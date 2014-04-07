@@ -1,0 +1,14 @@
+language: python
+python:
+  - "2.7"
+services:
+  - postgresql
+install: 
+  - pip install -r reqs/prod.txt
+env:
+  - DJANGO_SETTINGS_MODULE="djangus.settings.prod"
+before_script:
+  - psql -c 'create database djangus;' -U postgres
+  - psql -c 'create role djangus with login createdb password \'djangus\';' -U postgres
+  - python manage.py syncdb --noinput
+script: test

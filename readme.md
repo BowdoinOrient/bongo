@@ -24,3 +24,6 @@ You'll need:
 
 ####deployment
 Deployment is handled via Fabric. `fab ?` will show you all the available commands. `fab setup` should take you from a blank Ubuntu or Debian install to ready to deploy, then you can `fab deploy` and `fab start`.
+
+####tests[![Build Status](https://travis-ci.org/BowdoinOrient/djangus.svg)](https://travis-ci.org/BowdoinOrient/djangus)
+
