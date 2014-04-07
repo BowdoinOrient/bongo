@@ -1,5 +1,4 @@
 -r common.txt
-git+git://github.com/AGoodId/django-s3-collectstatic.git#egg=django-s3-collectstatic
 django-supervisor==0.3.2
 gevent==0.13.8
 gunicorn==0.14.3
