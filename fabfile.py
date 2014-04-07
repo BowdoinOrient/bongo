@@ -1,6 +1,6 @@
 from fabric.api import env, run, task, prefix, cd, sudo, settings
 from fabric.contrib.files import exists
-from djangus.settings.common import SITE_NAME, DJANGO_ROOT
+from djangus.settings.common import SITE_NAME, BASE_DIR
 from os.path import join, normpath
 from os import environ
 
@@ -13,8 +13,8 @@ env.command_prefixes = [
     "cd /home/bjacobel/code/" + SITE_NAME,
     "source /home/bjacobel/.virtualenvs/{}/bin/activate".format(SITE_NAME),
     'export DJANGO_SETTINGS_MODULE={}.settings.prod'.format(SITE_NAME),
-    'export {site}_SECRET_KEY=\'{key}\''.format(site=SITE_NAME.upper(), key=open(normpath(join(DJANGO_ROOT, 'settings/secret_key'))).read().strip()),
-    'export {site}_PSQL_PASS=\'{pword}\''.format(site=SITE_NAME.upper(), pword=open(normpath(join(DJANGO_ROOT, 'settings/postgres_pass'))).read().strip()),
+    'export {site}_SECRET_KEY=\'{key}\''.format(site=SITE_NAME.upper(), key=open(normpath(join(BASE_DIR, 'settings/secrets/secret_key'))).read().strip()),
+    'export {site}_PSQL_PASS=\'{pword}\''.format(site=SITE_NAME.upper(), pword=open(normpath(join(BASE_DIR, 'settings/secrets/psql_pass'))).read().strip()),
 ]
 ########## END GLOBALS
 
@@ -103,7 +103,6 @@ def reqs():
         'libsasl2-dev',
         'postgresql postgresql-contrib libpq-dev',
         'rabbitmq-server',
-        'supervisor'
     ]
 
     # make sure nothing ever asks for input
