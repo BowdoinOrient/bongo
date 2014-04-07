@@ -6,3 +6,6 @@ djangus/settings/secrets/*
 
 # No static files
 djangus/static/*
+
+# No logs
+djangus/logs/*
