@@ -1,0 +1,8 @@
+# Folder of secret keys and passwords
+djangus/settings/secrets/*
+
+# Pycocide
+*.pyc
+
+# No static files
+djangus/static/*
