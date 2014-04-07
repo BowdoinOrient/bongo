@@ -163,12 +163,6 @@ SUIT_CONFIG = {
     'ADMIN_NAME': SITE_NAME
 }
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-
-NOSE_ARGS = [
-    '--nocapture'
-]
-
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-context-processors
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
