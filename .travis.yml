@@ -6,9 +6,8 @@ services:
 install: 
   - pip install -r reqs/prod.txt
 env:
-  - DJANGO_SETTINGS_MODULE="djangus.settings.prod"
+  - DJANGO_SETTINGS_MODULE="djangus.settings.travis"
 before_script:
   - psql -c 'create database djangus;' -U postgres
-  - psql -c 'create role djangus with login createdb password \'djangus\';' -U postgres
   - python manage.py syncdb --noinput
 script: test
