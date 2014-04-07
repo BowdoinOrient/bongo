@@ -9,3 +9,6 @@ djangus/static/*
 
 # No logs
 djangus/logs/*
+
+# coveralls
+.coverage

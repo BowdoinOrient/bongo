@@ -1,14 +1,18 @@
 language: python
 python:
   - "2.7"
+  - "3.3"
 services:
   - postgresql
   - rabbitmq
 install: 
-  - pip install -r reqs/prod.txt
+  - pip install -r reqs/travis.txt
 env:
   - DJANGO_SETTINGS_MODULE="djangus.settings.travis" DJANGUS_SECRET_KEY="totallynotmyrealsecretkey"
 before_script:
   - psql -c 'create database djangus;' -U postgres
   - python manage.py syncdb --noinput
-script: test
+script: 
+  - coverage run --source=djangus manage.py test
+after_success:
+  - coveralls
