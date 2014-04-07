@@ -7,7 +7,7 @@ services:
 install: 
   - pip install -r reqs/prod.txt
 env:
-  - DJANGO_SETTINGS_MODULE="djangus.settings.travis" SECRET_KEY="totallynotmyrealsecretkey"
+  - DJANGO_SETTINGS_MODULE="djangus.settings.travis" DJANGUS_SECRET_KEY="totallynotmyrealsecretkey"
 before_script:
   - psql -c 'create database djangus;' -U postgres
   - python manage.py syncdb --noinput
