@@ -46,7 +46,7 @@ INSTALLED_APPS = (
     'djcelery',
 
     # Local apps
-    'bonus.apps.bonus',
+    'bongo.apps.bongo',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -59,9 +59,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'bonus.urls'
+ROOT_URLCONF = 'bongo.urls'
 
-WSGI_APPLICATION = 'bonus.wsgi.application'
+WSGI_APPLICATION = 'bongo.wsgi.application'
 
 
 # Internationalization
