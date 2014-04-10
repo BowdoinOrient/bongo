@@ -7,11 +7,11 @@ services:
 install: 
   - pip install -r reqs/travis.txt
 env:
-  - DJANGO_SETTINGS_MODULE="djangus.settings.travis" DJANGUS_SECRET_KEY="totallynotmyrealsecretkey"
+  - DJANGO_SETTINGS_MODULE="bongo.settings.travis" DJANGUS_SECRET_KEY="totallynotmyrealsecretkey"
 before_script:
-  - psql -c 'create database djangus;' -U postgres
+  - psql -c 'create database bongo;' -U postgres
   - python manage.py syncdb --noinput
 script: 
-  - coverage run --source=djangus manage.py test
+  - coverage run --source=bongo manage.py test
 after_success:
   - coveralls

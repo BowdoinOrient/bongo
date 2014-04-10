@@ -1,6 +1,6 @@
 from fabric.api import env, run, task, prefix, cd, sudo, settings
 from fabric.contrib.files import exists
-from djangus.settings.common import SITE_NAME, BASE_DIR
+from bongo.settings.common import SITE_NAME, BASE_DIR
 from os.path import join, normpath
 from os import environ
 

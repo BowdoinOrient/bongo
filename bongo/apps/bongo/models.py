@@ -23,7 +23,7 @@ class Issue(models.Model):
     pass
 
 class Author (models.Model): # Extends to photographers as well, you can be both 
-    # possibility this author is also a djangus user
+    # possibility this author is also a bongo user
     user = models.ForeignKey(User, null=True)
 
     firstname = models.CharField(max_length=30)

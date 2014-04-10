@@ -1,14 +1,14 @@
 # Folder of secret keys and passwords
-djangus/settings/secrets/*
+bongo/settings/secrets/*
 
 # Pycocide
 *.pyc
 
 # No static files
-djangus/static/*
+bongo/static/*
 
 # No logs
-djangus/logs/*
+bongo/logs/*
 
 # coveralls
 .coverage

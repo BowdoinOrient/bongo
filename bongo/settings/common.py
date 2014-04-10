@@ -1,5 +1,5 @@
 """
-Django settings for djangus project.
+Django settings for bongo project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/dev/topics/settings/
@@ -46,7 +46,7 @@ INSTALLED_APPS = (
     'djcelery',
 
     # Local apps
-    'djangus.apps.djangus',
+    'bonus.apps.bonus',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -59,9 +59,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'djangus.urls'
+ROOT_URLCONF = 'bonus.urls'
 
-WSGI_APPLICATION = 'djangus.wsgi.application'
+WSGI_APPLICATION = 'bonus.wsgi.application'
 
 
 # Internationalization
