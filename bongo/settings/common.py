@@ -35,9 +35,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # SASS preprocessor
-    'pipeline',
-
     # Suit has to come before contrib.admin
     'suit',
     'django.contrib.admin',
@@ -84,25 +81,11 @@ USE_TZ = True
 
 STATIC_URL ='/static/'
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'static'))
-STATICFILES_DIRS = (
-    os.path.normpath(os.path.join(BASE_DIR, 'assets')),
-)
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-
-# Pipeline configuration
-PIPELINE_COMPILERS = (
-  'pipeline.compilers.sass.SASSCompiler',
-)
-PIPELINE_CSS = {
-    'scss': {
-        'source_filenames': ('scss/*.scss',),
-        'output_filename': 'css/bowdoinorient.css'
-    },
-}
-STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
