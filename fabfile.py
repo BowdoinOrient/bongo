@@ -13,7 +13,7 @@ def shellquote(s):
 envr = {
     "DJANGO_SETTINGS_MODULE" : "bongo.settings.prod",
     "BONGO_SECRET_KEY" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/secret_key'))).read().strip()),
-    "BONGO_PSQL_PASS" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/postgres_pass'))).read().strip()),
+    "BONGO_POSTGRES_PASS" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/postgres_pass'))).read().strip()),
     "AWS_ACCESS_KEY_ID" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_id'))).read().strip()),
     "AWS_SECRET_ACCESS_KEY" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_secret_key'))).read().strip()),
 }
@@ -27,7 +27,7 @@ prefix_string = prefix_string[:-4]
 
 ########## GLOBALS
 env.run = 'python manage.py'
-env.user = 'bjacobel'
+env.user = 'orient'
 env.hosts = ['citadel.bjacobel.com']
 ########## END GLOBALS
 
@@ -41,7 +41,7 @@ def deploy(branch='master'):
 
     """Get the latest code from git, and install reqs from reqs/prod.txt"""
 
-    with cd("/home/bjacobel/code"):
+    with cd("/home/orient"):
         fabtools.require.git.working_copy("git@github.com:bowdoinorient/bongo.git", branch=branch)
         
         with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
@@ -57,11 +57,11 @@ def start():
 
     """Serve the app using supervisord"""
 
-    with cd("/home/bjacobel/code/bongo"):
+    with cd("/home/orient/bongo"):
         with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
             with prefix(prefix_string):
                 # check to make sure logs dir exists, make it if not
-                if not exists('/home/bjacobel/code/bongo/logs'):
+                if not exists('/home/orient/bongo/logs'):
                     run('mkdir logs')
 
                 run('python manage.py supervisor --daemon')
@@ -88,7 +88,7 @@ def tail():
 
     """Follow the logs of the supervisord processes."""
 
-    with cd("/home/bjacobel/code/bongo"):
+    with cd("/home/orient/bongo"):
         run('tail -f logs/{}.log'.format(SITE_NAME))
 
 ######### END SERVE AND RESTART
@@ -100,7 +100,7 @@ def syncdb():
 
     """Run a syncdb"""
 
-    with cd("/home/bjacobel/code/bongo"):
+    with cd("/home/orient/bongo"):
         with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
             with prefix(prefix_string):
                 run('%(run)s syncdb --noinput' % env)
@@ -114,7 +114,7 @@ def collectstatic():
 
     """Collect all static files, and copy them to S3 for production usage."""
 
-    with cd("/home/bjacobel/code/bongo"):
+    with cd("/home/orient/bongo"):
         with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
             with prefix(prefix_string):
                 run('%(run)s fasts3collectstatic --noinput' % env)
@@ -156,18 +156,20 @@ def setup():
         run('mkdir -p /home/bjacobel/.virtualenvs/bongo')
         run('virtualenv /home/bjacobel/.virtualenvs/bongo')
 
-    print(red("Create a password for the postgres account"))
+    print(red("Create a password for the postgres account."))
     sudo('passwd postgres')
 
     # Setup Postgres with a new user; give access to database
     with settings(sudo_user="postgres", warn_only=True):
-        sudo('psql -c "CREATE ROLE bongo WITH LOGIN PASSWORD \'{}\';"'.format(envr['bongo_PSQL_PASS']))
+        sudo('psql -c "CREATE ROLE bongo WITH LOGIN PASSWORD \'{}\';"'.format(envr['BONGO_POSTGRES_PASS']))
         sudo('psql -c "CREATE DATABASE bongo;"')
 
     # fire up nginx
     sudo(nginx)
 
     print(green("Server setup successfully. Now run ") + blue("fab deploy."))
+    print(red("Note: ")+"the server has NOT been secured. Do not neglect to set up a firewall,")
+    print("iptables, fail2ban, and SSH key-only login you WILL get the Orient pwned.")
 
 ########### END BUILD THE ENVIRONMENT
 
@@ -175,7 +177,7 @@ def setup():
 def managepy(command):
     """run an arbitrary 'python manage.py' command"""
 
-    with cd("/home/bjacobel/code/bongo"):
+    with cd("/home/orient/bongo"):
         with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
             with prefix(prefix_string):
                 run(env.run +" "+ command)

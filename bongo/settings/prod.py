@@ -7,7 +7,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': SITE_NAME,
         'USER': SITE_NAME,
-        'PASSWORD': environ.get("{}_PSQL_PASS".format(SITE_NAME.upper())),
+        'PASSWORD': environ.get("{}_POSTGRES_PASS".format(SITE_NAME.upper())),
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
