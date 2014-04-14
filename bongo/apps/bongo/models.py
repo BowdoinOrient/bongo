@@ -1,35 +1,139 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Article (models.Model):
-    pass
+""" The following models describe things a post on the website is.
+Posts are most commonly articles, but that terminology is limiting;
+a post might be a stand-alone photo or an entry in a video series. 
 
-class Photo (models.Model):
-    pass
+Articles have a ForeignKey for text and a ManyToManyField for every 
+other type of content Bongo supports storing, for maximum content reusability.
+They also have a primary_type, which will help the frontend decide the
+layout for that post (a standard article, a photo gallery, etc.)
+"""
+
+class Post (models.Model):
+    created = models.DateTimeField()
+    created.auto_now_add=True
+
+    published = models.DateTimeField()
+    is_published = models.BooleanField()  # allow for drafts
+
+    updated = models.DateTimeField()
+    updated.auto_now_add=True
+
+    series = models.ManyToManyKey(Series, null=True, blank=True)
+    issue = models.
+
+    title = models.CharField(max_length=180)
+
+    creators = models.ManyToManyField(Creator, null=False)
+
+    text = models.ForeignKey("Text")
+    photos = models.ManyToManyField("Photo")
+    video = models.ManyToManyField("Video")
+    html = models.ManyToManyField("HTML")
+
+    types = (
+        ("text", "Article"),
+        ("photo", "Photo(s)"),
+        ("video", "Video(s)"),
+        ("html", "Other")
+    )
+
+    primary_type = models.CharField(choices=types, default="text")
+
+
+    
+""" The following models describe things a post can contain.
+This is a limited subset for the time being and will expand.
+"""
+
+class Text (models.Model):
+    authors = models.ManyToManyField(Creator)
+    body = models.TextField()
 
 class Video (models.Model):
-    pass
+    filmers = models.ManyToManyField(Creator)
+    staticfile = models.FileField()
+    caption = models.TextField()
 
-class Serie (models.Model):
-    pass
+class Photo (models.Model):
+    photographer = models.ForeignKey(Creator)
+    staticfile = models.FileField()
+    caption = models.TextField()
+
+class HTML (models.Model)
+    designers = models.ManyToManyField(Creator)
+    content = models.TextField()
+    caption = models.TextField()
+
+
+
+""" Series and Issues are helpful for grouping and archiving
+Posts. Every post must belong to one Issue, but can be in many series.
+"""
+class Series (models.Model):  # series is the singular, which may confuse django
+    name = models.CharField(max_length=100)
+
+
+class Issue (models.Model):
+    issue_date = models.DateField()  # friday, friday, this better validate to a friday
+
+
+
+""" Creators own Posts. Creators might be:
+    - an organization (e.g., The Editorial Board)
+    - a user of Bongo (e.g., an Orient staffer)
+    - not allowed to access Bongo (e.g., a columnist)
+
+    - a photographer
+    - a writer
+    - a filmmaker
+    - an infographicmaker
+    - some combination of the above, or more
+"""
+
+class Creator(models.Model)
+    # possibility this author is also a bongo user
+    user = models.ForeignKey(User, null=True, blank=True)
+
+    name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, null=True, blank=True)
+
+
+""" Other miscellaneous tools """
 
 class Alert (models.Model):
-    pass
+    run_from = models.DateField()
+    run_through = models.DateField()
+
+    message = models.TextField()
+
+    urgent = models.BooleanField(default=False)
+
+
+class Advertiser (models.Model):
+    name = models.CharField(max_length=100)
+
 
 class Ad (models.Model):
+    run_from = models.DateField()
+    run_through = models.DateField()
+
+    owner = models.ForeignKey(Advertiser)
+
+    url = models.URLField(null=True, blank=True)
+
+
+""" For our Plancast replacement """
+class Event (models.Model):
     pass
 
-class Issue(models.Model):
+
+""" For our Buffer replacement """
+class ScheduledPost(models.Model)
     pass
 
-class Author (models.Model): # Extends to photographers as well, you can be both 
-    # possibility this author is also a bongo user
-    user = models.ForeignKey(User, null=True)
 
-    firstname = models.CharField(max_length=30)
-    lastname = models.CharField(max_length=30)
 
-    written_works = models.ManyToManyField(Article, null=True)
-    photo_works = models.ManyToManyField(Photo, null=True)
-    video_works = models.ManyToManyField(Video, null=True)
 
