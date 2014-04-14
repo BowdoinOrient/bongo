@@ -1,150 +1,181 @@
-from fabric.api import env, run, task, prefix, cd, sudo, settings
+from fabric.api import env, run, local, task, prefix, cd, sudo, settings
+from fabric.context_managers import shell_env, prefix
 from fabric.contrib.files import exists
-from bongo.settings.common import SITE_NAME, BASE_DIR
+from fabric.colors import red, green, blue
+from bongo.settings.common import DJANGO_ROOT
 from os.path import join, normpath
-from os import environ
+import fabtools
+import time
+
+def shellquote(s):
+    return "'" + s.replace("'", "'\\''") + "'"
+
+envr = {
+    "DJANGO_SETTINGS_MODULE" : "bongo.settings.prod",
+    "BONGO_SECRET_KEY" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/secret_key'))).read().strip()),
+    "BONGO_PSQL_PASS" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/postgres_pass'))).read().strip()),
+    "AWS_ACCESS_KEY_ID" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_id'))).read().strip()),
+    "AWS_SECRET_ACCESS_KEY" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_secret_key'))).read().strip()),
+}
+
+prefix_string = ""
+
+for key, value in envr.iteritems():
+    prefix_string += "export {}={} && ".format(key, value)
+
+prefix_string = prefix_string[:-4]
 
 ########## GLOBALS
 env.run = 'python manage.py'
 env.user = 'bjacobel'
 env.hosts = ['citadel.bjacobel.com']
-env.path = "/home/bjacobel/code/" + SITE_NAME
-env.command_prefixes = [
-    "cd /home/bjacobel/code/" + SITE_NAME,
-    "source /home/bjacobel/.virtualenvs/{}/bin/activate".format(SITE_NAME),
-    'export DJANGO_SETTINGS_MODULE={}.settings.prod'.format(SITE_NAME),
-    'export {site}_SECRET_KEY=\'{key}\''.format(site=SITE_NAME.upper(), key=open(normpath(join(BASE_DIR, 'settings/secrets/secret_key'))).read().strip()),
-    'export {site}_PSQL_PASS=\'{pword}\''.format(site=SITE_NAME.upper(), pword=open(normpath(join(BASE_DIR, 'settings/secrets/psql_pass'))).read().strip()),
-]
 ########## END GLOBALS
 
 
-########## DEPLOY AND SERVE
+########## DEPLOY
+
 @task
-def deploy(branch=None):
+def deploy(branch='master'):
+
+    local("git push origin " + branch)
+
     """Get the latest code from git, and install reqs from reqs/prod.txt"""
 
-    if branch:
-        run('git remote update')
-        with settings(warn_only=True):
-             # if the branch doesn't exist locally yet - this may fail without crashing the script
-            run('git checkout -t %s' % branch)
-        # If the branch is here locally, this will check it out. If it's not, we checked it out above - this will just do it again.
-        run('git checkout %s' % branch)
-        run('git pull origin %s' % branch)
-    else:
-        run('git pull origin master')  # specificity never hurt anybody
+    with cd("/home/bjacobel/code"):
+        fabtools.require.git.working_copy("git@github.com:bowdoinorient/bongo.git", branch=branch)
+        
+        with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
+            run('pip -q install -r bongo/reqs/prod.txt')
 
-    run('pip -q install -r reqs/prod.txt')
+############ END DEPLOY
+
+
+######### SERVE AND RESTART
 
 @task
 def start():
-    """Serve the app using supervisord"""
-    # check to make sure logs dir exists, make it if not
-    if not exists("logs"):
-        run('mkdir logs')
 
-    run('python manage.py supervisor --daemon')
+    """Serve the app using supervisord"""
+
+    with cd("/home/bjacobel/code/bongo"):
+        with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
+            with prefix(prefix_string):
+                # check to make sure logs dir exists, make it if not
+                if not exists('/home/bjacobel/code/bongo/logs'):
+                    run('mkdir logs')
+
+                run('python manage.py supervisor --daemon')
 
 @task
 def stop():
+
     """Kill supervisord"""
-    with open('/tmp/supervisor_{}.pid'.format(SITE_NAME),'r') as f:
-        pid = f.read()
-        run('kill -15 ' + pid)  # SIGTERM is what supervisord expects to gracefully shut down workers
+   
+    pid = run('cat /tmp/supervisor_bongo.pid')
+    run('kill -15 ' + pid)  # SIGTERM is what supervisord expects to gracefully shut down workers
 
 @task
 def restart():
+
     """Restart Gunicorn and Celery via supervisord."""
+
     stop()
+    time.sleep(5)  # supervisor takes a couple of seconds to gracefully stop
     start()
 
 @task
 def tail():
-    """Follow the logs of the supervisord processes."""
-    run('tail -f logs/{}.log'.format(SITE_NAME))
 
-######### END DEPLOY AND SERVE
+    """Follow the logs of the supervisord processes."""
+
+    with cd("/home/bjacobel/code/bongo"):
+        run('tail -f logs/{}.log'.format(SITE_NAME))
+
+######### END SERVE AND RESTART
 
 
 ########## DATABASE MANAGEMENT
 @task
 def syncdb():
+
     """Run a syncdb"""
-    run('%(run)s syncdb --noinput' % env)
 
-@task
-def migrate(app=None):
-    """Apply one (or more) migrations. If no app is specified, fabric will
-    attempt to run a site-wide migration.
+    with cd("/home/bjacobel/code/bongo"):
+        with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
+            with prefix(prefix_string):
+                run('%(run)s syncdb --noinput' % env)
 
-    :param str app: Django app name to migrate.
-    """
-    if app:
-        run('%s migrate %s --noinput' % (env.run, app))
-    else:
-        run('%(run)s migrate --noinput' % env)
 ########## END DATABASE MANAGEMENT
 
 
 ########## FILE MANAGEMENT
 @task
 def collectstatic():
+
     """Collect all static files, and copy them to S3 for production usage."""
-    run('%(run)s fasts3collectstatic' % env)
+
+    with cd("/home/bjacobel/code/bongo"):
+        with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
+            with prefix(prefix_string):
+                run('%(run)s fasts3collectstatic --noinput' % env)
 ########## END FILE MANAGEMENT
 
 
-@task
-def reqs():
-    """Install system packages not included on standard Debian installs"""
-    packages = [
-        'libevent-dev',
-        'libsasl2-dev',
-        'postgresql postgresql-contrib libpq-dev',
-        'rabbitmq-server',
-    ]
-
-    # make sure nothing ever asks for input
-    run('export DEBIAN_FRONTEND=noninteractive')
-
-    for package in packages:
-        sudo('apt-get -y install ' + package)
-
-    # put the frontend back
-    run('export DEBIAN_FRONTEND=dialog')
-
-
-@task
-def virtualize():
-    """Create a virtualenv for python packages"""
-    if not exists("/home/bjacobel/.virtualenvs/" + SITE_NAME):
-        run('virtualenv /home/bjacobel/.virtualenvs/' + SITE_NAME)
-    else:
-        print("Virtualenv already exists.")
-
-
-@task
-def postgres():
-    """Setup Postgres with a new user; set passwords and permissions"""
-    run('psql -c "CREATE ROLE {} WITH LOGIN;"'.format(SITE_NAME))
-    run('psql -c "ALTER ROLE {role} WITH PASSWORD \'{pword}\';"'.format(role=SITE_NAME, pword=os.environ.get('{}_PSQL_PASS'.format(SITE_NAME.upper()))))
-    run('psql -c "CREATE DATABASE {};"'.format(SITE_NAME))
-
-
-@task
-def env_check():
-    """Make sure the environment is what we think it is."""
-    run("printenv | grep {}".format(SITE_NAME.upper()))
-
+####### BUILD THE ENVIRONMENT
 
 @task
 def setup():
-    """Meta-task - should take a machine from bare to ready to start()"""
-    reqs()
-    postgres()
-    virtualize()
-    deploy()
-    syncdb()
-    migrate()
-    collectstatic()
+    """Take a vanilla Debian/Ubuntu machine and get it ready to deploy onto"""
+
+    # make sure nothing ever asks for input
+    with shell_env(DEBIAN_FRONTEND='noninteractive'):
+
+        sudo('apt-get -qq update')
+        sudo('apt-get -qq upgrade')
+
+        # Install system packages not included on standard Debian installs
+        packages = [
+            'libevent-dev',
+            'libsasl2-dev',
+            'libldap2-dev',
+            'postgresql postgresql-contrib',
+            'rabbitmq-server',
+            'python2.7-dev',
+            'nginx',
+            'memcached',
+            'git',
+        ]
+
+        for package in packages:
+            sudo('apt-get -q -y install ' + package)
+
+    # Create a virtualenv
+    run('pip install virtualenv')
+
+    if not exists('/home/bjacobel/.virtualenvs/bongo'):
+        run('mkdir -p /home/bjacobel/.virtualenvs/bongo')
+        run('virtualenv /home/bjacobel/.virtualenvs/bongo')
+
+    print(red("Create a password for the postgres account"))
+    sudo('passwd postgres')
+
+    # Setup Postgres with a new user; give access to database
+    with settings(sudo_user="postgres", warn_only=True):
+        sudo('psql -c "CREATE ROLE bongo WITH LOGIN PASSWORD \'{}\';"'.format(envr['bongo_PSQL_PASS']))
+        sudo('psql -c "CREATE DATABASE bongo;"')
+
+    # fire up nginx
+    sudo(nginx)
+
+    print(green("Server setup successfully. Now run ") + blue("fab deploy."))
+
+########### END BUILD THE ENVIRONMENT
+
+@task
+def managepy(command):
+    """run an arbitrary 'python manage.py' command"""
+
+    with cd("/home/bjacobel/code/bongo"):
+        with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
+            with prefix(prefix_string):
+                run(env.run +" "+ command)
