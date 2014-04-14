@@ -44,6 +44,7 @@ INSTALLED_APPS = (
 
     # Local apps
     'bongo.apps.bongo',
+    'bongo.apps.archive',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -89,7 +90,8 @@ STATICFILES_FINDERS = (
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ('Brian Jacobel', 'bjacobel@gmail.com'),
+    ('Brian Jacobel', 'bjacobel@bowdoin.edu'),
+    ('Andrew Daniels', 'adaniels@bowdoin.edu'),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
