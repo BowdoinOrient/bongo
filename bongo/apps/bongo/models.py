@@ -242,7 +242,7 @@ class Ad (models.Model):
     def __unicode__(self):
         return self.owner + ": {} through {}".format(run_from.strftime("%x"), run_through.strftime("%x"))
 
-class Tips (models.Model):
+class Tip (models.Model):
     content = models.TextField()
     respond_to = models.EmailField(null=True, blank=True)
     submitted_at = models.DateTimeField()
