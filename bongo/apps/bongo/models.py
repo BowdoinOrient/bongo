@@ -246,8 +246,8 @@ class Tip (models.Model):
     content = models.TextField()
     respond_to = models.EmailField(null=True, blank=True)
     submitted_at = models.DateTimeField()
-    submitted_from = models.GenericIPAddressField()
-    useragent = models.TextField()
+    submitted_from = models.GenericIPAddressField(null=True, blank=False)
+    useragent = models.TextField(null=True, blank=False)
 
     def __unicode__(self):
         return self.content[:60]
