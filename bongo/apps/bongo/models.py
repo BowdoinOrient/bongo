@@ -4,21 +4,42 @@ from django.contrib.auth.models import User
 
 """ Series and Issues are helpful for grouping and archiving
 Posts. Every post must belong to one Issue, but can be in many series.
+Also sections are obviously a thing we do.
 """
 
 class Series (models.Model):  # series is the singular, which may confuse django
     name = models.CharField(max_length=100)
+
 
 class Volume (models.Model):
     volume_number = models.IntegerField()
     volume_year_start = models.IntegerField()
     volume_year_end = models.IntegerField()
 
+
 class Issue (models.Model):
     issue_date = models.DateField()  # friday, friday, this better validate to a friday
     issue_number = models.IntegerField()
     volume = models.ForeignKey(Volume)
 
+
+class Section (models.Model):
+    sections = (
+        ("news", "News"),
+        ("features", "Features"),
+        ("ae", "Arts & Entertainment"),
+        ("opinion", "Opinion"),
+        ("sports", "Sports"),
+    )
+    primary_type = models.CharField(max_length=8, choices=sections, default="news")
+
+
+""" potential system for reccommending content. For now only a Post can have tags, but
+there's potential for them to be assigned to individual content instead and then have
+the Post's tags be the collection of all the content within's tags
+"""
+class Tag (models.Model):
+    tag = models.CharField(max_length=25)
 
 
 
@@ -105,8 +126,14 @@ class Post (models.Model):
     series = models.ManyToManyField(Series, null=True, blank=True)
     issue = models.ForeignKey(Issue, null=True, blank=True)  # issue might be null in the case of a web-only post
     volume = models.ForeignKey(Volume)  # volume cannot be null because it represents an academic year
+    section = models.ForeignKey(Section)
 
     title = models.CharField(max_length=180)
+    slug = models.CharField(max_length=180, editable=False, default="")  # http://en.wikipedia.org/wiki/Clean_URL#Slug
+    tags = models.ManyToManyField(Tag, null=True, blank=True)
+
+    views_local = models.IntegerField(editable=False, default=0)
+    views_global = models.IntegerField(editable=False, default=0)
 
     creators = models.ManyToManyField(Creator, null=False)
 
@@ -127,6 +154,14 @@ class Post (models.Model):
 
     primary_type = models.CharField(max_length=8, choices=types, default="generic")
 
+    """ Return all of the media entities referenced by this post """
+    def content():
+        content = []
+
+        for media in [text, photos, video, html]:
+            content.append(media.all())
+
+        return content
 
 
 
@@ -154,6 +189,13 @@ class Ad (models.Model):
     owner = models.ForeignKey(Advertiser)
 
     url = models.URLField(null=True, blank=True)
+
+class Tips (models.Model):
+    content = models.TextField()
+    respond_to = models.EmailField(null=True, blank=True)
+    submitted_at = models.DateTimeField()
+    submitted_from = models.GenericIPAddressField()
+    useragent = models.TextField()
 
 
 
