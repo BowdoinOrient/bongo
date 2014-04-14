@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date, datetime
+import nltk.data
+import re
 
 
 """ Series and Issues are helpful for grouping and archiving
@@ -10,17 +13,26 @@ Also sections are obviously a thing we do.
 class Series (models.Model):  # series is the singular, which may confuse django
     name = models.CharField(max_length=100)
 
+    def __unicode__(self):
+        return self.name
+
 
 class Volume (models.Model):
     volume_number = models.IntegerField()
     volume_year_start = models.IntegerField()
     volume_year_end = models.IntegerField()
 
+    def __unicode__(self):
+        return self.volume_number
+
 
 class Issue (models.Model):
     issue_date = models.DateField()  # friday, friday, this better validate to a friday
     issue_number = models.IntegerField()
     volume = models.ForeignKey(Volume)
+
+    def __unicode__(self):
+        return self.issue_number
 
 
 class Section (models.Model):
@@ -31,7 +43,10 @@ class Section (models.Model):
         ("opinion", "Opinion"),
         ("sports", "Sports"),
     )
-    primary_type = models.CharField(max_length=8, choices=sections, default="news")
+    section = models.CharField(max_length=8, choices=sections, default="news")
+
+    def __unicode__(self):
+        return self.section
 
 
 """ potential system for reccommending content. For now only a Post can have tags, but
@@ -40,6 +55,9 @@ the Post's tags be the collection of all the content within's tags
 """
 class Tag (models.Model):
     tag = models.CharField(max_length=25)
+
+    def __unicode__(self):
+        return self.tag
 
 
 
@@ -67,6 +85,9 @@ class Creator(models.Model):
 
     profpic = models.FileField(null=True, blank=True)
 
+    def __unicode__(self):
+        return self.name
+
 
 
 
@@ -78,12 +99,25 @@ This is a limited subset for the time being and will expand.
 class Text (models.Model):
     authors = models.ManyToManyField(Creator)
     body = models.TextField()
+    excerpt = models.TextField(editable=False, null=True)
+
+    def __unicode__(self):
+        return self.excerpt
+
+    def save(self, *args, **kwargs):
+        # Using NLTK here is a sledgehammer for a thumbtack, but it may be useful for tagging, too
+        tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+        excerpt = ' '.join(tokenizer.tokenize(data)[:4])
+        super(Text, self).save(*args, **kwargs)
 
 
 class Video (models.Model):
     filmers = models.ManyToManyField(Creator)
     staticfile = models.FileField()
     caption = models.TextField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.caption[:60]
 
 
 class Photo (models.Model):
@@ -92,14 +126,20 @@ class Photo (models.Model):
     caption = models.TextField(null=True, blank=True)
 
     """ get_or_create a thumbnail of the specified width and height """
-    def thumbnail(width, height):
+    def thumbnail(self, width, height):
         pass
+
+    def __unicode__(self):
+        return self.caption[:60]
 
 
 class HTML (models.Model):
     designers = models.ManyToManyField(Creator)
     content = models.TextField()
     caption = models.TextField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.caption[:60]
 
 
 
@@ -155,13 +195,16 @@ class Post (models.Model):
     primary_type = models.CharField(max_length=8, choices=types, default="generic")
 
     """ Return all of the media entities referenced by this post """
-    def content():
+    def content(self):
         content = []
 
-        for media in [text, photos, video, html]:
+        for media in [self.text, self.photos, self.video, self.html]:
             content.append(media.all())
 
         return content
+
+    def __unicode__(self):
+        return self.title
 
 
 
@@ -177,9 +220,15 @@ class Alert (models.Model):
 
     urgent = models.BooleanField(default=False)
 
+    def __unicode__(self):
+        return self.message
+
 
 class Advertiser (models.Model):
     name = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.name
 
 
 class Ad (models.Model):
@@ -190,12 +239,18 @@ class Ad (models.Model):
 
     url = models.URLField(null=True, blank=True)
 
+    def __unicode__(self):
+        return self.owner + ": {} through {}".format(run_from.strftime("%x"), run_through.strftime("%x"))
+
 class Tips (models.Model):
     content = models.TextField()
     respond_to = models.EmailField(null=True, blank=True)
     submitted_at = models.DateTimeField()
     submitted_from = models.GenericIPAddressField()
     useragent = models.TextField()
+
+    def __unicode__(self):
+        return self.content[:60]
 
 
 
