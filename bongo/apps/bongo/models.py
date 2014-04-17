@@ -128,6 +128,15 @@ class Video (models.Model):
         return self.caption[:60]
 
 
+class PDF (models.Model):
+    authors = models.ManyToManyField(Creator)
+    staticfile = models.FileField()
+    caption = models.TextField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.caption[:60]
+
+
 class Photo (models.Model):
     photographer = models.ForeignKey(Creator)
     staticfile = models.ImageField()
@@ -189,6 +198,7 @@ class Post (models.Model):
     photos = models.ManyToManyField(Photo, null=True, blank=True)
     video = models.ManyToManyField(Video, null=True, blank=True)
     html = models.ManyToManyField(HTML, null=True, blank=True)
+    pdf = models.ManyToManyField(PDF, null=True, blank=True)
 
     types = (
         ("text", "Article"),
@@ -206,7 +216,7 @@ class Post (models.Model):
     def content(self):
         content = []
 
-        for media in [self.text, self.photos, self.video, self.html]:
+        for media in [self.text, self.photos, self.video, self.html, self.pdf]:
             content.append(media.all())
 
         return content
