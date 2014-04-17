@@ -12,6 +12,7 @@ from __future__ import unicode_literals
 from django.db import models
 
 
+""" Have been imported """
 class Ads(models.Model):
     id = models.AutoField(primary_key=True)
     start_date = models.DateField()
@@ -26,6 +27,7 @@ class Ads(models.Model):
         db_table = 'ads'
 
 
+""" Have been imported """
 class Alerts(models.Model):
     id = models.AutoField(primary_key=True)
     message = models.TextField()
@@ -68,7 +70,9 @@ class Article(models.Model):
         managed = False
         db_table = 'article'
 
-
+""" Won't import this: was an in-place JOIN between Articles, Authors and Jobs.
+Good example of something Toph architected really well, but superceded now.
+"""
 class Articleauthor(models.Model):
     id = models.AutoField(primary_key=True)
     article_id = models.IntegerField()
@@ -95,7 +99,7 @@ class Articlebody(models.Model):
         managed = False
         db_table = 'articlebody'
 
-
+""" Won't import this """
 class Articletype(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -135,7 +139,7 @@ class Author(models.Model):
         managed = False
         db_table = 'author'
 
-
+""" Won't import this """
 class Browse(models.Model):
     id = models.AutoField(primary_key=True)
     article = models.IntegerField(blank=True, null=True)
@@ -144,7 +148,7 @@ class Browse(models.Model):
         managed = False
         db_table = 'browse'
 
-
+""" Won't import this """
 class CiSessions(models.Model):
     session_id = models.CharField(primary_key=True, max_length=40)
     ip_address = models.CharField(max_length=16)
@@ -156,7 +160,7 @@ class CiSessions(models.Model):
         managed = False
         db_table = 'ci_sessions'
 
-
+""" Won't import this """
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
     article_id = models.IntegerField(blank=True, null=True)
@@ -175,7 +179,7 @@ class Comment(models.Model):
         managed = False
         db_table = 'comment'
 
-
+""" Won't import this """
 class Event(models.Model):
     issue_date = models.DateField()
     event_date = models.DateField()
@@ -211,7 +215,7 @@ class Job(models.Model):
         managed = False
         db_table = 'job'
 
-
+""" Won't import this """
 class Links(models.Model):
     id = models.AutoField(primary_key=True)
     article_id = models.IntegerField()
@@ -252,7 +256,7 @@ class Photo(models.Model):
         managed = False
         db_table = 'photo'
 
-
+""" Won't import this """
 class Quote(models.Model):
     id = models.AutoField(primary_key=True)
     quote = models.TextField(blank=True)
@@ -266,7 +270,7 @@ class Quote(models.Model):
         managed = False
         db_table = 'quote'
 
-
+""" Won't import this """
 class Related(models.Model):
     id = models.AutoField(primary_key=True)
     article_id = models.IntegerField()
@@ -313,7 +317,7 @@ class Settings(models.Model):
         managed = False
         db_table = 'settings'
 
-
+""" Won't import this """
 class Ted(models.Model):
     id = models.AutoField(primary_key=True)
     message = models.CharField(max_length=500)
@@ -322,7 +326,7 @@ class Ted(models.Model):
         managed = False
         db_table = 'ted'
 
-
+""" Have been imported """
 class Tips(models.Model):
     id = models.AutoField(primary_key=True)
     tip = models.TextField(blank=True)
@@ -338,7 +342,7 @@ class Tips(models.Model):
         managed = False
         db_table = 'tips'
 
-
+""" Won't import this """
 class Users(models.Model):
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=20)
@@ -348,7 +352,7 @@ class Users(models.Model):
         managed = False
         db_table = 'users'
 
-
+""" Have been imported """
 class Volume(models.Model):
     id = models.AutoField(primary_key=True)
     arabic = models.IntegerField()
