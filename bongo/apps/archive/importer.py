@@ -100,6 +100,14 @@ def import_section():
             priority=old_section.priority
         )
 
+""" Import the old jobs table into the new Job model """
+def import_job():
+    for old_job in archive_models.Job.objects.using('archive').all():
+        (job, created) = bongo_models.Job.objects.get_or_create(
+            pk=old_job.id,
+            title=old_job.name,
+        )
+
 
 
 def import_all():
@@ -110,3 +118,4 @@ def import_all():
     import_issues()
     import_series()
     import_section()
+    import_job()

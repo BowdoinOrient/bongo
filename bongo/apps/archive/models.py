@@ -99,16 +99,6 @@ class Author(models.Model):
         db_table = 'author'
 
 
-class Job(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    active = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'job'
-
-
 class Photo(models.Model):
     id = models.AutoField(primary_key=True)
     filename_small = models.CharField(max_length=100)
@@ -137,14 +127,19 @@ class Photo(models.Model):
 
 
 
+""" Have been imported """
 
 
+class Job(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    active = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'job'
 
 
-
-
-
-""" Has been imported """
 class Section(models.Model):
     id = models.AutoField(primary_key=True)
     priority = models.IntegerField()
@@ -155,7 +150,6 @@ class Section(models.Model):
         managed = False
         db_table = 'section'
 
-""" Has been imported """
 class Issue(models.Model):
     id = models.AutoField(primary_key=True)
     issue_date = models.DateField()
@@ -168,7 +162,6 @@ class Issue(models.Model):
         managed = False
         db_table = 'issue'
 
-""" Have been imported """
 class Ads(models.Model):
     id = models.AutoField(primary_key=True)
     start_date = models.DateField()
@@ -183,7 +176,6 @@ class Ads(models.Model):
         db_table = 'ads'
 
 
-""" Have been imported """
 class Alerts(models.Model):
     id = models.AutoField(primary_key=True)
     message = models.TextField()
@@ -196,7 +188,6 @@ class Alerts(models.Model):
         managed = False
         db_table = 'alerts'
 
-""" Has been imported """
 class Series(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -208,7 +199,6 @@ class Series(models.Model):
         managed = False
         db_table = 'series'
 
-""" Have been imported """
 class Tips(models.Model):
     id = models.AutoField(primary_key=True)
     tip = models.TextField(blank=True)
@@ -224,7 +214,6 @@ class Tips(models.Model):
         managed = False
         db_table = 'tips'
 
-""" Have been imported """
 class Volume(models.Model):
     id = models.AutoField(primary_key=True)
     arabic = models.IntegerField()
@@ -238,14 +227,9 @@ class Volume(models.Model):
 
 
 
+""" Don't import these """
 
 
-
-
-
-
-
-""" Won't import this """
 class Settings(models.Model):
     name = models.CharField(max_length=255, blank=True)
     int_value = models.IntegerField(blank=True, null=True)
@@ -255,7 +239,7 @@ class Settings(models.Model):
         managed = False
         db_table = 'settings'
 
-""" Won't import this """
+
 class Ted(models.Model):
     id = models.AutoField(primary_key=True)
     message = models.CharField(max_length=500)
@@ -264,7 +248,7 @@ class Ted(models.Model):
         managed = False
         db_table = 'ted'
 
-""" Won't import this """
+
 class Users(models.Model):
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=20)
@@ -274,7 +258,7 @@ class Users(models.Model):
         managed = False
         db_table = 'users'
 
-""" Won't import this """
+
 class Quote(models.Model):
     id = models.AutoField(primary_key=True)
     quote = models.TextField(blank=True)
@@ -288,7 +272,7 @@ class Quote(models.Model):
         managed = False
         db_table = 'quote'
 
-""" Won't import this """
+
 class Related(models.Model):
     id = models.AutoField(primary_key=True)
     article_id = models.IntegerField()
@@ -302,7 +286,7 @@ class Related(models.Model):
         managed = False
         db_table = 'related'
 
-""" Won't import this """
+
 class Browse(models.Model):
     id = models.AutoField(primary_key=True)
     article = models.IntegerField(blank=True, null=True)
@@ -311,7 +295,7 @@ class Browse(models.Model):
         managed = False
         db_table = 'browse'
 
-""" Won't import this """
+
 class CiSessions(models.Model):
     session_id = models.CharField(primary_key=True, max_length=40)
     ip_address = models.CharField(max_length=16)
@@ -323,7 +307,7 @@ class CiSessions(models.Model):
         managed = False
         db_table = 'ci_sessions'
 
-""" Won't import this """
+
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
     article_id = models.IntegerField(blank=True, null=True)
@@ -342,7 +326,7 @@ class Comment(models.Model):
         managed = False
         db_table = 'comment'
 
-""" Won't import this """
+
 class Event(models.Model):
     issue_date = models.DateField()
     event_date = models.DateField()
@@ -355,7 +339,7 @@ class Event(models.Model):
         managed = False
         db_table = 'event'
 
-""" Won't import this """
+
 class Articletype(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -364,7 +348,7 @@ class Articletype(models.Model):
         managed = False
         db_table = 'articletype'
 
-""" Won't import this """
+
 class Links(models.Model):
     id = models.AutoField(primary_key=True)
     article_id = models.IntegerField()
