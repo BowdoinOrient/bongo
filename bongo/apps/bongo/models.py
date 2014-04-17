@@ -91,7 +91,7 @@ class Creator(models.Model):
 
     twitter = models.CharField(max_length=15, null=True, blank=True)
 
-    profpic = models.FileField(null=True, blank=True)
+    profpic = models.ImageField(null=True, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -130,7 +130,7 @@ class Video (models.Model):
 
 class Photo (models.Model):
     photographer = models.ForeignKey(Creator)
-    staticfile = models.FileField()
+    staticfile = models.ImageField()
     caption = models.TextField(null=True, blank=True)
 
     """ get_or_create a thumbnail of the specified width and height """
@@ -246,6 +246,8 @@ class Ad (models.Model):
     owner = models.ForeignKey(Advertiser)
 
     url = models.URLField(null=True, blank=True)
+
+    adfile = models.ImageField()
 
     def __unicode__(self):
         return self.owner + ": {} through {}".format(run_from.strftime("%x"), run_through.strftime("%x"))
