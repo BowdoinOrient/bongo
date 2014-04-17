@@ -192,7 +192,7 @@ class Event(models.Model):
         managed = False
         db_table = 'event'
 
-
+""" Has been imported """
 class Issue(models.Model):
     id = models.AutoField(primary_key=True)
     issue_date = models.DateField()

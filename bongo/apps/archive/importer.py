@@ -26,6 +26,7 @@ def import_ads():
             # the add must have been created on a previous run of the task
             pass
 
+
 """ Import the old tips table into the new Tip model """
 def import_tips():
     for old_tip in archive_models.Tips.objects.using('archive').all():
@@ -68,6 +69,8 @@ def import_volumes():
             volume_year_end=old_volume.annodomini+1
         )
 
+
+""" Import the old issues table into the new Issue model """
 def import_issues():
     for old_issue in archive_models.Issue.objects.using('archive').all():
         (issue, created) = bongo_models.Issue.objects.get_or_create(

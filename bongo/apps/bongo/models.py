@@ -61,6 +61,11 @@ class Tag (models.Model):
         return self.tag
 
 
+class Job(models.Model):
+    title = models.CharField(max_length=40)
+
+    def __unicode__(self):
+        return self.title
 
 
 """ Creators own Posts. Creators might be:
@@ -80,7 +85,8 @@ class Creator(models.Model):
     user = models.ForeignKey(User, null=True, blank=True)
 
     name = models.CharField(max_length=100)
-    title = models.CharField(max_length=40, null=True, blank=True)
+    
+    job = models.ForeignKey(Job)
 
     twitter = models.CharField(max_length=15, null=True, blank=True)
 
