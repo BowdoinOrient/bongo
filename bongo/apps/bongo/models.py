@@ -30,7 +30,7 @@ class Issue (models.Model):
     issue_date = models.DateField()  # friday, friday, this better validate to a friday
     issue_number = models.IntegerField()
     volume = models.ForeignKey(Volume)
-    scribd = models.IntegerField()
+    scribd = models.IntegerField(null=True,blank=True)
 
     def __unicode__(self):
         return self.issue_number
@@ -214,8 +214,8 @@ class Post (models.Model):
 
 
 class Alert (models.Model):
-    run_from = models.DateField()
-    run_through = models.DateField()
+    run_from = models.DateTimeField()
+    run_through = models.DateTimeField()
 
     message = models.TextField()
 

@@ -44,11 +44,16 @@ def import_tips():
 """ Import the old alerts table into the new Alert model """
 def import_alerts():
     for old_alert in archive_models.Alerts.objects.using('archive').all():
+        if not old_alert.end_date or not old_alert.start_date:
+            print "Refusing to commit an alert with a null datetime"
+            continue
+
         (alert, created) = bongo_models.Alert.objects.get_or_create(
             pk=old_alert.id,
-            run_from=make_aware(old_alert.start_date, tz),
-            run_through=make_aware(old_alert.end_date, tz),
-            urgent=True if old_alert.urgent == 1 else False  # Apparently ternary expressions are "frowned upon by Pythonistas" but that's really their problem, isn't it
+            # They are each datetimes in the archive, this is unneccesary. Convert to date.
+            run_from=old_alert.start_date,
+            run_through=old_alert.end_date,
+            urgent=True if old_alert.urgent == 1 else False,  # Apparently ternary expressions are "frowned upon by Pythonistas" but that's really their problem, isn't it
             message=old_alert.message
         )
 
@@ -64,12 +69,12 @@ def import_volumes():
         )
 
 def import_issues():
-    for old_issue in archive_models.issue.objects.using('archive').all():
-        (issue, created) = bongo_models.issue.objects.get_or_create(
+    for old_issue in archive_models.Issue.objects.using('archive').all():
+        (issue, created) = bongo_models.Issue.objects.get_or_create(
             pk=old_issue.id,
-            issue_date=make_aware(old_issue.issue_date, tz),
+            issue_date=old_issue.issue_date,
             issue_number=old_issue.issue_number,
-            volume=bongo_models.Volume.objects.get(pk__exact=old_issue.volume),
+            volume=bongo_models.Volume.objects.get(volume_number__exact=old_issue.volume),
             scribd=old_issue.scribd,
             # @TODO: Host our own PDFs?
         ) 
