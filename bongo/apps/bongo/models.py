@@ -38,13 +38,14 @@ class Issue (models.Model):
 
 class Section (models.Model):
     sections = (
-        ("news", "News"),
-        ("features", "Features"),
-        ("ae", "Arts & Entertainment"),
-        ("opinion", "Opinion"),
-        ("sports", "Sports"),
+        ("News", "News"),
+        ("Features", "Features"),
+        ("A&E", "Arts & Entertainment"),
+        ("Opinion", "Opinion"),
+        ("Sports", "Sports"),
     )
-    section = models.CharField(max_length=8, choices=sections, default="news")
+    section = models.CharField(max_length=8, choices=sections, default="News")
+    priority = models.IntegerField()
 
     def __unicode__(self):
         return self.section

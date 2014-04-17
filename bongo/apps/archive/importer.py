@@ -89,7 +89,16 @@ def import_series():
         (series, created) = bongo_models.Series.objects.get_or_create(
             pk=old_series.id,
             name=old_series.name
-        ) 
+        )
+
+""" Import the old sections table into the new Section model """
+def import_section():
+    for old_section in archive_models.Section.objects.using('archive').all():
+        (section, created) = bongo_models.Section.objects.get_or_create(
+            pk=old_section.id,
+            section=old_section.shortname,
+            priority=old_section.priority
+        )
 
 
 
@@ -99,3 +108,5 @@ def import_all():
     import_alerts()
     import_volumes()
     import_issues()
+    import_series()
+    import_section()
