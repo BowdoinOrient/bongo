@@ -307,7 +307,7 @@ class Series(models.Model):
         managed = False
         db_table = 'series'
 
-
+""" Won't import this """
 class Settings(models.Model):
     name = models.CharField(max_length=255, blank=True)
     int_value = models.IntegerField(blank=True, null=True)

@@ -80,6 +80,15 @@ def import_issues():
             volume=bongo_models.Volume.objects.get(volume_number__exact=old_issue.volume),
             scribd=old_issue.scribd,
             # @TODO: Host our own PDFs?
+        )
+
+
+""" Import the old series table into the new Series model """
+def import_series():
+    for old_series in archive_models.Series.objects.using('archive').all():
+        (series, created) = bongo_models.Series.objects.get_or_create(
+            pk=old_series.id,
+            name=old_series.name
         ) 
 
 
