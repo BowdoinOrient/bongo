@@ -104,6 +104,9 @@ class Creator(models.Model):
 This is a limited subset for the time being and will expand.
 """
 
+class Content(models.Model):
+    pass
+
 class Text (models.Model):
     authors = models.ManyToManyField(Creator)
     body = models.TextField()
