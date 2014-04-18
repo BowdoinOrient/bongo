@@ -159,6 +159,14 @@ class HTML (models.Model):
         return self.caption[:60]
 
 
+class Pullquote (models.Model):
+    quote = models.TextField()
+    attibution = models.TextField()
+
+    def __unicode__(self):
+        return self.quote
+
+
 
 
 """ The following model describes things a post on the website is.

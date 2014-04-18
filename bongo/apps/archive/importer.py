@@ -109,6 +109,21 @@ def import_job():
         )
 
 
+""" Holy shit all of these last few are interrelated so this is going to be a piece of work """
+def import_attachments():
+    for old_attachment in archive_models.Attachment.objects.using('archive').all():
+        if old_attachment.type == "html":
+            pass
+        elif old_attachment.type == "vimeo":
+            pass
+        elif old_attachment.type == "youtube":
+            pass
+        elif old_attachment.type == "file":
+            pass
+        elif old_attachment.type == "pullquote":
+            pass            
+
+
 
 def import_all():
     import_ads()
@@ -119,3 +134,4 @@ def import_all():
     import_series()
     import_section()
     import_job()
+    import_attachment()
