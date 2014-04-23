@@ -105,10 +105,10 @@ This is a limited subset for the time being and will expand.
 """
 
 class Content(models.Model):
-    pass
+    creators = models.ManyToManyField(Creator)
+    caption = models.TextField(null=True, blank=True)
 
 class Text (models.Model):
-    authors = models.ManyToManyField(Creator)
     body = models.TextField()
     excerpt = models.TextField(editable=False, null=True)
 
@@ -123,27 +123,21 @@ class Text (models.Model):
 
 
 class Video (models.Model):
-    filmers = models.ManyToManyField(Creator)
     staticfile = models.FileField()
-    caption = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
         return self.caption[:60]
 
 
 class PDF (models.Model):
-    authors = models.ManyToManyField(Creator)
     staticfile = models.FileField()
-    caption = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
         return self.caption[:60]
 
 
 class Photo (models.Model):
-    photographer = models.ForeignKey(Creator)
     staticfile = models.ImageField()
-    caption = models.TextField(null=True, blank=True)
 
     """ get_or_create a thumbnail of the specified width and height """
     def thumbnail(self, width, height):
@@ -154,9 +148,7 @@ class Photo (models.Model):
 
 
 class HTML (models.Model):
-    designers = models.ManyToManyField(Creator)
     content = models.TextField()
-    caption = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
         return self.caption[:60]
@@ -205,11 +197,7 @@ class Post (models.Model):
 
     creators = models.ManyToManyField(Creator, null=False)
 
-    text = models.ManyToManyField(Text, null=True, blank=True)  # multiple text bodies in a post = liveblog
-    photos = models.ManyToManyField(Photo, null=True, blank=True)
-    video = models.ManyToManyField(Video, null=True, blank=True)
-    html = models.ManyToManyField(HTML, null=True, blank=True)
-    pdf = models.ManyToManyField(PDF, null=True, blank=True)
+    content = models.ManyToManyField(Content, null=True, blank=True)
 
     types = (
         ("text", "Article"),
