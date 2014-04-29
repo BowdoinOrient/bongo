@@ -15,8 +15,9 @@ You'll need:
 2. Then you'll need to run:
 
         pip install -r reqs/dev.txt
-        python manage.py syncdb
-        python manage.py test
+        python manage.py makemigrations bongo
+        python manage.py makemigrations archive
+        python manage.py migrate
         python manage.py collectstatic
         python manage.py runserver
 

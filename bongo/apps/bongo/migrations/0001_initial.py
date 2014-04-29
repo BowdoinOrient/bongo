@@ -1,4 +1,6 @@
 # encoding: utf8
+from __future__ import unicode_literals
+
 from django.db import models, migrations
 
 
@@ -9,76 +11,197 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Volume',
+            name=b'Volume',
             fields=[
-                (u'id', models.AutoField(verbose_name=u'ID', serialize=False, auto_created=True, primary_key=True)),
-                ('volume_number', models.IntegerField()),
-                ('volume_year_start', models.IntegerField()),
-                ('volume_year_end', models.IntegerField()),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'volume_number', models.IntegerField()),
+                (b'volume_year_start', models.IntegerField()),
+                (b'volume_year_end', models.IntegerField()),
             ],
             options={
             },
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Event',
+            name=b'Event',
             fields=[
-                (u'id', models.AutoField(verbose_name=u'ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
             ],
             options={
             },
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='ScheduledPost',
+            name=b'HTML',
             fields=[
-                (u'id', models.AutoField(verbose_name=u'ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'content', models.TextField()),
             ],
             options={
             },
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Advertiser',
+            name=b'ScheduledPost',
             fields=[
-                (u'id', models.AutoField(verbose_name=u'ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=100)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
             ],
             options={
             },
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Alert',
+            name=b'Advertiser',
             fields=[
-                (u'id', models.AutoField(verbose_name=u'ID', serialize=False, auto_created=True, primary_key=True)),
-                ('run_from', models.DateField()),
-                ('run_through', models.DateField()),
-                ('message', models.TextField()),
-                ('urgent', models.BooleanField(default=False)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'name', models.CharField(max_length=100)),
             ],
             options={
             },
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Series',
+            name=b'PDF',
             fields=[
-                (u'id', models.AutoField(verbose_name=u'ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=100)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'staticfile', models.FileField(upload_to=b'')),
             ],
             options={
             },
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Ad',
+            name=b'Tip',
             fields=[
-                (u'id', models.AutoField(verbose_name=u'ID', serialize=False, auto_created=True, primary_key=True)),
-                ('run_from', models.DateField()),
-                ('run_through', models.DateField()),
-                ('owner', models.ForeignKey(to='bongo.Advertiser', to_field=u'id')),
-                ('url', models.URLField(null=True, blank=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'content', models.TextField()),
+                (b'respond_to', models.EmailField(max_length=75, null=True, blank=True)),
+                (b'submitted_at', models.DateTimeField()),
+                (b'submitted_from', models.GenericIPAddressField(null=True)),
+                (b'useragent', models.TextField(null=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name=b'Tag',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'tag', models.CharField(max_length=25)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name=b'Series',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'name', models.CharField(max_length=100)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name=b'Section',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'section', models.CharField(default=b'News', max_length=8, choices=[(b'News', b'News'), (b'Features', b'Features'), (b'A&E', b'Arts & Entertainment'), (b'Opinion', b'Opinion'), (b'Sports', b'Sports')])),
+                (b'priority', models.IntegerField()),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name=b'Alert',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'run_from', models.DateTimeField()),
+                (b'run_through', models.DateTimeField()),
+                (b'message', models.TextField()),
+                (b'urgent', models.BooleanField(default=False)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name=b'Photo',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'staticfile', models.ImageField(upload_to=b'')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name=b'Job',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'title', models.CharField(max_length=40)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name=b'Video',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'staticfile', models.FileField(upload_to=b'')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name=b'Pullquote',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'quote', models.TextField()),
+                (b'attibution', models.TextField()),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name=b'Text',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'body', models.TextField()),
+                (b'excerpt', models.TextField(null=True, editable=False)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name=b'Ad',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'run_from', models.DateField()),
+                (b'run_through', models.DateField()),
+                (b'owner', models.ForeignKey(to=b'bongo.Advertiser', to_field='id')),
+                (b'url', models.URLField(null=True, blank=True)),
+                (b'adfile', models.ImageField(upload_to=b'')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name=b'Creator',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                (b'name', models.CharField(max_length=100)),
+                (b'job', models.ForeignKey(to=b'bongo.Job', to_field='id')),
+                (b'twitter', models.CharField(max_length=15, null=True, blank=True)),
+                (b'profpic', models.ImageField(null=True, upload_to=b'', blank=True)),
             ],
             options={
             },
