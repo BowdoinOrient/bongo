@@ -122,8 +122,15 @@ class Text (models.Model):
         super(Text, self).save(*args, **kwargs)
 
 
-class Video (models.Model):
-    staticfile = models.FileField()
+class Video(models.Model):
+    hosts = (
+        ("YouTube", "YouTube"),
+        ("Vimeo", "Vimeo"),
+        ("Vine", "Vine"),
+    )  # the syntax of how you have to do this is really annoying
+
+    host = models.CharField(max_length=7, choices=hosts, default="Vimeo")
+    uid = models.CharField(max_length=20, verbose_name="Video identifier - typically a string of letters or numbers after the last slash in the URL")
 
     def __unicode__(self):
         return self.caption[:60]
