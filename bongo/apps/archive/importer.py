@@ -113,15 +113,26 @@ def import_job():
 def import_attachments():
     for old_attachment in archive_models.Attachment.objects.using('archive').all():
         if old_attachment.type == "html":
-            pass
+            (atchmt, created) = bongo_models.HTML.objects.get_or_create(
+                pk=old_attachment.id,
+                content=old_attachment.body
+            )
         elif old_attachment.type == "vimeo":
-            pass
+            (atchmt, created) = bongo_models..objects.get_or_create(
+                pk=old_attachment.id,
+            )
         elif old_attachment.type == "youtube":
-            pass
+            (atchmt, created) = bongo_models..objects.get_or_create(
+                pk=old_attachment.id,
+            )
         elif old_attachment.type == "file":
-            pass
+            (atchmt, created) = bongo_models..objects.get_or_create(
+                pk=old_attachment.id,
+            )
         elif old_attachment.type == "pullquote":
-            pass            
+            (atchmt, created) = bongo_models..objects.get_or_create(
+                pk=old_attachment.id,
+            )            
 
 
 
