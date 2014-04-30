@@ -83,7 +83,7 @@ class Job(models.Model):
 
 class Creator(models.Model):
     # possibility this author is also a bongo user
-    # user = models.ForeignKey(User, null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True)
 
     name = models.CharField(max_length=100)
     
