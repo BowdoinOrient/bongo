@@ -96,6 +96,9 @@ class Creator(models.Model):
     def __unicode__(self):
         return self.name
 
+    def works(self):
+        return self.content_set
+
 
 
 
@@ -163,7 +166,7 @@ class HTML (models.Model):
 
 class Pullquote (models.Model):
     quote = models.TextField()
-    attibution = models.TextField()
+    attribution = models.TextField()
 
     def __unicode__(self):
         return self.quote
