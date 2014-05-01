@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        (b'bongo', b'0002_content_issue'),
+        (b'bongo', b'0006_photo'),
     ]
 
     operations = [

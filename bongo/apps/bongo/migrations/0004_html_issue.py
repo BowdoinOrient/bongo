@@ -7,20 +7,19 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        (b'bongo', b'0001_initial'),
+        (b'bongo', b'0003_content'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name=b'Content',
+            name=b'HTML',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                (b'caption', models.TextField(null=True, blank=True)),
-                (b'creators', models.ManyToManyField(to=b'bongo.Creator')),
+                ('content_ptr', models.OneToOneField(auto_created=True, primary_key=True, to_field='id', serialize=False, to=b'bongo.Content')),
+                (b'content', models.TextField()),
             ],
             options={
             },
-            bases=(models.Model,),
+            bases=(b'bongo.content',),
         ),
         migrations.CreateModel(
             name=b'Issue',

@@ -32,16 +32,6 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name=b'HTML',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                (b'content', models.TextField()),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
             name=b'ScheduledPost',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -55,16 +45,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 (b'name', models.CharField(max_length=100)),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
-            name=b'PDF',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                (b'staticfile', models.FileField(upload_to=b'')),
             ],
             options={
             },
@@ -129,52 +109,10 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name=b'Photo',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                (b'staticfile', models.ImageField(upload_to=b'')),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
             name=b'Job',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 (b'title', models.CharField(max_length=40)),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
-            name=b'Video',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                (b'staticfile', models.FileField(upload_to=b'')),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
-            name=b'Pullquote',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                (b'quote', models.TextField()),
-                (b'attibution', models.TextField()),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
-            name=b'Text',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                (b'body', models.TextField()),
-                (b'excerpt', models.TextField(null=True, editable=False)),
             ],
             options={
             },
@@ -189,19 +127,6 @@ class Migration(migrations.Migration):
                 (b'owner', models.ForeignKey(to=b'bongo.Advertiser', to_field='id')),
                 (b'url', models.URLField(null=True, blank=True)),
                 (b'adfile', models.ImageField(upload_to=b'')),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
-            name=b'Creator',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                (b'name', models.CharField(max_length=100)),
-                (b'job', models.ForeignKey(to=b'bongo.Job', to_field='id')),
-                (b'twitter', models.CharField(max_length=15, null=True, blank=True)),
-                (b'profpic', models.ImageField(null=True, upload_to=b'', blank=True)),
             ],
             options={
             },

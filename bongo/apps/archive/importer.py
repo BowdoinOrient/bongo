@@ -2,8 +2,14 @@ import models as archive_models
 from bongo.apps.bongo import models as bongo_models
 from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
+import requests
 
 tz = get_current_timezone()
+
+
+def get(url):
+    pass
+
 
 
 """ Import the old ads table into the new Advertiser, Ad models """
@@ -13,18 +19,11 @@ def import_ads():
         (ad, created) = bongo_models.Ad.objects.get_or_create(
             pk=old_ad.id, 
             run_from=make_aware(old_ad.start_date, tz), 
-            run_through=make_aware(old_ad.end_date, tz)
+            run_through=make_aware(old_ad.end_date, tz),
+            url = old_ad.link
         )
 
-        if created:
-            ad.url = old_ad.link
-            ad.save()
-
-            # @TODO: Address file download and re-upload with requests and boto
-
-        else:
-            # the add must have been created on a previous run of the task
-            pass
+        # @TODO: Address file download and re-upload with requests and boto
 
 
 """ Import the old tips table into the new Tip model """
@@ -33,13 +32,11 @@ def import_tips():
         (tip, created) = bongo_models.Tip.objects.get_or_create(
             pk=old_tip.id, 
             content=old_tip.tip,
-            submitted_at=make_aware(old_tip.submitted, tz)
+            submitted_at=make_aware(old_tip.submitted, tz),
+            submitted_from = old_tip.user_ip,
+            useragent = old_tip.user_agent
         )
 
-        if created:
-            tip.submitted_from = old_tip.user_ip
-            tip.useragent = old_tip.user_agent
-            tip.save()
 
 
 """ Import the old alerts table into the new Alert model """
@@ -110,31 +107,51 @@ def import_job():
 
 
 """ Holy shit all of these last few are interrelated so this is going to be a piece of work """
-def import_attachments():
-    for old_attachment in archive_models.Attachment.objects.using('archive').all():
-        if old_attachment.type == "html":
-            (atchmt, created) = bongo_models.HTML.objects.get_or_create(
-                pk=old_attachment.id,
-                content=old_attachment.body
-            )
-        elif old_attachment.type == "vimeo":
-            (atchmt, created) = bongo_models..objects.get_or_create(
-                pk=old_attachment.id,
-            )
-        elif old_attachment.type == "youtube":
-            (atchmt, created) = bongo_models..objects.get_or_create(
-                pk=old_attachment.id,
-            )
-        elif old_attachment.type == "file":
-            (atchmt, created) = bongo_models..objects.get_or_create(
-                pk=old_attachment.id,
-            )
-        elif old_attachment.type == "pullquote":
-            (atchmt, created) = bongo_models..objects.get_or_create(
-                pk=old_attachment.id,
-            )            
+
+def import_attachment():
+    for old_attachment in archive_models.Attachments.objects.using('archive').all():
+        if old_attachment.id <= 5:
+            # Attachments 1-5 are broken in the current BONUS and have the wrong content1/content2
+            # ordering. I'm comfortable dropping them.
+            continue
+        else:
+            if old_attachment.type == "html":
+                (atchmt, created) = bongo_models.HTML.objects.get_or_create(
+                    pk=old_attachment.id,
+                    content=old_attachment.content1
+                )
+            elif old_attachment.type == "vimeo":
+                (atchmt, created) = bongo_models.Video.objects.get_or_create(
+                    pk=old_attachment.id,
+                    host="Vimeo",
+                    uid=old_attachment.content1,
+                )
+            elif old_attachment.type == "youtube":
+                (atchmt, created) = bongo_models.Video.objects.get_or_create(
+                    pk=old_attachment.id,
+                    host="YouTube",
+                    uid=old_attachment.content1,
+                )
+            elif old_attachment.type == "pullquote":
+                (atchmt, created) = bongo_models.Pullquote.objects.get_or_create(
+                    pk=old_attachment.id,
+                    quote=old_attachment.content1,
+                    attribution=old_attachment.content2
+                )   
+
+            if old_attachment.type != "pullquote":
+                atchmt.caption=old_attachment.content2
+
+            # figure out to which Post this attachment belongs and if it exists yet
+            post_id = old_attachment.article_id
+            creator_id = old_attachment.author_id
 
 
+def import_content():
+    pass
+
+def import_creator():
+    pass
 
 def import_all():
     import_ads()

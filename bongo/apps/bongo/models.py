@@ -69,6 +69,10 @@ class Job(models.Model):
         return self.title
 
 
+
+
+
+
 """ Creators own Posts. Creators might be:
     - an organization (e.g., The Editorial Board)
     - a user of Bongo (e.g., an Orient staffer)
@@ -103,6 +107,7 @@ class Creator(models.Model):
 
 
 
+
 """ The following models describe things a post can contain.
 This is a limited subset for the time being and will expand.
 """
@@ -111,7 +116,11 @@ class Content(models.Model):
     creators = models.ManyToManyField(Creator)
     caption = models.TextField(null=True, blank=True)
 
-class Text (models.Model):
+    def save(self, *args, **kwargs):
+        raise Exception("You can not create a Content object directly, only its subclasses (e.g., Video, Text, Photo)")
+
+
+class Text (Content):
     body = models.TextField()
     excerpt = models.TextField(editable=False, null=True)
 
@@ -125,7 +134,7 @@ class Text (models.Model):
         super(Text, self).save(*args, **kwargs)
 
 
-class Video(models.Model):
+class Video(Content):
     hosts = (
         ("YouTube", "YouTube"),
         ("Vimeo", "Vimeo"),
@@ -139,14 +148,14 @@ class Video(models.Model):
         return self.caption[:60]
 
 
-class PDF (models.Model):
+class PDF (Content):
     staticfile = models.FileField()
 
     def __unicode__(self):
         return self.caption[:60]
 
 
-class Photo (models.Model):
+class Photo (Content):
     staticfile = models.ImageField()
 
     """ get_or_create a thumbnail of the specified width and height """
@@ -157,19 +166,22 @@ class Photo (models.Model):
         return self.caption[:60]
 
 
-class HTML (models.Model):
+class HTML (Content):
     content = models.TextField()
 
     def __unicode__(self):
         return self.caption[:60]
 
 
-class Pullquote (models.Model):
+class Pullquote (Content):
     quote = models.TextField()
     attribution = models.TextField()
 
     def __unicode__(self):
         return self.quote
+
+
+
 
 
 
@@ -232,6 +244,10 @@ class Post (models.Model):
 
     def __unicode__(self):
         return self.title
+
+
+
+
 
 
 
