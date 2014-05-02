@@ -11,11 +11,12 @@ tz = get_current_timezone()
 
 
 def getfile(url):
+    print("Downloading "+url)
     r = requests.get(url)
 
     if r.status_code == 200:
         return ContentFile(r.content)
-    else
+    else:
         raise Exception("File not found.")
 
 
@@ -152,26 +153,59 @@ def import_attachment():
                 atchmt.caption=old_attachment.content2
                 atchmt.save()
 
-            # have to create the Posts before we can link them here
-            import_content()
 
-            # Ditto with the Creators
+            # have to create the Creators before we can link them here
             import_creator()
 
-            # this shouldn't fail now that posts have been created
-            post = bongo_models.Post.objects.get(pk__exact=old_attachment.article_id)
-            post.content.add(atchmt)
-            post.save()
-
-            # ditto, again
             creator = bongo_models.Creator.objects.get(pk__exact=old_attachment.author_id)
             atchmt.creators.add(creator)
             atchmt.save()
 
+            
+            # ditto for content
+            import_content()
+
+            post = bongo_models.Post.objects.get(pk__exact=old_attachment.article_id)
+            post.content.add(atchmt)
+            post.save()
 
 
+
+
+""" this is complex """
 def import_content():
-    pass
+    for old_articlebody in archive_models.Articlebody.objects.using('archive').all():
+        (text, created) = bongo_models.Text.objects.get_or_create(
+            pk=old_articlebody.id,
+            body=old_articlebody.articlebody
+        )
+
+        text.creators.add(bongo_models.Creator.get(pk__exact=old_articlebody.creator_id))
+        text.save()
+
+        old_article = archive_models.Article.objects.get(id__exact=old_articlebody.article_id)
+
+        (post, created) = bongo_models.Post.objects.get_or_create(
+            pk=old_article.id,
+            created=old_article.date_created,
+            updated=old_article.date_updated,
+            published=old_article.date_published,
+            is_published=(True if old_article.published == 1 else False),  # I love you Python
+            series=bongo_models.Series.objects.get(pk__exact=old_article.series),
+            issue=bongo_models.Issue.objects.get(pk__exact=old_article.issue),
+            volume=bongo_models.Volume.objects.get(pk__exact=old_article.volume),
+            section=bongo_models.Section.objects.get(pk__exact=old_article.section),
+            title=old_article.title,
+            views_local=old_article.views_bowdoin,
+            views_global=old_article.views,
+        )
+
+        post.content.add(text)
+
+        for old_articleauthor in archive_models.Articleauthor.objects.using('archive').filter(article_id__exact=old_article.id):
+            post.creators.add(bongo_models.Creator.get(pk=old_articleauthor.author_id))
+
+        post.save()
 
 
 def import_creator():
@@ -199,6 +233,11 @@ def import_photo():
 
         photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
         photo.save()
+        
+
+        post_owner = bongo_models.Post.objects.get(pk__exact=old_photo.article_id)
+        post_owner.creators.add(photo)
+        post_owner.save()
 
 
 

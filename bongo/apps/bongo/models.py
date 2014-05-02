@@ -214,13 +214,13 @@ class Post (models.Model):
     section = models.ForeignKey(Section)
 
     title = models.CharField(max_length=180)
-    slug = models.CharField(max_length=180, editable=False, default="")  # http://en.wikipedia.org/wiki/Clean_URL#Slug
+    slug = models.CharField(max_length=180, verbose_name="Slug. WARNING: Changing this will change the post URL, breaking existing links.")  # http://en.wikipedia.org/wiki/Clean_URL#Slug
     tags = models.ManyToManyField(Tag, null=True, blank=True)
 
     views_local = models.IntegerField(editable=False, default=0)
     views_global = models.IntegerField(editable=False, default=0)
 
-    creators = models.ManyToManyField(Creator, null=False)
+    creators = models.ManyToManyField(Creator)
 
     content = models.ManyToManyField(Content, null=True, blank=True)
 
@@ -236,14 +236,13 @@ class Post (models.Model):
 
     primary_type = models.CharField(max_length=8, choices=types, default="generic")
 
-    """ Return all of the media entities referenced by this post """
-    def content(self):
-        content = []
 
-        for media in [self.text, self.photos, self.video, self.html, self.pdf]:
-            content.append(media.all())
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)[:180]
 
-        return content
+        super(Text, self).save(*args, **kwargs)
+
 
     def __unicode__(self):
         return self.title
