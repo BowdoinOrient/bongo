@@ -1,9 +1,11 @@
-import models as archive_models
+from bongo.apps.archive import models as archive_models
 from bongo.apps.bongo import models as bongo_models
+from django.core.management.base import BaseCommand
 from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
+from django.db import transaction
 from datetime import date
 import requests
 
@@ -25,6 +27,9 @@ def getfile(url):
 """ Import the old ads table into the new Advertiser, Ad models """
 def import_ads():
     for old_ad in archive_models.Ads.objects.using('archive').all():
+
+        print ("Importing ad "+str(old_ad.id))
+
         (advertiser, created) = bongo_models.Advertiser.objects.get_or_create(name=old_ad.sponsor)
         (ad, created) = bongo_models.Ad.objects.get_or_create(
             pk=old_ad.id, 
@@ -39,6 +44,9 @@ def import_ads():
 """ Import the old tips table into the new Tip model """
 def import_tips():
     for old_tip in archive_models.Tips.objects.using('archive').all():
+
+        print ("Importing tip "+str(old_tip.id))
+
         (tip, created) = bongo_models.Tip.objects.get_or_create(
             pk=old_tip.id, 
             content=old_tip.tip,
@@ -52,9 +60,12 @@ def import_tips():
 """ Import the old alerts table into the new Alert model """
 def import_alerts():
     for old_alert in archive_models.Alerts.objects.using('archive').all():
+
         if not old_alert.end_date or not old_alert.start_date:
             print "Refusing to commit an alert with a null datetime"
             continue
+
+        print ("Importing alert "+str(old_alert.id))
 
         (alert, created) = bongo_models.Alert.objects.get_or_create(
             pk=old_alert.id,
@@ -69,6 +80,9 @@ def import_alerts():
 """ Import the old volumes table into the new Volume model """
 def import_volumes():
     for old_volume in archive_models.Volume.objects.using('archive').all():
+
+        print ("Importing volume "+str(old_volume.id))
+
         (volume, created) = bongo_models.Volume.objects.get_or_create(
             pk=old_volume.id,
             volume_number=old_volume.arabic,
@@ -80,6 +94,9 @@ def import_volumes():
 """ Import the old issues table into the new Issue model """
 def import_issues():
     for old_issue in archive_models.Issue.objects.using('archive').all():
+
+        print ("Importing issue "+str(old_issue.id))
+
         (issue, created) = bongo_models.Issue.objects.get_or_create(
             pk=old_issue.id,
             issue_date=old_issue.issue_date,
@@ -93,6 +110,9 @@ def import_issues():
 """ Import the old series table into the new Series model """
 def import_series():
     for old_series in archive_models.Series.objects.using('archive').all():
+
+        print ("Importing series "+str(old_series.id))
+
         (series, created) = bongo_models.Series.objects.get_or_create(
             pk=old_series.id,
             name=old_series.name
@@ -101,6 +121,9 @@ def import_series():
 """ Import the old sections table into the new Section model """
 def import_section():
     for old_section in archive_models.Section.objects.using('archive').all():
+
+        print ("Importing section "+str(old_section.id))
+
         (section, created) = bongo_models.Section.objects.get_or_create(
             pk=old_section.id,
             section=old_section.shortname,
@@ -110,6 +133,9 @@ def import_section():
 """ Import the old jobs table into the new Job model """
 def import_job():
     for old_job in archive_models.Job.objects.using('archive').all():
+
+        print ("Importing job "+str(old_job.id))
+
         (job, created) = bongo_models.Job.objects.get_or_create(
             pk=old_job.id,
             title=old_job.name,
@@ -120,6 +146,9 @@ def import_job():
 
 def import_attachment():
     for old_attachment in archive_models.Attachments.objects.using('archive').all():
+
+        print ("Importing attachment "+str(old_attachment.id))
+
         if old_attachment.id <= 5:
             # Attachments 1-5 are absent in the current frontend and have the wrong content1/content2
             # ordering. I'm comfortable dropping them.
@@ -175,6 +204,9 @@ def import_attachment():
 """ this is complex """
 def import_content():
     for old_articlebody in archive_models.Articlebody.objects.using('archive').all():
+
+        print ("Importing content "+str(old_content.id))
+
         (text, created) = bongo_models.Text.objects.get_or_create(
             pk=old_articlebody.id,
             body=old_articlebody.articlebody
@@ -210,16 +242,26 @@ def import_content():
 
 def import_creator():
     for old_author in archive_models.Author.objects.using('archive').all():
+
+        print ("Importing author "+str(old_author.id))
+
         (creator, created) = bongo_models.Creator.objects.get_or_create(
             name=old_author.name,
-            job=bongo_models.Job.objects.get(pk__exact=old_author.job),
         )
 
-        creator.profpic.save(slugify(old_author.name), getfile("http://bowdoinorient.com/images/authors"+old_author.photo))
+        if old_author.job:
+            creator.job = bongo_models.Job.objects.get(pk__exact=old_author.job)
+            creator.save()
+
+        if old_author.photo:
+            creator.profpic.save(slugify(old_author.name)+".jpg", getfile("http://bowdoinorient.com/images/authors/"+old_author.photo))
 
 
 def import_photo():
     for old_photo in archive_models.Photo.objects.using('archive').all():
+
+        print ("Importing photo "+str(old_photo.id))
+
         (photo, created) = bongo_models.Attachment.objects.get_or_create(
             caption=old_photo.caption,
         )
@@ -241,17 +283,26 @@ def import_photo():
 
 
 
-def import_all():
-    import_ads()
-    import_tips()
-    import_alerts()
-    import_volumes()
-    import_issues()
-    import_series()
-    import_section()
-    import_job()
-    import_attachment()
-    # import_content() and import_creator() will be called by import_attachment()
-    import_photo()
+class Command(BaseCommand):
 
+    def handle(self, *args, **options):
+
+        transaction.set_autocommit(False)
+        sid = transaction.savepoint()
+
+        import_ads()
+        import_tips()
+        import_alerts()
+        import_volumes()
+        import_issues()
+        import_series()
+        import_section()
+        import_job()
+        import_attachment()
+        # import_content() and import_creator() will be called by import_attachment()
+        import_photo()
+
+
+        # rollback all changes - testing only
+        transaction.savepoint_rollback(sid)
 

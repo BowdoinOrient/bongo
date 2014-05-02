@@ -12,3 +12,6 @@ bongo/logs/*
 
 # coveralls
 .coverage
+
+# No media
+bongo/media/*
