@@ -2,13 +2,22 @@ import models as archive_models
 from bongo.apps.bongo import models as bongo_models
 from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
+from django.core.files.base import ContentFile
+from django.utils.text import slugify
+from datetime import date
 import requests
 
 tz = get_current_timezone()
 
 
-def get(url):
-    pass
+def getfile(url):
+    r = requests.get(url)
+
+    if r.status_code == 200:
+        return ContentFile(r.content)
+    else
+        raise Exception("File not found.")
+
 
 
 
@@ -23,7 +32,7 @@ def import_ads():
             url = old_ad.link
         )
 
-        # @TODO: Address file download and re-upload with requests and boto
+        ad.adfile.save(old_ad.filename, getfile("http://bowdoinorient.com/ads/"+old_ad.filename))
 
 
 """ Import the old tips table into the new Tip model """
@@ -111,7 +120,7 @@ def import_job():
 def import_attachment():
     for old_attachment in archive_models.Attachments.objects.using('archive').all():
         if old_attachment.id <= 5:
-            # Attachments 1-5 are broken in the current BONUS and have the wrong content1/content2
+            # Attachments 1-5 are absent in the current frontend and have the wrong content1/content2
             # ordering. I'm comfortable dropping them.
             continue
         else:
@@ -141,17 +150,57 @@ def import_attachment():
 
             if old_attachment.type != "pullquote":
                 atchmt.caption=old_attachment.content2
+                atchmt.save()
 
-            # figure out to which Post this attachment belongs and if it exists yet
-            post_id = old_attachment.article_id
-            creator_id = old_attachment.author_id
+            # have to create the Posts before we can link them here
+            import_content()
+
+            # Ditto with the Creators
+            import_creator()
+
+            # this shouldn't fail now that posts have been created
+            post = bongo_models.Post.objects.get(pk__exact=old_attachment.article_id)
+            post.content.add(atchmt)
+            post.save()
+
+            # ditto, again
+            creator = bongo_models.Creator.objects.get(pk__exact=old_attachment.author_id)
+            atchmt.creators.add(creator)
+            atchmt.save()
+
 
 
 def import_content():
     pass
 
+
 def import_creator():
-    pass
+    for old_author in archive_models.Author.objects.using('archive').all():
+        (creator, created) = bongo_models.Creator.objects.get_or_create(
+            name=old_author.name,
+            job=bongo_models.Job.objects.get(pk__exact=old_author.job),
+        )
+
+        creator.profpic.save(slugify(old_author.name), getfile("http://bowdoinorient.com/images/authors"+old_author.photo))
+
+
+def import_photo():
+    for old_photo in archive_models.Photo.objects.using('archive').all():
+        (photo, created) = bongo_models.Attachment.objects.get_or_create(
+            caption=old_photo.caption,
+        )
+
+        image_url = "http://bowdoinorient.com/images/{date}/{fname}".format(
+            date=old_photo.article_date.date.today().strftime("%Y-%m-%d"),
+            fname=old_photo.filename_original,
+        )
+
+        photo.staticfile.save(slugify(old_author.name), getfile(image_url))
+
+        photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
+        photo.save()
+
+
 
 def import_all():
     import_ads()
@@ -163,3 +212,7 @@ def import_all():
     import_section()
     import_job()
     import_attachment()
+    # import_content() and import_creator() will be called by import_attachment()
+    import_photo()
+
+

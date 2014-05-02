@@ -116,8 +116,8 @@ class Content(models.Model):
     creators = models.ManyToManyField(Creator)
     caption = models.TextField(null=True, blank=True)
 
-    def save(self, *args, **kwargs):
-        raise Exception("You can not create a Content object directly, only its subclasses (e.g., Video, Text, Photo)")
+    def __unicode__(self):
+        return creators.all()
 
 
 class Text (Content):
@@ -144,8 +144,11 @@ class Video(Content):
     host = models.CharField(max_length=7, choices=hosts, default="Vimeo")
     uid = models.CharField(max_length=20, verbose_name="Video identifier - typically a string of letters or numbers after the last slash in the URL")
 
+    def url(self):
+        return "http://{host}.com/{uid}".format(host=self.host.lower(), uid=self.uid)
+
     def __unicode__(self):
-        return self.caption[:60]
+        return self.url()
 
 
 class PDF (Content):
