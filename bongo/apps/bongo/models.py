@@ -91,7 +91,7 @@ class Creator(models.Model):
 
     name = models.CharField(max_length=100)
     
-    job = models.ForeignKey(Job)
+    job = models.ForeignKey(Job, null=True)
 
     twitter = models.CharField(max_length=15, null=True, blank=True)
 
