@@ -243,23 +243,32 @@ def import_content():
         # This shouldn't actually ever be invoked now that I did some manual DB cleanup
         if old_article.volume == 0:
             old_article.volume = old_article.date_created.year - 1870
-            
-        (post, created) = bongo_models.Post.objects.get_or_create(
-            pk=old_article.id,
-            created=old_article.date_created,
-            updated=old_article.date_updated,
-            published=old_article.date_published,
-            is_published=(True if old_article.published == 1 else False),  # I love you Python
-            opinion=(True if old_article.opinion == 1 else False),
-            issue=bongo_models.Issue.objects.get(issue_number__exact=old_article.issue_number, volume__exact=bongo_models.Volume.objects.get(volume_number__exact=old_article.volume)),
-            volume=bongo_models.Volume.objects.get(volume_number__exact=old_article.volume),
-            section=bongo_models.Section.objects.get(pk__exact=old_article.section_id),
-            title=old_article.title,
-            views_local=old_article.views_bowdoin,
-            views_global=old_article.views,
-        )
 
-        if created:
+        # if the article referenced by old_articlebody.article_id already exists, then this is a revision. Update the body only.
+        try:
+            bongo_models.Post.objects.get(pk__exact=old_articlebody.article_id)
+            existing_post = bongo_models.Post.objects.get(pk__exact=old_articlebody.article_id)
+            for existing_content in existing_post.content.all():
+                existing_content.delete()
+            existing_post.content.add(text)
+            existing_post.save()
+
+        except:         
+            post = bongo_models.Post.objects.create(
+                pk=old_article.id,
+                created=old_article.date_created,
+                updated=old_article.date_updated,
+                published=old_article.date_published,
+                is_published=(True if old_article.published == 1 else False),  # I love you Python
+                opinion=(True if old_article.opinion == 1 else False),
+                issue=bongo_models.Issue.objects.get(issue_number__exact=old_article.issue_number, volume__exact=bongo_models.Volume.objects.get(volume_number__exact=old_article.volume)),
+                volume=bongo_models.Volume.objects.get(volume_number__exact=old_article.volume),
+                section=bongo_models.Section.objects.get(pk__exact=old_article.section_id),
+                title=old_article.title,
+                views_local=old_article.views_bowdoin,
+                views_global=old_article.views,
+            )
+
             post.series.add(bongo_models.Series.objects.get(pk__exact=old_article.series))
 
             post.content.add(text)
@@ -267,7 +276,7 @@ def import_content():
             for old_articleauthor in archive_models.Articleauthor.objects.using('archive').filter(article_id__exact=old_article.id):
                 post.creators.add(bongo_models.Creator.objects.get(pk__exact=old_articleauthor.author_id))
 
-        post.save()
+            post.save()
 
 
 def import_creator():
