@@ -28,7 +28,7 @@ prefix_string = prefix_string[:-4]
 ########## GLOBALS
 env.run = 'python manage.py'
 env.user = 'orient'
-env.hosts = ['citadel.bjacobel.com']
+env.hosts = ['bowdoinoccident.com']
 ########## END GLOBALS
 
 
@@ -44,7 +44,7 @@ def deploy(branch='master'):
     with cd("/home/orient"):
         fabtools.require.git.working_copy("git@github.com:bowdoinorient/bongo.git", branch=branch)
         
-        with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
+        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo'):
             run('pip -q install -r bongo/reqs/prod.txt')
 
 ############ END DEPLOY
@@ -58,7 +58,7 @@ def start():
     """Serve the app using supervisord"""
 
     with cd("/home/orient/bongo"):
-        with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
+        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo'):
             with prefix(prefix_string):
                 # check to make sure logs dir exists, make it if not
                 if not exists('/home/orient/bongo/logs'):
@@ -101,7 +101,7 @@ def syncdb():
     """Run a syncdb"""
 
     with cd("/home/orient/bongo"):
-        with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
+        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo'):
             with prefix(prefix_string):
                 run('%(run)s syncdb --noinput' % env)
 
@@ -115,7 +115,7 @@ def collectstatic():
     """Collect all static files, and copy them to S3 for production usage."""
 
     with cd("/home/orient/bongo"):
-        with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
+        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo'):
             with prefix(prefix_string):
                 run('%(run)s fasts3collectstatic --noinput' % env)
 ########## END FILE MANAGEMENT
@@ -152,9 +152,9 @@ def setup():
     # Create a virtualenv
     run('pip install virtualenv')
 
-    if not exists('/home/bjacobel/.virtualenvs/bongo'):
-        run('mkdir -p /home/bjacobel/.virtualenvs/bongo')
-        run('virtualenv /home/bjacobel/.virtualenvs/bongo')
+    if not exists('/home/orient/.virtualenvs/bongo'):
+        run('mkdir -p /home/orient/.virtualenvs/bongo')
+        run('virtualenv /home/orient/.virtualenvs/bongo')
 
     print(red("Create a password for the postgres account."))
     sudo('passwd postgres')
@@ -178,6 +178,6 @@ def managepy(command):
     """run an arbitrary 'python manage.py' command"""
 
     with cd("/home/orient/bongo"):
-        with fabtools.python.virtualenv('/home/bjacobel/.virtualenvs/bongo'):
+        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo'):
             with prefix(prefix_string):
                 run(env.run +" "+ command)
