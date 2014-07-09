@@ -19,9 +19,8 @@ def getfile(url):
     if r.status_code == 200:
         return ContentFile(r.content)
     else:
-        raise Exception("File not found.")
-
-
+        print("Error: File not found.")
+        return ContentFile("")
 
 
 """ Import the old ads table into the new Advertiser, Ad models """
@@ -35,7 +34,8 @@ def import_ads():
             pk=old_ad.id, 
             run_from=make_aware(old_ad.start_date, tz), 
             run_through=make_aware(old_ad.end_date, tz),
-            url = old_ad.link
+            url=old_ad.link,
+            owner=advertiser,
         )
 
         ad.adfile.save(old_ad.filename, getfile("http://bowdoinorient.com/ads/"+old_ad.filename))
@@ -300,7 +300,7 @@ class Command(BaseCommand):
         import_job()
         import_attachment()
         # import_content() and import_creator() will be called by import_attachment()
-        import_photo()
+        # import_photo()
 
 
         # rollback all changes - testing only
