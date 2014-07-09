@@ -130,7 +130,7 @@ class Text (Content):
     def save(self, *args, **kwargs):
         # Using NLTK here is a sledgehammer for a thumbtack, but it may be useful for tagging, too
         tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-        excerpt = ' '.join(tokenizer.tokenize(data)[:4])
+        self.excerpt = ' '.join(tokenizer.tokenize(self.body)[:4])
         super(Text, self).save(*args, **kwargs)
 
 

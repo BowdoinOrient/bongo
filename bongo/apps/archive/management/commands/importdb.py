@@ -6,21 +6,31 @@ from django.utils.timezone import make_aware
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
 from django.db import transaction
-from datetime import date
+from datetime import date, datetime
 import requests
 
 tz = get_current_timezone()
 
-
 def getfile(url):
     print("Downloading "+url)
-    r = requests.get(url)
+    #r = requests.get(url)
+    return ContentFile("")
 
     if r.status_code == 200:
         return ContentFile(r.content)
     else:
         print("Error: File not found.")
         return ContentFile("")
+
+
+""" Convert a date to a datetime, do nothing to a datetime """
+def datetimeify(d):
+    if str(type(d)) == "<type 'datetime.datetime'>":
+        return d
+    elif str(type(d)) == "<type 'datetime.date'>":
+        return datetime.combine(d, datetime.min.time())
+    else:
+        raise Exception("Things are really fucked: datetimeify called with a "+str(type(d)))
 
 
 """ Import the old ads table into the new Advertiser, Ad models """
@@ -32,8 +42,8 @@ def import_ads():
         (advertiser, created) = bongo_models.Advertiser.objects.get_or_create(name=old_ad.sponsor)
         (ad, created) = bongo_models.Ad.objects.get_or_create(
             pk=old_ad.id, 
-            run_from=make_aware(old_ad.start_date, tz), 
-            run_through=make_aware(old_ad.end_date, tz),
+            run_from=make_aware(datetimeify(old_ad.start_date), tz), 
+            run_through=make_aware(datetimeify(old_ad.end_date), tz),
             url=old_ad.link,
             owner=advertiser,
         )
@@ -50,7 +60,7 @@ def import_tips():
         (tip, created) = bongo_models.Tip.objects.get_or_create(
             pk=old_tip.id, 
             content=old_tip.tip,
-            submitted_at=make_aware(old_tip.submitted, tz),
+            submitted_at=make_aware(datetimeify(old_tip.submitted), tz),
             submitted_from = old_tip.user_ip,
             useragent = old_tip.user_agent
         )
@@ -186,10 +196,10 @@ def import_attachment():
             # have to create the Creators before we can link them here
             import_creator()
 
-            creator = bongo_models.Creator.objects.get(pk__exact=old_attachment.author_id)
-            atchmt.creators.add(creator)
-            atchmt.save()
-
+            if old_attachment.author_id:
+                creator = bongo_models.Creator.objects.get(pk__exact=old_attachment.author_id)
+                atchmt.creators.add(creator)
+                atchmt.save()
             
             # ditto for content
             import_content()
@@ -205,17 +215,18 @@ def import_attachment():
 def import_content():
     for old_articlebody in archive_models.Articlebody.objects.using('archive').all():
 
-        print ("Importing content "+str(old_content.id))
+        print ("Importing content "+str(old_articlebody.id))
 
         (text, created) = bongo_models.Text.objects.get_or_create(
             pk=old_articlebody.id,
-            body=old_articlebody.articlebody
+            body=old_articlebody.body
         )
 
-        text.creators.add(bongo_models.Creator.get(pk__exact=old_articlebody.creator_id))
-        text.save()
+        if old_articlebody.creator_id:
+            text.creators.add(bongo_models.Creator.objects.get(pk__exact=old_articlebody.creator_id))
+            text.save()
 
-        old_article = archive_models.Article.objects.get(id__exact=old_articlebody.article_id)
+        old_article = archive_models.Article.objects.get(pk__exact=old_articlebody.article_id)
 
         (post, created) = bongo_models.Post.objects.get_or_create(
             pk=old_article.id,
