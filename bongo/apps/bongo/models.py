@@ -218,6 +218,8 @@ class Post (models.Model):
     slug = models.CharField(max_length=180, verbose_name="Slug. WARNING: Changing this will change the post URL, breaking existing links.")  # http://en.wikipedia.org/wiki/Clean_URL#Slug
     tags = models.ManyToManyField(Tag, null=True, blank=True)
 
+    opinion = models.BooleanField(default=False)
+
     views_local = models.IntegerField(editable=False, default=0)
     views_global = models.IntegerField(editable=False, default=0)
 
