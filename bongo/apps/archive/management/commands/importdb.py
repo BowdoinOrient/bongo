@@ -222,10 +222,6 @@ def import_content():
             body=old_articlebody.body
         )
 
-        if old_articlebody.creator_id:
-            text.creators.add(bongo_models.Creator.objects.get(pk__exact=old_articlebody.creator_id))
-            text.save()
-
         try:
             old_article = archive_models.Article.objects.using('archive').get(pk__exact=old_articlebody.article_id)
         except:
@@ -234,7 +230,15 @@ def import_content():
             print("Article {} has a body but no entry in the Article table.".format(old_articlebody.article_id))
             continue
 
-        
+        # find the author of this article (different than articlebody.creator_id)
+        try:
+            old_articleauthor = archive_models.Articleauthor.objects.using('archive').get(article_id__exact=old_articlebody.article_id)
+            text.creators.add(bongo_models.Creator.objects.get(pk__exact=old_articleauthor.author_id))
+            text.save()
+        except:
+            # the post does not have an author, which is bad but nonfatal
+            pass
+ 
         # If an article has no volume number, try to guess it by the year. Better than nothing. 
         # This shouldn't actually ever be invoked now that I did some manual DB cleanup
         if old_article.volume == 0:
@@ -246,7 +250,8 @@ def import_content():
             updated=old_article.date_updated,
             published=old_article.date_published,
             is_published=(True if old_article.published == 1 else False),  # I love you Python
-            issue=bongo_models.Issue.objects.get(pk__exact=old_article.issue_number),
+            opinion=(True if old_article.opinion == 1 else False),
+            issue=bongo_models.Issue.objects.get(issue_number__exact=old_article.issue_number, volume__exact=bongo_models.Volume.objects.get(volume_number__exact=old_article.volume)),
             volume=bongo_models.Volume.objects.get(volume_number__exact=old_article.volume),
             section=bongo_models.Section.objects.get(pk__exact=old_article.section_id),
             title=old_article.title,
