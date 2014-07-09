@@ -226,27 +226,41 @@ def import_content():
             text.creators.add(bongo_models.Creator.objects.get(pk__exact=old_articlebody.creator_id))
             text.save()
 
-        old_article = archive_models.Article.objects.get(pk__exact=old_articlebody.article_id)
+        try:
+            old_article = archive_models.Article.objects.using('archive').get(pk__exact=old_articlebody.article_id)
+        except:
+            # Ohhh boy, an articlebody without an article. Somebody's been messing with the database.
+            # Log it and move on.
+            print("Article {} has a body but no entry in the Article table.".format(old_articlebody.article_id))
+            continue
 
+        
+        # If an article has no volume number, try to guess it by the year. Better than nothing. 
+        # This shouldn't actually ever be invoked now that I did some manual DB cleanup
+        if old_article.volume == 0:
+            old_article.volume = old_article.date_created.year - 1870
+            
         (post, created) = bongo_models.Post.objects.get_or_create(
             pk=old_article.id,
             created=old_article.date_created,
             updated=old_article.date_updated,
             published=old_article.date_published,
             is_published=(True if old_article.published == 1 else False),  # I love you Python
-            series=bongo_models.Series.objects.get(pk__exact=old_article.series),
-            issue=bongo_models.Issue.objects.get(pk__exact=old_article.issue),
-            volume=bongo_models.Volume.objects.get(pk__exact=old_article.volume),
-            section=bongo_models.Section.objects.get(pk__exact=old_article.section),
+            issue=bongo_models.Issue.objects.get(pk__exact=old_article.issue_number),
+            volume=bongo_models.Volume.objects.get(volume_number__exact=old_article.volume),
+            section=bongo_models.Section.objects.get(pk__exact=old_article.section_id),
             title=old_article.title,
             views_local=old_article.views_bowdoin,
             views_global=old_article.views,
         )
 
-        post.content.add(text)
+        if created:
+            post.series.add(bongo_models.Series.objects.get(pk__exact=old_article.series))
 
-        for old_articleauthor in archive_models.Articleauthor.objects.using('archive').filter(article_id__exact=old_article.id):
-            post.creators.add(bongo_models.Creator.get(pk=old_articleauthor.author_id))
+            post.content.add(text)
+
+            for old_articleauthor in archive_models.Articleauthor.objects.using('archive').filter(article_id__exact=old_article.id):
+                post.creators.add(bongo_models.Creator.objects.get(pk__exact=old_articleauthor.author_id))
 
         post.save()
 
@@ -257,6 +271,7 @@ def import_creator():
         print ("Importing author "+str(old_author.id))
 
         (creator, created) = bongo_models.Creator.objects.get_or_create(
+            pk=old_author.id,
             name=old_author.name,
         )
 
@@ -310,8 +325,8 @@ class Command(BaseCommand):
         import_section()
         import_job()
         import_attachment()
-        # import_content() and import_creator() will be called by import_attachment()
-        # import_photo()
+        # import_content() and import_creator() will be called at the right moment by import_attachment()
+        import_photo()
 
 
         # rollback all changes - testing only

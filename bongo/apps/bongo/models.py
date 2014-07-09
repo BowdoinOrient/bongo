@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date, datetime
+from django.utils.text import slugify
 import nltk.data
 import re
 
@@ -241,7 +242,7 @@ class Post (models.Model):
         if not self.slug:
             self.slug = slugify(self.title)[:180]
 
-        super(Text, self).save(*args, **kwargs)
+        super(Post, self).save(*args, **kwargs)
 
 
     def __unicode__(self):
