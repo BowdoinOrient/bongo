@@ -213,9 +213,9 @@ def import_attachment():
 
 """ this is complex """
 def import_content():
-    for old_articlebody in archive_models.Articlebody.objects.using('archive').all():
+    for old_articlebody in archive_models.Articlebody.objects.using('archive').all().order_by('-id'): # why? because backwards is more fun
 
-        print ("Importing content "+str(old_articlebody.id))
+        print ("Importing old article "+str(old_articlebody.article_id))
 
         (text, created) = bongo_models.Text.objects.get_or_create(
             pk=old_articlebody.id,
@@ -243,6 +243,14 @@ def import_content():
         # This shouldn't actually ever be invoked now that I did some manual DB cleanup
         if old_article.volume == 0:
             old_article.volume = old_article.date_created.year - 1870
+        
+        # If any of these fields are missing, set them to the unix epoch
+        if old_article.date_created is None:
+            old_article.date_created = make_aware(datetime(1970, 1, 1), tz)
+        if old_article.date_updated is None:
+            old_article.date_updated = make_aware(datetime(1970, 1, 1), tz)
+        if old_article.date_published is None:
+            old_article.date_published = make_aware(datetime(1970, 1, 1), tz)
 
         # if the article referenced by old_articlebody.article_id already exists, then this is a revision. Update the body only.
         try:
