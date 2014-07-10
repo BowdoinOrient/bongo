@@ -207,6 +207,17 @@ def import_attachment():
 
 """ this is complex """
 def import_content():
+
+
+
+
+    """ TODO: Refactor content importer to loop over articles, not articlebodies     
+        Running into issues with orphaned attachments because their articles don't get created
+        because they had no articlebodies because they were attachment-only stories.
+    """
+
+
+    
     for old_articlebody in archive_models.Articlebody.objects.using('archive').all():
 
         print ("Importing old article "+str(old_articlebody.article_id))
