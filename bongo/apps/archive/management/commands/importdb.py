@@ -33,6 +33,7 @@ def datetimeify(d):
 
 
 """ Import the old ads table into the new Advertiser, Ad models """
+""" There aren't actually any, so this is pointless """
 def import_ads():
     for old_ad in archive_models.Ads.objects.using('archive').all():
 
@@ -47,7 +48,8 @@ def import_ads():
             owner=advertiser,
         )
 
-        ad.adfile.save(old_ad.filename, getfile("http://bowdoinorient.com/ads/"+old_ad.filename), upload_to="ads")
+        ad.adfile.save(old_ad.filename, getfile("http://bowdoinorient.com/ads/"+old_ad.filename))
+        ad.save()
 
 
 """ Import the old tips table into the new Tip model """
@@ -191,17 +193,10 @@ def import_attachment():
                 atchmt.caption=old_attachment.content2
                 atchmt.save()
 
-
-            # have to create the Creators before we can link them here
-            import_creator()
-
             if old_attachment.author_id:
                 creator = bongo_models.Creator.objects.get(pk__exact=old_attachment.author_id)
                 atchmt.creators.add(creator)
                 atchmt.save()
-            
-            # ditto for content
-            import_content()
 
             post = bongo_models.Post.objects.get(pk__exact=old_attachment.article_id)
             post.content.add(atchmt)
@@ -301,7 +296,8 @@ def import_creator():
             creator.save()
 
         if old_author.photo:
-            creator.profpic.save(slugify(old_author.name)+".jpg", getfile("http://bowdoinorient.com/images/authors/"+old_author.photo), upload_to="headshots")
+            creator.profpic.save(slugify(old_author.name)+".jpg", getfile("http://bowdoinorient.com/images/authors/"+old_author.photo))
+            creator.save()
 
 
 def import_photo():
@@ -309,15 +305,16 @@ def import_photo():
 
         print ("Importing photo "+str(old_photo.id))
 
+        (photo, created) = bongo_models.Photo.objects.get_or_create(
+            caption=old_photo.caption,
+        )
+
         image_url = "http://bowdoinorient.com/images/{date}/{fname}".format(
             date=old_photo.article_date,
             fname=old_photo.filename_original,
         )
 
-        (photo, created) = bongo_models.Photo.objects.get_or_create(
-            caption=old_photo.caption,
-            staticfile=models.ImageField(old_photo.id+".jpg", getfile(image_url), upload_to="photos/"+old_photo.article_date.year)
-        )
+        photo.staticfile.save(old_photo.id+".jpg", getfile(image_url))
 
         photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
         photo.save()
@@ -343,8 +340,9 @@ class Command(BaseCommand):
         import_series()
         import_section()
         import_job()
+        import_creator()
+        import_content()
         import_attachment()
-        # import_content() and import_creator() will be called by import_attachment()
         import_photo()
 
         print("So, what do you think? Take a look around and see if you think the import went OK.")
