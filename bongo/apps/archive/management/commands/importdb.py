@@ -5,7 +5,7 @@ from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
-from django.db import transaction
+from django.db import transaction, models
 from datetime import date, datetime
 import requests
 
@@ -47,7 +47,7 @@ def import_ads():
             owner=advertiser,
         )
 
-        ad.adfile.save(old_ad.filename, getfile("http://bowdoinorient.com/ads/"+old_ad.filename))
+        ad.adfile.save(old_ad.filename, getfile("http://bowdoinorient.com/ads/"+old_ad.filename), upload_to="ads")
 
 
 """ Import the old tips table into the new Tip model """
@@ -301,7 +301,7 @@ def import_creator():
             creator.save()
 
         if old_author.photo:
-            creator.profpic.save("headshots/"+slugify(old_author.name)+".jpg", getfile("http://bowdoinorient.com/images/authors/"+old_author.photo))
+            creator.profpic.save(slugify(old_author.name)+".jpg", getfile("http://bowdoinorient.com/images/authors/"+old_author.photo), upload_to="headshots")
 
 
 def import_photo():
@@ -314,11 +314,9 @@ def import_photo():
             fname=old_photo.filename_original,
         )
 
-        imagefield = models.ImageField("photos/"+old_photo.article_date.year+"/"+old_photo.id+".jpg", getfile(image_url))
-
         (photo, created) = bongo_models.Photo.objects.get_or_create(
             caption=old_photo.caption,
-            staticfile=imagefield 
+            staticfile=models.ImageField(old_photo.id+".jpg", getfile(image_url), upload_to="photos/"+old_photo.article_date.year)
         )
 
         photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
