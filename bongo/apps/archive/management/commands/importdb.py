@@ -13,8 +13,7 @@ tz = get_current_timezone()
 
 def getfile(url):
     print("Downloading "+url)
-    #r = requests.get(url)
-    return ContentFile("")
+    r = requests.get(url)
 
     if r.status_code == 200:
         return ContentFile(r.content)
@@ -213,7 +212,7 @@ def import_attachment():
 
 """ this is complex """
 def import_content():
-    for old_articlebody in archive_models.Articlebody.objects.using('archive').all().order_by('-id'): # why? because backwards is more fun
+    for old_articlebody in archive_models.Articlebody.objects.using('archive').all():
 
         print ("Importing old article "+str(old_articlebody.article_id))
 
@@ -302,7 +301,7 @@ def import_creator():
             creator.save()
 
         if old_author.photo:
-            creator.profpic.save(slugify(old_author.name)+".jpg", getfile("http://bowdoinorient.com/images/authors/"+old_author.photo))
+            creator.profpic.save("headshots/"+slugify(old_author.name)+".jpg", getfile("http://bowdoinorient.com/images/authors/"+old_author.photo))
 
 
 def import_photo():
@@ -310,23 +309,23 @@ def import_photo():
 
         print ("Importing photo "+str(old_photo.id))
 
-        (photo, created) = bongo_models.Attachment.objects.get_or_create(
-            caption=old_photo.caption,
-        )
-
         image_url = "http://bowdoinorient.com/images/{date}/{fname}".format(
-            date=old_photo.article_date.date.today().strftime("%Y-%m-%d"),
+            date=old_photo.article_date,
             fname=old_photo.filename_original,
         )
 
-        photo.staticfile.save(slugify(old_author.name), getfile(image_url))
+        imagefield = models.ImageField("photos/"+old_photo.article_date.year+"/"+old_photo.id+".jpg", getfile(image_url))
+
+        (photo, created) = bongo_models.Photo.objects.get_or_create(
+            caption=old_photo.caption,
+            staticfile=imagefield 
+        )
 
         photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
         photo.save()
         
-
         post_owner = bongo_models.Post.objects.get(pk__exact=old_photo.article_id)
-        post_owner.creators.add(photo)
+        post_owner.content.add(photo)
         post_owner.save()
 
 
@@ -347,10 +346,19 @@ class Command(BaseCommand):
         import_section()
         import_job()
         import_attachment()
-        # import_content() and import_creator() will be called at the right moment by import_attachment()
+        # import_content() and import_creator() will be called by import_attachment()
         import_photo()
 
+        print("So, what do you think? Take a look around and see if you think the import went OK.")
+        print("To accept the import, type 'commit' below.")
+        print("To abort the import, type 'rollback'.")
 
-        # rollback all changes - testing only
-        transaction.savepoint_rollback(sid)
+        resp = None
+        while resp not in ['commit', 'rollback']:
+            resp = raw_input("[commit/rollback]: ")
+
+        if resp == 'rollback':
+            transaction.savepoint_rollback(sid)
+        elif resp == "commit":
+            transaction.commit()
 
