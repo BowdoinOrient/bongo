@@ -307,6 +307,7 @@ def import_photo():
         print ("Importing photo "+str(old_photo.id))
 
         (photo, created) = bongo_models.Photo.objects.get_or_create(
+            pk=old_photo.id,
             caption=old_photo.caption,
         )
 

@@ -39,4 +39,8 @@ ALLOWED_HOSTS = [
     'localhost'
 ]
 
-INSTALLED_APPS += ()
+INSTALLED_APPS += (
+    'django_nose',
+)
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
