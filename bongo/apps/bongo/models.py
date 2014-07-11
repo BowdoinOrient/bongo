@@ -161,6 +161,7 @@ class PDF (Content):
 
 class Photo (Content):
     staticfile = models.ImageField(upload_to="photos")
+    attribution = models.TextField(null=True, blank=True)
 
     """ get_or_create a thumbnail of the specified width and height """
     def thumbnail(self, width, height):

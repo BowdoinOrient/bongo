@@ -318,6 +318,8 @@ def import_photo():
 
         photo.staticfile.save(str(old_photo.id)+".jpg", getfile(image_url))
 
+        #@TODO: Courtesy photos have a photographer id of 1, which doesn't exist.
+        #    Need to preserve the courtesy field.
         photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
         photo.save()
         
