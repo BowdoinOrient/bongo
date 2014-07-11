@@ -179,7 +179,7 @@ class HTML (Content):
 
 class Pullquote (Content):
     quote = models.TextField()
-    attribution = models.TextField()
+    attribution = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
         return self.quote
