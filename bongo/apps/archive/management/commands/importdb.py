@@ -13,7 +13,8 @@ tz = get_current_timezone()
 
 def getfile(url):
     print("Downloading "+url)
-    r = requests.get(url)
+    #r = requests.get(url)
+    return ContentFile("")
 
     if r.status_code == 200:
         return ContentFile(r.content)
@@ -209,41 +210,33 @@ def import_attachment():
 def import_content():
 
 
-
-
     """ TODO: Refactor content importer to loop over articles, not articlebodies     
         Running into issues with orphaned attachments because their articles don't get created
         because they had no articlebodies because they were attachment-only stories.
     """
-
-
     
-    for old_articlebody in archive_models.Articlebody.objects.using('archive').all():
+    for old_article in archive_models.Article.objects.using('archive').all():
 
-        print ("Importing old article "+str(old_articlebody.article_id))
+        print ("Importing article "+str(old_article.id))
 
-        (text, created) = bongo_models.Text.objects.get_or_create(
-            pk=old_articlebody.id,
-            body=old_articlebody.body
-        )
+        # get the Text
 
-        try:
-            old_article = archive_models.Article.objects.using('archive').get(pk__exact=old_articlebody.article_id)
+        try:  # get the last articlebody (most recent revision)
+            old_articlebody = archive_models.Articlebody.objects.using('archive').get(article_id=old_article.id).order_by("-timestamp")[0]
         except:
-            # Ohhh boy, an articlebody without an article. Somebody's been messing with the database.
-            # Log it and move on.
-            print("Article {} has a body but no entry in the Article table.".format(old_articlebody.article_id))
-            continue
+            old_articlebody = None
 
-        # find the author of this article (different than articlebody.creator_id)
+
+        # get the Creator(s)
+        
+        old_authors = []
         try:
-            old_articleauthor = archive_models.Articleauthor.objects.using('archive').get(article_id__exact=old_articlebody.article_id)
-            text.creators.add(bongo_models.Creator.objects.get(pk__exact=old_articleauthor.author_id))
-            text.save()
+            for old_articleauthor in archive_models.Articleauthor.objects.using('archive').get(article_id__exact=old_article.id):
+                old_authors.append(archive_models.Author.objects.using('archive').get(id__exact=old_articleauthor.author_id))
         except:
-            # the post does not have an author, which is bad but nonfatal
             pass
- 
+
+
         # If an article has no volume number, try to guess it by the year. Better than nothing. 
         # This shouldn't actually ever be invoked now that I did some manual DB cleanup
         if old_article.volume == 0:
@@ -256,40 +249,37 @@ def import_content():
             old_article.date_updated = make_aware(datetime(1970, 1, 1), tz)
         if old_article.date_published is None:
             old_article.date_published = make_aware(datetime(1970, 1, 1), tz)
+      
+        post = bongo_models.Post.objects.create(
+            pk=old_article.id,
+            created=old_article.date_created,
+            updated=old_article.date_updated,
+            published=old_article.date_published,
+            is_published=(True if old_article.published == 1 else False),  # I love you Python
+            opinion=(True if old_article.opinion == 1 else False),
+            issue=bongo_models.Issue.objects.get(issue_number__exact=old_article.issue_number, volume__exact=bongo_models.Volume.objects.get(volume_number__exact=old_article.volume)),
+            volume=bongo_models.Volume.objects.get(volume_number__exact=old_article.volume),
+            section=bongo_models.Section.objects.get(pk__exact=old_article.section_id),
+            title=old_article.title,
+            views_local=old_article.views_bowdoin,
+            views_global=old_article.views,
+        )
 
-        # if the article referenced by old_articlebody.article_id already exists, then this is a revision. Update the body only.
-        try:
-            bongo_models.Post.objects.get(pk__exact=old_articlebody.article_id)
-            existing_post = bongo_models.Post.objects.get(pk__exact=old_articlebody.article_id)
-            for existing_content in existing_post.content.all():
-                existing_content.delete()
-            existing_post.content.add(text)
-            existing_post.save()
+        post.series.add(bongo_models.Series.objects.get(pk__exact=old_article.series))
 
-        except:         
-            post = bongo_models.Post.objects.create(
-                pk=old_article.id,
-                created=old_article.date_created,
-                updated=old_article.date_updated,
-                published=old_article.date_published,
-                is_published=(True if old_article.published == 1 else False),  # I love you Python
-                opinion=(True if old_article.opinion == 1 else False),
-                issue=bongo_models.Issue.objects.get(issue_number__exact=old_article.issue_number, volume__exact=bongo_models.Volume.objects.get(volume_number__exact=old_article.volume)),
-                volume=bongo_models.Volume.objects.get(volume_number__exact=old_article.volume),
-                section=bongo_models.Section.objects.get(pk__exact=old_article.section_id),
-                title=old_article.title,
-                views_local=old_article.views_bowdoin,
-                views_global=old_article.views,
+        if old_articlebody:
+
+            (text, created) = bongo_models.Text.objects.get_or_create(
+                pk=old_articlebody.id,
+                body=old_articlebody.body
             )
-
-            post.series.add(bongo_models.Series.objects.get(pk__exact=old_article.series))
 
             post.content.add(text)
 
-            for old_articleauthor in archive_models.Articleauthor.objects.using('archive').filter(article_id__exact=old_article.id):
-                post.creators.add(bongo_models.Creator.objects.get(pk__exact=old_articleauthor.author_id))
+        for old_author in old_authors:
+            post.creators.add(bongo_models.Creator.objects.get(pk__exact=old_author.id))
 
-            post.save()
+        post.save()
 
 
 def import_creator():
