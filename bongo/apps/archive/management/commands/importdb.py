@@ -321,9 +321,12 @@ def import_photo():
         photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
         photo.save()
         
-        post_owner = bongo_models.Post.objects.get(pk__exact=old_photo.article_id)
-        post_owner.content.add(photo)
-        post_owner.save()
+        try:
+            post_owner = bongo_models.Post.objects.get(pk__exact=old_photo.article_id)
+            post_owner.content.add(photo)
+            post_owner.save()
+        except:
+            print("Photo's owner has been deleted... sad :(")
 
 
 

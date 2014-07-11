@@ -18,3 +18,4 @@ INSTALLED_APPS += (
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+NOSE_TESTMATCH = '(?:^|[b_./-])[Tt]ests'
