@@ -315,7 +315,7 @@ def import_photo():
             fname=old_photo.filename_original,
         )
 
-        photo.staticfile.save(old_photo.id+".jpg", getfile(image_url))
+        photo.staticfile.save(str(old_photo.id)+".jpg", getfile(image_url))
 
         photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
         photo.save()
