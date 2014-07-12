@@ -13,7 +13,8 @@ tz = get_current_timezone()
 
 def getfile(url):
     print("Downloading "+url)
-    r = requests.get(url)
+#    r = requests.get(url)
+    return ContentFile("")
 
     if r.status_code == 200:
         return ContentFile(r.content)
@@ -312,15 +313,14 @@ def import_photo():
 
         image_url = "http://bowdoinorient.com/images/{date}/{fname}".format(
             date=old_photo.article_date,
-            fname=(old_photo.filename_original if old_photo.filename_original is not None else old_photo.filename_large)
+            fname=(old_photo.filename_original if old_photo.filename_original else old_photo.filename_large)
         )
 
         photo.staticfile.save(str(old_photo.id)+".jpg", getfile(image_url))
 
         # Courtesy photos have a photographer id of 1, which doesn't exist.
         if old_photo.photographer_id == 1:
-            (creator, created) = bongo_models.Creator.objects.get_or_create(name=old_photo.credit[11:], courtesyof=True)
-            photo.creators.add(creator)
+            photo.creators.add(bongo_models.Creator.objects.create(name=old_photo.credit, courtesyof=True))
         # All other photographers should already be in the Creator table.
         else:
             try:
@@ -343,6 +343,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
+        transaction.set_autocommit(False)
+        sid = transaction.savepoint()
+
         import_ads()
         import_tips()
         import_alerts()
@@ -352,6 +355,8 @@ class Command(BaseCommand):
         import_section()
         import_job()
         import_creator()
-        import_content()
-        import_attachment()
+#        import_content()
+#        import_attachment()
         import_photo()
+
+        transaction.savepoint_rollback(sid)

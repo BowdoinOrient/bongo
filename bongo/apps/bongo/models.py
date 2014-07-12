@@ -107,15 +107,6 @@ class Creator(models.Model):
     def works(self):
         return self.content_set
 
-    def get_name():
-        """ accessor method that takes into account the "courtesy of" field """
-        n = self.name
-        if self.courtesyof:
-            n = "Courtesy of " + n
-
-        return n
-
-
 
 
 
