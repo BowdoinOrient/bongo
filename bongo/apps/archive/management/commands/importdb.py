@@ -13,8 +13,7 @@ tz = get_current_timezone()
 
 def getfile(url):
     print("Downloading "+url)
-    #r = requests.get(url)
-    return ContentFile("")
+    r = requests.get(url)
 
     if r.status_code == 200:
         return ContentFile(r.content)
@@ -327,7 +326,7 @@ def import_photo():
             try:
                 photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
             except:
-                print("Issues crediting this photo to author #"+str(old_photo.photographer_id))
+                print("Issues crediting this photo to a uthor #"+str(old_photo.photographer_id))
         
         photo.save()
         
@@ -344,9 +343,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        transaction.set_autocommit(False)
-        sid = transaction.savepoint()
-
         import_ads()
         import_tips()
         import_alerts()
@@ -359,17 +355,3 @@ class Command(BaseCommand):
         import_content()
         import_attachment()
         import_photo()
-
-        print("So, what do you think? Take a look around and see if you think the import went OK.")
-        print("To accept the import, type 'commit' below.")
-        print("To abort the import, type 'rollback'.")
-
-        resp = None
-        while resp not in ['commit', 'rollback']:
-            resp = raw_input("[commit/rollback]: ")
-
-        if resp == 'rollback':
-            transaction.savepoint_rollback(sid)
-        elif resp == "commit":
-            transaction.commit()
-
