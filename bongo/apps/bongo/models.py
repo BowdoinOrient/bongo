@@ -98,11 +98,22 @@ class Creator(models.Model):
 
     profpic = models.ImageField(null=True, blank=True, upload_to="headshots")
 
+    # for photos that previously ran with a photographer_id of 1 and a "courtesy of" caption
+    courtesyof = models.BooleanField(default=False)
+
     def __unicode__(self):
         return self.name
 
     def works(self):
         return self.content_set
+
+    def get_name():
+        """ accessor method that takes into account the "courtesy of" field """
+        n = self.name
+        if self.courtesyof:
+            n = "Courtesy of " + n
+
+        return n
 
 
 
