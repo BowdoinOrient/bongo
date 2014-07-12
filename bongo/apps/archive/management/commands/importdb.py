@@ -320,11 +320,14 @@ def import_photo():
 
         # Courtesy photos have a photographer id of 1, which doesn't exist.
         if old_photo.photographer_id == 1:
-            creator = bongo_models.Creator.objects.get_or_create(name=old_photo.credit[11:], courtesyof=True)
+            (creator, created) = bongo_models.Creator.objects.get_or_create(name=old_photo.credit[11:], courtesyof=True)
             photo.creators.add(creator)
         # All other photographers should already be in the Creator table.
         else:
-            photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
+            try:
+                photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
+            except:
+                print("Issues crediting this photo to author #"+str(old_photo.photographer_id))
         
         photo.save()
         
