@@ -312,7 +312,7 @@ def import_photo():
 
         image_url = "http://bowdoinorient.com/images/{date}/{fname}".format(
             date=old_photo.article_date,
-            fname=old_photo.filename_original,
+            fname=(old_photo.filename_original if old_photo.filename_original is not None else old_photo.filename_large)
         )
 
         photo.staticfile.save(str(old_photo.id)+".jpg", getfile(image_url))
