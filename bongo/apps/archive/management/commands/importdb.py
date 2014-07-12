@@ -326,7 +326,7 @@ def import_photo():
             try:
                 photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
             except:
-                print("Issues crediting this photo to a uthor #"+str(old_photo.photographer_id))
+                print("Issues crediting this photo to author #"+str(old_photo.photographer_id))
         
         photo.save()
         
