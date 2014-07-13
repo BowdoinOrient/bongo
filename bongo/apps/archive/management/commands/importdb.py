@@ -311,12 +311,15 @@ def import_photo():
             caption=old_photo.caption,
         )
 
-        image_url = "http://bowdoinorient.com/images/{date}/{fname}".format(
-            date=old_photo.article_date,
-            fname=(old_photo.filename_original if old_photo.filename_original else old_photo.filename_large)
-        )
+        try:
+            image_url = "http://bowdoinorient.com/images/{date}/{fname}".format(
+                date=(old_photo.article_date if old_photo.article_date else archive_models.Article.objects.using('archive').get(id__exact=old_photo.article_id).date),
+                fname=(old_photo.filename_original if old_photo.filename_original else old_photo.filename_large)
+            )
 
-        photo.staticfile.save(str(old_photo.id)+".jpg", getfile(image_url))
+            photo.staticfile.save(str(old_photo.id)+".jpg", getfile(image_url))
+        except:
+            print("File really, really couldn't be found/")
 
         # Courtesy photos have a photographer id of 1, which doesn't exist.
         # We have to come up with a new id for this photographer that doesn't interfere with any existing id
