@@ -13,8 +13,7 @@ tz = get_current_timezone()
 
 def getfile(url):
     print("Downloading "+url)
-#    r = requests.get(url)
-    return ContentFile("")
+    r = requests.get(url)
 
     if r.status_code == 200:
         return ContentFile(r.content)
@@ -302,6 +301,7 @@ def import_creator():
 
 
 def import_photo():
+    new_ids_created = 1
     for old_photo in archive_models.Photo.objects.using('archive').all():
 
         print ("Importing photo "+str(old_photo.id))
@@ -319,9 +319,12 @@ def import_photo():
         photo.staticfile.save(str(old_photo.id)+".jpg", getfile(image_url))
 
         # Courtesy photos have a photographer id of 1, which doesn't exist.
+        # We have to come up with a new id for this photographer that doesn't interfere with any existing id
         if old_photo.photographer_id == 1:
-            photo.creators.add(bongo_models.Creator.objects.create(name=old_photo.credit, courtesyof=True))
-        # All other photographers should already be in the Creator table.
+            photo.creators.add(bongo_models.Creator.objects.create(name=old_photo.credit, courtesyof=True, pk=archive_models.Author.objects.using('archive').latest('id').id + new_ids_created))
+            new_ids_created += 1
+        elif old_photo.photographer_id == 0:
+            pass
         else:
             try:
                 photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
@@ -343,8 +346,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        transaction.set_autocommit(False)
-        sid = transaction.savepoint()
+        #transaction.set_autocommit(False)
+        #sid = transaction.savepoint()
 
         import_ads()
         import_tips()
@@ -355,8 +358,8 @@ class Command(BaseCommand):
         import_section()
         import_job()
         import_creator()
-#        import_content()
-#        import_attachment()
+        import_content()
+        import_attachment()
         import_photo()
 
-        transaction.savepoint_rollback(sid)
+        #transaction.savepoint_rollback(sid)
