@@ -45,6 +45,9 @@ INSTALLED_APPS = (
     # Local apps
     'bongo.apps.bongo',
     'bongo.apps.archive',
+
+    # for the API
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
