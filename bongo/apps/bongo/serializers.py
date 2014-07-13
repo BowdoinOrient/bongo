@@ -1,81 +1,82 @@
-from django.db import models
+from bongo.apps.bongo.models import *
 from rest_framework import serializers
 
 
 class SeriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Series
-        fields = ('name',)
+        fields = ('id', 'name',)
 
 class VolumeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Volume
-        fields = ('volume_number', 'volume_year_start', 'volume_year_end')
+        fields = ('id', 'volume_number', 'volume_year_start', 'volume_year_end')
 
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
-        fields = ('issue_date', 'issue_number', 'volume', 'scribd')
+        fields = ('id', 'issue_date', 'issue_number', 'volume', 'scribd')
 
 class SectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Section
-        fields = ('section', 'priority')
+        fields = ('id', 'section', 'priority')
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ('tag',)
+        fields = ('id', 'tag',)
 
 class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
-        fields = ('title',)
+        fields = ('id', 'title',)
 
 class CreatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Creator
-        fields = ('user', 'name', 'job', 'twitter', 'profpic', 'courtesyof')
+        fields = ('id', 'user', 'name', 'job', 'twitter', 'profpic', 'courtesyof')
 
 class ContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Content
-        fields = ('creators', 'caption')
+        fields = ('id', 'creators', 'caption')
 
 class TextSerializer(serializers.ModelSerializer):
     class Meta:
         model = Text
-        fields = ('creators', 'caption', 'body', 'excerpt')
+        fields = ('id', 'creators', 'caption', 'body', 'excerpt')
 
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
-        fields = ('creators', 'caption', 'host', 'uid')
+        fields = ('id', 'creators', 'caption', 'host', 'uid')
 
-class PdfSerializer(serializers.ModelSerializer):
+class PDFSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Pdf
-        fields = ('creators', 'caption', 'staticfile')
+        model = PDF
+        fields = ('id', 'creators', 'caption', 'staticfile')
 
 class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
-        fields = ('creators', 'caption', 'staticfile')
+        fields = ('id', 'creators', 'caption', 'staticfile')
 
 class HTMLSerializer(serializers.ModelSerializer):
     class Meta:
         model = HTML
-        fields = ('creators', 'caption', 'content')
+        fields = ('id', 'creators', 'caption', 'content')
 
 class PullquoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pullquote
-        fields = ('creators', 'caption', 'quote', 'attribution')
+        fields = ('id', 'creators', 'caption', 'quote', 'attribution')
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = (
+            'id', 
             'created',
             'updated',
             'published',
@@ -98,29 +99,29 @@ class PostSerializer(serializers.ModelSerializer):
 class AlertSerializer(serializers.ModelSerializer):
     class Meta:
         model = Alert
-        fields = ('run_from', 'run_through', 'message', 'urgent')
+        fields = ('id', 'run_from', 'run_through', 'message', 'urgent')
 
 class AdvertiserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertiser
-        fields = ('name',)
+        fields = ('id', 'name',)
 
 class AdSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ad
-        fields = ('run_from', 'run_through', 'owner', 'url', 'adfile')
+        fields = ('id', 'run_from', 'run_through', 'owner', 'url', 'adfile')
 
 class TipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tip
-        fields = ('content', 'respond_to', 'submitted_at', 'submitted_from', 'useragent')
+        fields = ('id', 'content', 'respond_to', 'submitted_at', 'submitted_from', 'useragent')
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ()
+        fields = ('id', )
 
 class ScheduledPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = ScheduledPost
-        fields = ()
+        fields = ('id', )
