@@ -9,4 +9,3 @@ class PhotoList(generics.ListCreateAPIView):
 class PhotoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
-    serializer_class = ScheduledPostSerializer

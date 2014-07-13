@@ -4,9 +4,9 @@ from rest_framework import generics
 
 
 class VolumeList(generics.ListCreateAPIView):
-    queryset =Volumes.objects.all()
+    queryset =Volume.objects.all()
     serializer_class = VolumeSerializer
 
-class VolumesDetail(generics.RetrieveUpdateDestroyAPIView):
+class VolumeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Volume.objects.all()
     serializer_class = VolumeSerializer
