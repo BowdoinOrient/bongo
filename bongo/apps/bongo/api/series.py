@@ -1,5 +1,5 @@
-from bongo.apps.bongo.models import *
-from bongo.apps.bongo.serializers import *
+from bongo.apps.bongo.models import Series
+from bongo.apps.bongo.serializers import SeriesSerializer
 from rest_framework import generics
 
 

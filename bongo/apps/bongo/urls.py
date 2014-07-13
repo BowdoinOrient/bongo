@@ -3,8 +3,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from bongo.apps.bongo import api
 
 urlpatterns = patterns('',
-    url(r'series/$', api.SeriesList.as_view()),
-    url(r'series/(?P<pk>[0-9]+)/$', api.SeriesDetail.as_view()),
+    url(r'series/$', api.series.SeriesList.as_view()),
+    url(r'series/(?P<pk>[0-9]+)/$', api.series.SeriesDetail.as_view()),
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
