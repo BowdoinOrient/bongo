@@ -176,3 +176,10 @@ TEMPLATE_LOADERS = (
 TEMPLATE_DIRS = (
     os.path.normpath(os.path.join(BASE_DIR, 'templates')),
 )
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_SERIALIZER_CLASS': 'bongo.apps.bongo.pagination.CustomPaginationSerializer',
+    'PAGINATE_BY': 20,                 # Default to 10
+    'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
+    'MAX_PAGINATE_BY': 100             # Maximum limit allowed when using `?page_size=xxx`.
+}
