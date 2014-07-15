@@ -1,70 +1,57 @@
-from django.conf.urls import patterns, url
-from rest_framework.urlpatterns import format_suffix_patterns
-from bongo.apps.bongo.api import ad, advertiser, alert, content, creator, event, html, issue, job, pdf, photo, post, pullquote, scheduledpost, section, series, tag, text, tip, video, volume
+from django.conf.urls import patterns, url, include
+from bongo.apps.bongo import api
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+
+# routes for every model's create, retrieve, update, delete api endpoints
+router.register(r'series', api.SeriesCrud)
+router.register(r'volume', api.VolumeCrud)
+router.register(r'issue', api.IssueCrud)
+router.register(r'section', api.SectionCrud)
+router.register(r'tag', api.TagCrud)
+router.register(r'job', api.JobCrud)
+router.register(r'creator', api.CreatorCrud)
+router.register(r'content', api.ContentCrud)
+router.register(r'text', api.TextCrud)
+router.register(r'video', api.VideoCrud)
+router.register(r'pdf', api.PDFCrud)
+router.register(r'photo', api.PhotoCrud)
+router.register(r'html', api.HTMLCrud)
+router.register(r'pullquote', api.PullquoteCrud)
+router.register(r'post', api.PostCrud)
+router.register(r'alert', api.AlertCrud)
+router.register(r'advertiser', api.AdvertiserCrud)
+router.register(r'ad', api.AdCrud)
+router.register(r'tip', api.TipCrud)
+router.register(r'event', api.EventCrud)
+router.register(r'scheduledpost', api.ScheduledPostCrud)
+
+
+# routes for every model's restricted api (retrieve only)
+router.register(r'series', api.SeriesCrudRestricted)
+router.register(r'volume', api.VolumeCrudRestricted)
+router.register(r'issue', api.IssueCrudRestricted)
+router.register(r'section', api.SectionCrudRestricted)
+router.register(r'tag', api.TagCrudRestricted)
+router.register(r'job', api.JobCrudRestricted)
+router.register(r'creator', api.CreatorCrudRestricted)
+router.register(r'content', api.ContentCrudRestricted)
+router.register(r'text', api.TextCrudRestricted)
+router.register(r'video', api.VideoCrudRestricted)
+router.register(r'pdf', api.PDFCrudRestricted)
+router.register(r'photo', api.PhotoCrudRestricted)
+router.register(r'html', api.HTMLCrudRestricted)
+router.register(r'pullquote', api.PullquoteCrudRestricted)
+router.register(r'post', api.PostCrudRestricted)
+router.register(r'alert', api.AlertCrudRestricted)
+router.register(r'advertiser', api.AdvertiserCrudRestricted)
+router.register(r'ad', api.AdCrudRestricted)
+router.register(r'tip', api.TipCrudRestricted)
+router.register(r'event', api.EventCrudRestricted)
+router.register(r'scheduledpost', api.ScheduledPostCrudRestricted)
+
 
 urlpatterns = patterns('',
-    url(r'ad/$', ad.AdList.as_view()),
-    url(r'ad/(?P<pk>[0-9]+)/$', ad.AdDetail.as_view()),
-
-    url(r'advertiser/$', advertiser.AdvertiserList.as_view()),
-    url(r'advertiser/(?P<pk>[0-9]+)/$', advertiser.AdvertiserDetail.as_view()),
-
-    url(r'alert/$', alert.AlertList.as_view()),
-    url(r'alert/(?P<pk>[0-9]+)/$', alert.AlertDetail.as_view()),
-
-    url(r'content/$', content.ContentList.as_view()),
-    url(r'content/(?P<pk>[0-9]+)/$', content.ContentDetail.as_view()),
-
-    url(r'creator/$', creator.CreatorList.as_view()),
-    url(r'creator/(?P<pk>[0-9]+)/$', creator.CreatorDetail.as_view()),
-
-    url(r'event/$', event.EventList.as_view()),
-    url(r'event/(?P<pk>[0-9]+)/$', event.EventDetail.as_view()),
-
-    url(r'html/$', html.HTMLList.as_view()),
-    url(r'html/(?P<pk>[0-9]+)/$', html.HTMLDetail.as_view()),
-
-    url(r'issue/$', issue.IssueList.as_view()),
-    url(r'issue/(?P<pk>[0-9]+)/$', issue.IssueDetail.as_view()),
-
-    url(r'job/$', job.JobList.as_view()),
-    url(r'job/(?P<pk>[0-9]+)/$', job.JobDetail.as_view()),
-
-    url(r'pdf/$', pdf.PDFList.as_view()),
-    url(r'pdf/(?P<pk>[0-9]+)/$', pdf.PDFDetail.as_view()),
-
-    url(r'photo/$', photo.PhotoList.as_view()),
-    url(r'photo/(?P<pk>[0-9]+)/$', photo.PhotoDetail.as_view()),
-
-    url(r'post/$', post.PostList.as_view()),
-    url(r'post/(?P<pk>[0-9]+)/$', post.PostDetail.as_view()),
-
-    url(r'pullquote/$', pullquote.PullquoteList.as_view()),
-    url(r'pullquote/(?P<pk>[0-9]+)/$', pullquote.PullquoteDetail.as_view()),
-
-    url(r'scheduledpost/$', scheduledpost.ScheduledPostList.as_view()),
-    url(r'scheduledpost/(?P<pk>[0-9]+)/$', scheduledpost.ScheduledPostDetail.as_view()),
-
-    url(r'section/$', section.SectionList.as_view()),
-    url(r'section/(?P<pk>[0-9]+)/$', section.SectionDetail.as_view()),
-
-    url(r'series/$', series.SeriesList.as_view()),
-    url(r'series/(?P<pk>[0-9]+)/$', series.SeriesDetail.as_view()),
-
-    url(r'tag/$', tag.TagList.as_view()),
-    url(r'tag/(?P<pk>[0-9]+)/$', tag.TagDetail.as_view()),
-
-    url(r'text/$', text.TextList.as_view()),
-    url(r'text/(?P<pk>[0-9]+)/$', text.TextDetail.as_view()),
-
-    url(r'tip/$', tip.TipList.as_view()),
-    url(r'tip/(?P<pk>[0-9]+)/$', tip.TipDetail.as_view()),
-
-    url(r'video/$', video.VideoList.as_view()),
-    url(r'video/(?P<pk>[0-9]+)/$', video.VideoDetail.as_view()),
-
-    url(r'volume/$', volume.VolumeList.as_view()),
-    url(r'volume/(?P<pk>[0-9]+)/$', volume.VolumeDetail.as_view()),
+    url(r'^', include(router.urls)),
 )
-
-urlpatterns = format_suffix_patterns(urlpatterns)
