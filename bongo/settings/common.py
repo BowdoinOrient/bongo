@@ -48,9 +48,11 @@ INSTALLED_APPS = (
 
     # for the API
     'rest_framework',
+    'corsheaders',
 )
 
 MIDDLEWARE_CLASSES = (
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -183,3 +185,9 @@ REST_FRAMEWORK = {
     'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
     'MAX_PAGINATE_BY': 100             # Maximum limit allowed when using `?page_size=xxx`.
 }
+
+CORS_ORIGIN_WHITELIST = (
+    'localhost',
+    'bjacobel.com',
+    'bowdoinorient.com',
+)
