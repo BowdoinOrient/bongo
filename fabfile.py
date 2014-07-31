@@ -28,8 +28,13 @@ prefix_string = prefix_string[:-4]
 ########## GLOBALS
 env.run = 'python manage.py'
 env.user = 'orient'
-env.hosts = ['bowdoinoccident.com']
+env.hosts = ['citadel.bjacobel.com']
 ########## END GLOBALS
+
+######################
+# Note: I highly reccommend you log into orient@ each of env.hosts and add your id_rsa.pub to ~/.ssh/authorized_keys,
+# it will make using Fabric much easier.
+######################
 
 
 ########## DEPLOY
