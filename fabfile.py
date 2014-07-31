@@ -141,8 +141,6 @@ def setup():
         # Install system packages not included on standard Debian installs
         packages = [
             'libevent-dev',
-            'libsasl2-dev',
-            'libldap2-dev',
             'postgresql postgresql-contrib',
             'rabbitmq-server',
             'python2.7-dev',
