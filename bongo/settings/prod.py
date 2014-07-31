@@ -10,6 +10,14 @@ DATABASES = {
         'PASSWORD': environ.get("{}_POSTGRES_PASS".format(SITE_NAME.upper())),
         'HOST': '127.0.0.1',
         'PORT': '5432',
+    },
+    'archive': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'DB02Orient',
+        'USER': environ.get("OLD_MYSQL_USER"),
+        'PASSWORD': environ.get("OLD_MYSQL_PASS"),
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
