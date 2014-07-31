@@ -7,11 +7,12 @@ bongo/settings/secrets/*
 # No static files
 bongo/static/*
 
+# No media
+bongo/media/*
+
 # No logs
-bongo/logs/*
+/logs/*
 
 # coveralls
 .coverage
 
-# No media
-bongo/media/*
