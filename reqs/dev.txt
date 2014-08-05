@@ -1,6 +1,5 @@
 -r common.txt
 fabric==1.8.3
 fabtools==0.19.0
-MySQL-python==1.2.5
 factory_boy
 django-nose
