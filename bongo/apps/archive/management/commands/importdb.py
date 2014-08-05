@@ -207,24 +207,13 @@ def import_attachment():
 
 """ this is complex """
 def import_content():
-
-
-    """ TODO: Refactor content importer to loop over articles, not articlebodies     
-        Running into issues with orphaned attachments because their articles don't get created
-        because they had no articlebodies because they were attachment-only stories.
-    """
     
     for old_article in archive_models.Article.objects.using('archive').all():
 
         print ("Importing article "+str(old_article.id))
 
         # get the Text
-
-        try:  # get the last articlebody (most recent revision)
-            old_articlebody = archive_models.Articlebody.objects.using('archive').get(article_id=old_article.id).order_by("-timestamp")[0]
-        except:
-            old_articlebody = None
-
+        old_articlebody = archive_models.Articlebody.objects.using('archive').filter(article_id=old_article.id).order_by("-timestamp")[0]
 
         # get the Creator(s)
         
@@ -249,7 +238,7 @@ def import_content():
         if old_article.date_published is None:
             old_article.date_published = make_aware(datetime(1970, 1, 1), tz)
       
-        post = bongo_models.Post.objects.create(
+        (post, created) = bongo_models.Post.objects.get_or_create(
             pk=old_article.id,
             created=old_article.date_created,
             updated=old_article.date_updated,
@@ -272,8 +261,6 @@ def import_content():
                 pk=old_articlebody.id,
                 body=old_articlebody.body
             )
-
-            post.content.add(text)
 
         for old_author in old_authors:
             post.creators.add(bongo_models.Creator.objects.get(pk__exact=old_author.id))
@@ -349,8 +336,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        #transaction.set_autocommit(False)
-        #sid = transaction.savepoint()
+        # transaction.set_autocommit(False)
+        # sid = transaction.savepoint()
 
         import_ads()
         import_tips()
@@ -365,4 +352,4 @@ class Command(BaseCommand):
         import_attachment()
         import_photo()
 
-        #transaction.savepoint_rollback(sid)
+        # transaction.savepoint_rollback(sid)
