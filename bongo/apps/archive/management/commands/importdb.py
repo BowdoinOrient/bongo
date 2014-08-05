@@ -213,7 +213,10 @@ def import_content():
         print ("Importing article "+str(old_article.id))
 
         # get the Text
-        old_articlebody = archive_models.Articlebody.objects.using('archive').filter(article_id=old_article.id).order_by("-timestamp")[0]
+        try:
+            old_articlebody = archive_models.Articlebody.objects.using('archive').filter(article_id=old_article.id).order_by("-timestamp")[0]
+        except:
+            old_articlebody = None
 
         # get the Creator(s)
         
