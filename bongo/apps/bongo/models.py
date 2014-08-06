@@ -12,6 +12,9 @@ Also sections are obviously a thing we do.
 """
 
 class Series (models.Model):  # series is the singular, which may confuse django
+    class Meta:
+        verbose_name_plural = "Series"
+
     name = models.CharField(max_length=100)
 
     def __unicode__(self):
@@ -116,6 +119,9 @@ This is a limited subset for the time being and will expand.
 """
 
 class Content(models.Model):
+    class Meta:
+        verbose_name_plural = "Content"
+
     creators = models.ManyToManyField(Creator)
     caption = models.TextField(null=True, blank=True)
 
@@ -124,6 +130,9 @@ class Content(models.Model):
 
 
 class Text (Content):
+    class Meta:
+        verbose_name_plural = "Text"
+
     body = models.TextField()
     excerpt = models.TextField(editable=False, null=True)
 
@@ -173,6 +182,10 @@ class Photo (Content):
 
 
 class HTML (Content):
+    class Meta:
+        verbose_name = "HTML"
+        verbose_name_plural = "HTML"
+
     content = models.TextField()
 
     def __unicode__(self):
