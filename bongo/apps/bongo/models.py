@@ -120,7 +120,7 @@ class Content(models.Model):
     caption = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
-        return creators.all()
+        return self.caption
 
 
 class Text (Content):
