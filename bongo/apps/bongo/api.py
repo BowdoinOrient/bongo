@@ -34,6 +34,10 @@ class IssueCrudRestricted(viewsets.ReadOnlyModelViewSet):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
 
+class LatestIssueCrudRestricted(viewsets.ReadOnlyModelViewSet):
+    queryset = Issue.objects.order_by("-issue_date")[:1]
+    serializer_class = IssueSerializer
+
 class SectionCrud(viewsets.ModelViewSet):
     queryset = Section.objects.all()
     serializer_class = SectionSerializer

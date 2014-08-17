@@ -27,7 +27,7 @@ class Volume (models.Model):
     volume_year_end = models.IntegerField()
 
     def __unicode__(self):
-        return self.volume_number
+        return str(self.volume_number)
 
 
 class Issue (models.Model):
@@ -37,7 +37,7 @@ class Issue (models.Model):
     scribd = models.IntegerField(null=True,blank=True)
 
     def __unicode__(self):
-        return self.issue_number
+        return str(self.issue_number)
 
 
 class Section (models.Model):
