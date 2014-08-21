@@ -4,9 +4,6 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 
-# extra endpoints
-router.register(r'issue/latest', api.LatestIssueCrudRestricted)
-
 # routes for every model's create, retrieve, update, delete api endpoints
 router.register(r'series', api.SeriesCrud)
 router.register(r'volume', api.VolumeCrud)
@@ -53,6 +50,12 @@ router.register(r'ad', api.AdCrudRestricted)
 router.register(r'tip', api.TipCrudRestricted)
 router.register(r'event', api.EventCrudRestricted)
 router.register(r'scheduledpost', api.ScheduledPostCrudRestricted)
+
+
+# extra endpoints
+router.register(r'issue/latest', api.IssueCrudRestricted)
+router.register(r'section/{\d}/latest', api.SectionCrudRestricted)
+
 
 urlpatterns = patterns('',
     url(r'^', include(router.urls)),

@@ -1,10 +1,13 @@
 from bongo.apps.bongo.models import *
 from bongo.apps.bongo.serializers import *
 from rest_framework import viewsets, permissions
+from rest_framework.decorators import action, link
+from rest_framework.response import Response
+from django.core import serializers
 
 
 """ I know this is a gigantic mess - I'm searching for a better way.
-    Haven't found it yet, obviously. 
+    Haven't found it yet, obviously.
 """
 
 class SeriesCrud(viewsets.ModelViewSet):
@@ -34,6 +37,10 @@ class IssueCrudRestricted(viewsets.ReadOnlyModelViewSet):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
 
+    @link()
+    def latest(self, request, pk=None):
+        return Response(IssueSerializer(Issue.objects.order_by("-issue_date")[:1]).data[0])
+
 class LatestIssueCrudRestricted(viewsets.ReadOnlyModelViewSet):
     queryset = Issue.objects.order_by("-issue_date")[:1]
     serializer_class = IssueSerializer
@@ -46,6 +53,22 @@ class SectionCrud(viewsets.ModelViewSet):
 class SectionCrudRestricted(viewsets.ReadOnlyModelViewSet):
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
+
+    @link()
+    def latest(self, request, pk=None):
+        if 'limit' in request.GET:
+            l = request.GET['limit']
+        else:
+            l = 10
+
+        posts = Post.objects.filter(section_id__exact=pk).order_by("-published")[:l]
+
+        serializedPosts = []
+        for post in posts:
+            print PostSerializer(post).data
+            serializedPosts.append(PostSerializer(post).data)
+
+        return Response(serializedPosts)
 
 class TagCrud(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
