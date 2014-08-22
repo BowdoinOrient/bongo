@@ -52,11 +52,6 @@ router.register(r'event', api.EventCrudRestricted)
 router.register(r'scheduledpost', api.ScheduledPostCrudRestricted)
 
 
-# extra endpoints
-router.register(r'issue/latest', api.IssueCrudRestricted)
-router.register(r'section/{\d}/latest', api.SectionCrudRestricted)
-
-
 urlpatterns = patterns('',
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
