@@ -31,3 +31,31 @@ Deployment is handled via Fabric. `fab ?` will show you all the available comman
 
 ####tests:  [![Build Status](https://travis-ci.org/BowdoinOrient/bongo.svg)](https://travis-ci.org/BowdoinOrient/bongo) [![Coverage Status](https://coveralls.io/repos/BowdoinOrient/bongo/badge.png)](https://coveralls.io/r/BowdoinOrient/bongo)
 
+####using the api
+Bongo is a fairly typical RESTful API.
+
+To obtain a list of all resources of a type:
+
+        GET /api/v1/<resource>
+
+To obtain details about a specific instance of a resource type:
+
+        GET /api/v1/<resource>/<#>
+
+The object detail endpoint offers more method options to authenticated users:
+
+        POST/PUT/DELETE/UPDATE /api/v1/<resource>/<#>
+
+Authentication methods are still being developed.
+
+Every endpoint accepts two query parameters.
+
+1. `limit=<n>` limits the response to a maximum of `n` objects. Subsequent object are accessible through pagination. The default limit is 25, and the maximum is 100.
+
+2. `ordering=<criteria>` orders the response objects by `criteria`, where `criteria` is a field on the contained objects Django knows how to order. This argument accepts a `-` prefix for reverse ordering. For example, to return a list of posts in reverse chronological order:
+
+`GET /api/v1/post/?ordering=-published`
+
+Some endpoints allow you to cross-reference resources. For example, to return a  list of all of the posts in a particular section:
+
+        GET /api/v1/section/3/posts
