@@ -3,7 +3,11 @@ from os.path import join, normpath
 
 DEBUG = True
 
-SECRET_KEY = open(normpath(join(BASE_DIR, 'settings/secrets/secret_key'))).read().strip()
+SECRET_KEY = open(
+    normpath(
+        join(BASE_DIR, 'settings/secrets/secret_key')
+    )
+).read().strip()
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
@@ -40,4 +44,7 @@ ALLOWED_HOSTS = [
 ]
 
 INSTALLED_APPS += (
+    'django_nose',
 )
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
