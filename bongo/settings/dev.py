@@ -53,5 +53,3 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = ['--with-fixture-bundling']
 
 NOSE_TESTMATCH = '(?:^|[b_./-])[Tt]ests'
-
-environ["REUSE_DB"] = "1"
