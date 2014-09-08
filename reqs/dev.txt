@@ -3,4 +3,3 @@ fabric==1.8.3
 fabtools==0.19.0
 factory_boy
 -e git+git://github.com/django-nose/django-nose.git#egg=django-nose
-nose-progressive
