@@ -40,8 +40,4 @@ ALLOWED_HOSTS = [
 ]
 
 INSTALLED_APPS += (
-    'django_nose',
 )
-
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_TESTMATCH = '(?:^|[b_./-])[Tt]ests'

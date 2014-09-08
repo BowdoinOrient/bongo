@@ -8,7 +8,7 @@ You'll need:
 - Postgres ([Postgres.app](http://postgresapp.com) is a good option if you're on OS X).
 
 1. Run the following commands in psql or [PG Commander](https://eggerapps.at/pgcommander/) to set up Postgres:
-        
+
         CREATE ROLE bongo WITH LOGIN CREATEDB PASSWORD 'bongo';
         CREATE DATABASE bongo;
 

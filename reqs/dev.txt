@@ -2,4 +2,3 @@
 fabric==1.8.3
 fabtools==0.19.0
 factory_boy
-django-nose

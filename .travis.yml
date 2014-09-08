@@ -4,14 +4,14 @@ python:
 services:
   - postgresql
   - rabbitmq
-install: 
+install:
   - pip install -r reqs/travis.txt
 env:
   - DJANGO_SETTINGS_MODULE="bongo.settings.travis" BONGO_SECRET_KEY="totallynotmyrealsecretkey"
 before_script:
   - psql -c 'create database bongo;' -U postgres
   - python manage.py syncdb --noinput
-script: 
+script:
   - coverage run --source=bongo manage.py test
 after_success:
   - coveralls
