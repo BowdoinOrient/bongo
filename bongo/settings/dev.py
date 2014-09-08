@@ -1,5 +1,6 @@
 from common import *
 from os.path import join, normpath
+from os import environ
 
 DEBUG = True
 
@@ -48,3 +49,5 @@ INSTALLED_APPS += (
 )
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = ['--with-fixture-bundling', '--with-progressive']
