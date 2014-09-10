@@ -13,6 +13,10 @@ class ContentTestCase(TestCase):
         content = ContentFactory.build()
         self.assertIsNotNone(content.caption)
 
+    def test_ownership(self):
+        """ Test the M2M field connecting this content up to several creators """
+        pass
+
 
 class TextTestCase(TestCase):
     def test_inheritance(self):
