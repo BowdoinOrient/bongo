@@ -48,7 +48,7 @@ def deploy(branch='master'):
 
     with cd("/home/orient"):
         fabtools.require.git.working_copy("git@github.com:bowdoinorient/bongo.git", branch=branch)
-        
+
         with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo'):
             run('pip -q install -r bongo/reqs/prod.txt')
 
@@ -75,7 +75,7 @@ def start():
 def stop():
 
     """Kill supervisord"""
-   
+
     pid = run('cat /tmp/supervisor_bongo.pid')
     run('kill -15 ' + pid)  # SIGTERM is what supervisord expects to gracefully shut down workers
 
