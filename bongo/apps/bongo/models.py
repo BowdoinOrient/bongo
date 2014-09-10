@@ -94,7 +94,7 @@ class Creator(models.Model):
     user = models.ForeignKey(User, null=True, blank=True)
 
     name = models.CharField(max_length=100)
-    
+
     job = models.ForeignKey(Job, null=True)
 
     twitter = models.CharField(max_length=15, null=True, blank=True)
@@ -142,7 +142,7 @@ class Text (Content):
     def save(self, *args, **kwargs):
         # Using NLTK here is a sledgehammer for a thumbtack, but it may be useful for tagging, too
         tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-        self.excerpt = ' '.join(tokenizer.tokenize(self.body)[:4])
+        self.excerpt = ' '.join(tokenizer.tokenize(self.body)[:3])
         super(Text, self).save(*args, **kwargs)
 
 

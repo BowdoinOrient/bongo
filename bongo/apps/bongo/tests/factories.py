@@ -1,7 +1,35 @@
 import factory
 from bongo.apps.bongo import models
+from django.contrib.auth.models import User
 from random import choice, sample
-from string import lowercase, digits
+from string import lowercase, digits, capitalize, lowercase
+
+class UserFactory(factory.Factory):
+    class Meta:
+        model = User
+
+    first_name = capitalize(''.join(choice(lowercase) for i in range(6)))
+    last_name = capitalize(''.join(choice(lowercase) for i in range(7)))
+    username = factory.LazyAttribute(lambda obj: obj.first_name[0] + obj.last_name)
+    email = factory.LazyAttribute(lambda obj: obj.username + "@bowdoin.edu")
+    password = factory.PostGenerationMethodCall('set_password',
+                                                'defaultpassword')
+
+
+class JobFactory(factory.Factory):
+    class Meta:
+        model = models.Job
+
+    title = choice(["Editor in Chief", "Opinion Editor", "Contributor", "Staff Writer", "Columnist"])
+
+class CreatorFactory(factory.Factory):
+    class Meta:
+        model = models.Creator
+
+    user = factory.SubFactory(UserFactory)
+    name = capitalize(''.join(choice(lowercase) for i in range(6)))
+    job = factory.SubFactory(JobFactory)
+    twitter = "@"+''.join(choice(lowercase) for i in range(8))
 
 class ContentFactory(factory.Factory):
     class Meta:
