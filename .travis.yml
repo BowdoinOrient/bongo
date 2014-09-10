@@ -11,6 +11,7 @@ env:
 before_script:
   - psql -c 'create database bongo;' -U postgres
   - python manage.py syncdb --noinput
+  - python manage.py nltk-init
 script:
   - coverage run --source=bongo manage.py test
 after_success:
