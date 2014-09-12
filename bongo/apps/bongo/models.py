@@ -108,13 +108,14 @@ class Creator(models.Model):
         return self.name
 
     def works(self):
-        return
+        return (
             self.text_set +
             self.video_set +
             self.pdf_set +
             self.photo_set +
             self.html_set +
             self.pullquote_set
+        )
 
 
 
@@ -266,13 +267,14 @@ class Post (models.Model):
     primary_type = models.CharField(max_length=8, choices=types, default="generic")
 
     def content(self):
-        return
+        return (
             text.all() +
             video.all() +
             pdf.all() +
             photo.all() +
             html.all() +
             pullquote.all()
+        )
 
 
     def save(self, *args, **kwargs):
