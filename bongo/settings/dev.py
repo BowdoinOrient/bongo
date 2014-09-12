@@ -54,4 +54,4 @@ NOSE_ARGS = ['--with-fixture-bundling']
 
 NOSE_TESTMATCH = '(?:^|[b_./-])[Tt]ests'
 
-#os.environ['REUSE_DB'] = '1'
+os.environ['REUSE_DB'] = '1'
