@@ -108,7 +108,13 @@ class Creator(models.Model):
         return self.name
 
     def works(self):
-        return self.content_set  # @TODO this is a lot harder without a Content superclass
+        return
+            self.text_set +
+            self.video_set +
+            self.pdf_set +
+            self.photo_set +
+            self.html_set +
+            self.pullquote_set
 
 
 
