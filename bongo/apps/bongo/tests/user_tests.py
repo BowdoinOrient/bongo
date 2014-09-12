@@ -29,16 +29,17 @@ class CreatorTestCase(TestCase):
         """ Test the connection between a creator and the content they've made """
 
         me = CreatorFactory.build()
+        me.save()
 
         photo = PhotoFactory.build()
         photo.save()
         photo.creators.add(me)
-        video.save()
+        photo.save()
 
         video = VideoFactory.build()
         video.save()
         video.creators.add(me)
         video.save()
 
-        self.assertIn(photo, me.works())
-        self.assertIn(video, me.works())
+        self.assertIn(photo, me.works().all())
+        self.assertIn(video, me.works().all())
