@@ -44,12 +44,6 @@ class CreatorSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'name', 'job', 'twitter', 'profpic', 'courtesyof')
         depth = 2
 
-class ContentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Content
-        fields = ('id', 'creators', 'caption')
-        depth = 2
-
 class TextSerializer(serializers.ModelSerializer):
     class Meta:
         model = Text

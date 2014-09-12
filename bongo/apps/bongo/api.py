@@ -107,17 +107,6 @@ class CreatorCrudRestricted(viewsets.ReadOnlyModelViewSet):
     serializer_class = CreatorSerializer
     filter_backends = (filters.OrderingFilter,)
 
-class ContentCrud(viewsets.ModelViewSet):
-    queryset = Content.objects.all()
-    serializer_class = ContentSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    filter_backends = (filters.OrderingFilter,)
-
-class ContentCrudRestricted(viewsets.ReadOnlyModelViewSet):
-    queryset = Content.objects.all()
-    serializer_class = ContentSerializer
-    filter_backends = (filters.OrderingFilter,)
-
 class TextCrud(viewsets.ModelViewSet):
     queryset = Text.objects.all()
     serializer_class = TextSerializer

@@ -108,7 +108,7 @@ class Creator(models.Model):
         return self.name
 
     def works(self):
-        return self.content_set
+        return self.content_set  # @TODO this is a lot harder without a Content superclass
 
 
 
@@ -118,23 +118,14 @@ class Creator(models.Model):
 This is a limited subset for the time being and will expand.
 """
 
-class Content(models.Model):
-    class Meta:
-        verbose_name_plural = "Content"
-
-    creators = models.ManyToManyField(Creator)
-    caption = models.TextField(null=True, blank=True)
-
-    def __unicode__(self):
-        return self.caption
-
-
-class Text (Content):
+class Text (models.Model):
     class Meta:
         verbose_name_plural = "Text"
 
     body = models.TextField()
     excerpt = models.TextField(editable=False, null=True)
+    creators = models.ManyToManyField(Creator)
+    caption = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
         return self.excerpt
@@ -146,7 +137,7 @@ class Text (Content):
         super(Text, self).save(*args, **kwargs)
 
 
-class Video(Content):
+class Video(models.Model):
     hosts = (
         ("YouTube", "YouTube"),
         ("Vimeo", "Vimeo"),
@@ -155,6 +146,8 @@ class Video(Content):
 
     host = models.CharField(max_length=7, choices=hosts, default="Vimeo")
     uid = models.CharField(max_length=20, verbose_name="Video identifier - typically a string of letters or numbers after the last slash in the URL")
+    creators = models.ManyToManyField(Creator)
+    caption = models.TextField(null=True, blank=True)
 
     def url(self):
         return "http://{host}.com/{uid}".format(host=self.host.lower(), uid=self.uid)
@@ -163,15 +156,19 @@ class Video(Content):
         return self.url()
 
 
-class PDF (Content):
+class PDF (models.Model):
     staticfile = models.FileField(upload_to="pdfs")
+    creators = models.ManyToManyField(Creator)
+    caption = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
         return self.caption[:60]
 
 
-class Photo (Content):
+class Photo (models.Model):
     staticfile = models.ImageField(upload_to="photos")
+    creators = models.ManyToManyField(Creator)
+    caption = models.TextField(null=True, blank=True)
 
     """ get_or_create a thumbnail of the specified width and height """
     def thumbnail(self, width, height):
@@ -181,20 +178,24 @@ class Photo (Content):
         return self.caption[:60]
 
 
-class HTML (Content):
+class HTML (models.Model):
     class Meta:
         verbose_name = "HTML"
         verbose_name_plural = "HTML"
 
     content = models.TextField()
+    creators = models.ManyToManyField(Creator)
+    caption = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
         return self.caption[:60]
 
 
-class Pullquote (Content):
+class Pullquote (models.Model):
     quote = models.TextField()
     attribution = models.TextField(null=True, blank=True)
+    creators = models.ManyToManyField(Creator)
+    caption = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
         return self.quote
@@ -207,9 +208,9 @@ class Pullquote (Content):
 
 """ The following model describes things a post on the website is.
 Posts are most commonly articles, but that terminology is limiting;
-a post might be a stand-alone photo or an entry in a video series. 
+a post might be a stand-alone photo or an entry in a video series.
 
-Posts have a ManyToManyField for every type of content 
+Posts have a ManyToManyField for every type of content
 Bongo supports storing for maximum content reusability.
 They also have a primary_type, which will help the frontend decide the
 layout for that post (a standard article, liveblog, a photo gallery, etc.)
@@ -217,9 +218,9 @@ layout for that post (a standard article, liveblog, a photo gallery, etc.)
 
 class Post (models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)  
+    updated = models.DateTimeField(auto_now=True)
     # @TODO: auto-now and auto_now_add are in "accelerated deprecation" (https://code.djangoproject.com/ticket/21798)
-    # and might be gone in 1.7 final. in that case a custom save() function would be needed. 
+    # and might be gone in 1.7 final. in that case a custom save() function would be needed.
 
     published = models.DateTimeField()
     is_published = models.BooleanField(default=False)  # allow for drafts
@@ -240,7 +241,12 @@ class Post (models.Model):
 
     creators = models.ManyToManyField(Creator)
 
-    content = models.ManyToManyField(Content, null=True, blank=True)
+    text = models.ManyToManyField(Text, null=True, blank=True)
+    video = models.ManyToManyField(Video, null=True, blank=True)
+    pdf = models.ManyToManyField(PDF, null=True, blank=True)
+    photo = models.ManyToManyField(Photo, null=True, blank=True)
+    html = models.ManyToManyField(HTML, null=True, blank=True)
+    pullquote = models.ManyToManyField(Pullquote, null=True, blank=True)
 
     types = (
         ("text", "Article"),
@@ -249,10 +255,18 @@ class Post (models.Model):
         ("liveblog", "Liveblog"),
         ("html", "Interactive/Embedded"),
         ("generic", "Other")
-
     )
 
     primary_type = models.CharField(max_length=8, choices=types, default="generic")
+
+    def content(self):
+        return
+            text.all() +
+            video.all() +
+            pdf.all() +
+            photo.all() +
+            html.all() +
+            pullquote.all()
 
 
     def save(self, *args, **kwargs):
