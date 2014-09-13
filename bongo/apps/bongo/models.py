@@ -118,18 +118,6 @@ class Creator(models.Model):
         )
 
 
-class Content(models.Model):
-    class Meta:
-        verbose_name_plural = "Content"
-
-    creators = models.ManyToManyField(Creator)
-    caption = models.TextField(null=True, blank=True)
-
-    def __unicode__(self):
-        return self.caption
-
-
-
 """ The following models describe things a post can contain.
 This is a limited subset for the time being and will expand.
 """
