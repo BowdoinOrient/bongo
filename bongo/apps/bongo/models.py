@@ -118,6 +118,15 @@ class Creator(models.Model):
         )
 
 
+class Content(models.Model):
+    class Meta:
+        verbose_name_plural = "Content"
+
+    creators = models.ManyToManyField(Creator)
+    caption = models.TextField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.caption
 
 
 
@@ -125,87 +134,87 @@ class Creator(models.Model):
 This is a limited subset for the time being and will expand.
 """
 
-class Text (models.Model):
-    class Meta:
-        verbose_name_plural = "Text"
+# class Text (models.Model):
+#     class Meta:
+#         verbose_name_plural = "Text"
 
-    body = models.TextField()
-    excerpt = models.TextField(editable=False, null=True)
-    creators = models.ManyToManyField(Creator)
-    caption = models.TextField(null=True, blank=True)
+#     body = models.TextField()
+#     excerpt = models.TextField(editable=False, null=True)
+#     creators = models.ManyToManyField(Creator)
+#     caption = models.TextField(null=True, blank=True)
 
-    def __unicode__(self):
-        return self.excerpt
+#     def __unicode__(self):
+#         return self.excerpt
 
-    def save(self, *args, **kwargs):
-        # Using NLTK here is a sledgehammer for a thumbtack, but it may be useful for tagging, too
-        tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-        self.excerpt = ' '.join(tokenizer.tokenize(self.body)[:3])
-        super(Text, self).save(*args, **kwargs)
-
-
-class Video(models.Model):
-    hosts = (
-        ("YouTube", "YouTube"),
-        ("Vimeo", "Vimeo"),
-        ("Vine", "Vine"),
-    )  # the syntax of how you have to do this is really annoying
-
-    host = models.CharField(max_length=7, choices=hosts, default="Vimeo")
-    uid = models.CharField(max_length=20, verbose_name="Video identifier - typically a string of letters or numbers after the last slash in the URL")
-    creators = models.ManyToManyField(Creator)
-    caption = models.TextField(null=True, blank=True)
-
-    def url(self):
-        return "http://{host}.com/{uid}".format(host=self.host.lower(), uid=self.uid)
-
-    def __unicode__(self):
-        return self.url()
+#     def save(self, *args, **kwargs):
+#         # Using NLTK here is a sledgehammer for a thumbtack, but it may be useful for tagging, too
+#         tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+#         self.excerpt = ' '.join(tokenizer.tokenize(self.body)[:3])
+#         super(Text, self).save(*args, **kwargs)
 
 
-class PDF (models.Model):
-    staticfile = models.FileField(upload_to="pdfs")
-    creators = models.ManyToManyField(Creator)
-    caption = models.TextField(null=True, blank=True)
+# class Video(models.Model):
+#     hosts = (
+#         ("YouTube", "YouTube"),
+#         ("Vimeo", "Vimeo"),
+#         ("Vine", "Vine"),
+#     )  # the syntax of how you have to do this is really annoying
 
-    def __unicode__(self):
-        return self.caption[:60]
+#     host = models.CharField(max_length=7, choices=hosts, default="Vimeo")
+#     uid = models.CharField(max_length=20, verbose_name="Video identifier - typically a string of letters or numbers after the last slash in the URL")
+#     creators = models.ManyToManyField(Creator)
+#     caption = models.TextField(null=True, blank=True)
 
+#     def url(self):
+#         return "http://{host}.com/{uid}".format(host=self.host.lower(), uid=self.uid)
 
-class Photo (models.Model):
-    staticfile = models.ImageField(upload_to="photos")
-    creators = models.ManyToManyField(Creator)
-    caption = models.TextField(null=True, blank=True)
-
-    """ get_or_create a thumbnail of the specified width and height """
-    def thumbnail(self, width, height):
-        pass
-
-    def __unicode__(self):
-        return self.caption[:60]
+#     def __unicode__(self):
+#         return self.url()
 
 
-class HTML (models.Model):
-    class Meta:
-        verbose_name = "HTML"
-        verbose_name_plural = "HTML"
+# class PDF (models.Model):
+#     staticfile = models.FileField(upload_to="pdfs")
+#     creators = models.ManyToManyField(Creator)
+#     caption = models.TextField(null=True, blank=True)
 
-    content = models.TextField()
-    creators = models.ManyToManyField(Creator)
-    caption = models.TextField(null=True, blank=True)
-
-    def __unicode__(self):
-        return self.caption[:60]
+#     def __unicode__(self):
+#         return self.caption[:60]
 
 
-class Pullquote (models.Model):
-    quote = models.TextField()
-    attribution = models.TextField(null=True, blank=True)
-    creators = models.ManyToManyField(Creator)
-    caption = models.TextField(null=True, blank=True)
+# class Photo (models.Model):
+#     staticfile = models.ImageField(upload_to="photos")
+#     creators = models.ManyToManyField(Creator)
+#     caption = models.TextField(null=True, blank=True)
 
-    def __unicode__(self):
-        return self.quote
+#     """ get_or_create a thumbnail of the specified width and height """
+#     def thumbnail(self, width, height):
+#         pass
+
+#     def __unicode__(self):
+#         return self.caption[:60]
+
+
+# class HTML (models.Model):
+#     class Meta:
+#         verbose_name = "HTML"
+#         verbose_name_plural = "HTML"
+
+#     content = models.TextField()
+#     creators = models.ManyToManyField(Creator)
+#     caption = models.TextField(null=True, blank=True)
+
+#     def __unicode__(self):
+#         return self.caption[:60]
+
+
+# class Pullquote (models.Model):
+#     quote = models.TextField()
+#     attribution = models.TextField(null=True, blank=True)
+#     creators = models.ManyToManyField(Creator)
+#     caption = models.TextField(null=True, blank=True)
+
+#     def __unicode__(self):
+#         return self.quote
 
 
 
@@ -248,12 +257,12 @@ class Post (models.Model):
 
     creators = models.ManyToManyField(Creator)
 
-    text = models.ManyToManyField(Text, null=True, blank=True)
-    video = models.ManyToManyField(Video, null=True, blank=True)
-    pdf = models.ManyToManyField(PDF, null=True, blank=True)
-    photo = models.ManyToManyField(Photo, null=True, blank=True)
-    html = models.ManyToManyField(HTML, null=True, blank=True)
-    pullquote = models.ManyToManyField(Pullquote, null=True, blank=True)
+    # text = models.ManyToManyField(Text, null=True, blank=True)
+    # video = models.ManyToManyField(Video, null=True, blank=True)
+    # pdf = models.ManyToManyField(PDF, null=True, blank=True)
+    # photo = models.ManyToManyField(Photo, null=True, blank=True)
+    # html = models.ManyToManyField(HTML, null=True, blank=True)
+    # pullquote = models.ManyToManyField(Pullquote, null=True, blank=True)
 
     types = (
         ("text", "Article"),
