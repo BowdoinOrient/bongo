@@ -64,7 +64,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'bongo.urls'
 
-WSGI_APPLICATION = 'bongo.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 
 # Internationalization
