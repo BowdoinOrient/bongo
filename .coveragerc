@@ -1,0 +1,13 @@
+[run]
+source = bongo
+omit =
+    bongo/apps/archive/*,
+    bongo/apps/bongo/migrations/*,
+    bongo/apps/bongo/management/*,
+    bongo/settings/*,
+    *__init__**
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __unicode__

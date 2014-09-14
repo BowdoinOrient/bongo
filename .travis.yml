@@ -15,7 +15,6 @@ before_script:
   - python manage.py syncdb --noinput
   - curl https://s3.amazonaws.com/bongo-static/orient_canonical.sql | mysql -uroot -DDB02Orient_test
   - python manage.py nltk-init
-  - python manage.py importdb nodownload
 script:
   - coverage run --source=bongo manage.py test
 after_success:
