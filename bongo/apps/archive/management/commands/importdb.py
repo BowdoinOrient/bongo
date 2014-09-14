@@ -199,7 +199,14 @@ def import_attachment():
                 atchmt.save()
 
             post = bongo_models.Post.objects.get(pk__exact=old_attachment.article_id)
-            post.content.add(atchmt)
+            if old_attachment.type == "html":
+                post.html.add(atchmt)
+            elif old_attachment.type == "vimeo":
+                post.video.add(atchmt)
+            elif old_attachment.type == "youtube":
+                post.video.add(atchmt)
+            elif old_attachment.type == "pullquote":
+                post.pullquote.add(atchmt)
             post.save()
 
 
@@ -328,7 +335,7 @@ def import_photo():
         
         try:
             post_owner = bongo_models.Post.objects.get(pk__exact=old_photo.article_id)
-            post_owner.content.add(photo)
+            post_owner.photo.add(photo)
             post_owner.save()
         except:
             print("Photo's owner has been deleted... sad :(")
