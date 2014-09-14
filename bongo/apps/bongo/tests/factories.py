@@ -31,12 +31,6 @@ class CreatorFactory(factory.Factory):
     job = factory.SubFactory(JobFactory)
     twitter = "@"+''.join(choice(lowercase) for i in range(8))
 
-class ContentFactory(factory.Factory):
-    class Meta:
-        model = models.Content
-
-    caption = factory.Sequence(lambda n: 'This is content #{0}'.format(n))
-
 class TextFactory(factory.Factory):
     class Meta:
         model = models.Text

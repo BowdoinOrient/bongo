@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import date, datetime
 from django.utils.text import slugify
+from itertools import chain
 import nltk.data
 import re
 
@@ -108,13 +109,13 @@ class Creator(models.Model):
         return self.name
 
     def works(self):
-        return (
-            self.text_set +
-            self.video_set +
-            self.pdf_set +
-            self.photo_set +
-            self.html_set +
-            self.pullquote_set
+        return chain(
+            self.text_set.all(),
+            self.video_set.all(),
+            self.pdf_set.all(),
+            self.photo_set.all(),
+            self.html_set.all(),
+            self.pullquote_set.all()
         )
 
 

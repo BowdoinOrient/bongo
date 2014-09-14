@@ -41,5 +41,5 @@ class CreatorTestCase(TestCase):
         video.creators.add(me)
         video.save()
 
-        self.assertIn(photo, me.works().all())
-        self.assertIn(video, me.works().all())
+        self.assertIn(photo, me.works())
+        self.assertIn(video, me.works())
