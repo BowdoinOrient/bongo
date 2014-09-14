@@ -72,3 +72,21 @@ class PullquoteFactory(factory.Factory):
     caption = factory.Sequence(lambda n: 'This is pullquote #{0}'.format(n))
     quote = "Success is my only motherfuckin' option, failure's not"
     attribution = "Marshall Mathers, TDD evangelist"
+
+class SeriesFactory(factory.Factory):
+    pass
+
+class IssueFactory(factory.Factory):
+    pass
+
+class VolumeFactory(factory.Factory):
+    pass
+
+class SectionFactory(factory.Factory):
+    pass
+
+class TagFactory(factory.Factory):
+    pass
+
+class PostFactory(factory.Factory):
+    pass
