@@ -3,14 +3,18 @@ python:
   - "2.7"
 services:
   - postgresql
+  - mysql
   - rabbitmq
 install:
   - pip install -r reqs/travis.txt
 env:
   - DJANGO_SETTINGS_MODULE="bongo.settings.travis" BONGO_SECRET_KEY="totallynotmyrealsecretkey"
 before_script:
-  - psql -c 'create database bongo;' -U postgres
+  - psql -c 'create database bongo_test;' -U postgres
+  - mysql -e 'create database DB02Orient_test;'
   - python manage.py syncdb --noinput
+  - curl https://s3.amazonaws.com/bongo-static/orient_canonical.sql | mysql -uroot -DDB02Orient_test
+  - python manage.py importdb nodownload
   - python manage.py nltk-init
 script:
   - coverage run --source=bongo manage.py test

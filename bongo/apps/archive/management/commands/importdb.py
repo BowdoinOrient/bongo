@@ -10,16 +10,20 @@ from datetime import date, datetime
 import requests
 
 tz = get_current_timezone()
+DONT_DOWNLOAD=False
 
 def getfile(url):
-    print("Downloading "+url)
-    r = requests.get(url)
-
-    if r.status_code == 200:
-        return ContentFile(r.content)
-    else:
-        print("Error: File not found.")
+    if DONT_DOWNLOAD:
         return ContentFile("")
+    else:
+        print("Downloading "+url)
+        r = requests.get(url)
+
+        if r.status_code == 200:
+            return ContentFile(r.content)
+        else:
+            print("Error: File not found.")
+            return ContentFile("")
 
 
 """ Convert a date to a datetime, do nothing to a datetime """
@@ -41,8 +45,8 @@ def import_ads():
 
         (advertiser, created) = bongo_models.Advertiser.objects.get_or_create(name=old_ad.sponsor)
         (ad, created) = bongo_models.Ad.objects.get_or_create(
-            pk=old_ad.id, 
-            run_from=make_aware(datetimeify(old_ad.start_date), tz), 
+            pk=old_ad.id,
+            run_from=make_aware(datetimeify(old_ad.start_date), tz),
             run_through=make_aware(datetimeify(old_ad.end_date), tz),
             url=old_ad.link,
             owner=advertiser,
@@ -59,7 +63,7 @@ def import_tips():
         print ("Importing tip "+str(old_tip.id))
 
         (tip, created) = bongo_models.Tip.objects.get_or_create(
-            pk=old_tip.id, 
+            pk=old_tip.id,
             content=old_tip.tip,
             submitted_at=make_aware(datetimeify(old_tip.submitted), tz),
             submitted_from = old_tip.user_ip,
@@ -187,7 +191,7 @@ def import_attachment():
                     pk=old_attachment.id,
                     quote=old_attachment.content1,
                     attribution=old_attachment.content2
-                )   
+                )
 
             if old_attachment.type != "pullquote":
                 atchmt.caption=old_attachment.content2
@@ -214,7 +218,7 @@ def import_attachment():
 
 """ this is complex """
 def import_content():
-    
+
     for old_article in archive_models.Article.objects.using('archive').all():
 
         print ("Importing article "+str(old_article.id))
@@ -226,7 +230,7 @@ def import_content():
             old_articlebody = None
 
         # get the Creator(s)
-        
+
         old_authors = []
         try:
             for old_articleauthor in archive_models.Articleauthor.objects.using('archive').get(article_id__exact=old_article.id):
@@ -235,11 +239,11 @@ def import_content():
             pass
 
 
-        # If an article has no volume number, try to guess it by the year. Better than nothing. 
+        # If an article has no volume number, try to guess it by the year. Better than nothing.
         # This shouldn't actually ever be invoked now that I did some manual DB cleanup
         if old_article.volume == 0:
             old_article.volume = old_article.date_created.year - 1870
-        
+
         # If any of these fields are missing, set them to the unix epoch
         if old_article.date_created is None:
             old_article.date_created = make_aware(datetime(1970, 1, 1), tz)
@@ -247,7 +251,7 @@ def import_content():
             old_article.date_updated = make_aware(datetime(1970, 1, 1), tz)
         if old_article.date_published is None:
             old_article.date_published = make_aware(datetime(1970, 1, 1), tz)
-      
+
         (post, created) = bongo_models.Post.objects.get_or_create(
             pk=old_article.id,
             created=old_article.date_created,
@@ -330,9 +334,9 @@ def import_photo():
                 photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
             except:
                 print("Issues crediting this photo to author #"+str(old_photo.photographer_id))
-        
+
         photo.save()
-        
+
         try:
             post_owner = bongo_models.Post.objects.get(pk__exact=old_photo.article_id)
             post_owner.photo.add(photo)
@@ -345,6 +349,8 @@ def import_photo():
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
+        if args[0] = "nodownload":
+            DONT_DOWNLOAD=True
 
         # transaction.set_autocommit(False)
         # sid = transaction.savepoint()

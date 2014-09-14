@@ -5,11 +5,19 @@ from prod import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'bongo',
+        'NAME': 'bongo_test',
         'USER': 'postgres',
         'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '5432',
+    },
+    'archive': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'DB02Orient_test',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
