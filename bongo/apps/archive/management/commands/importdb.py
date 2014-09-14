@@ -349,7 +349,7 @@ def import_photo():
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        if args[0] = "nodownload":
+        if args[0] == "nodownload":
             DONT_DOWNLOAD=True
 
         # transaction.set_autocommit(False)
