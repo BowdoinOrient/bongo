@@ -10,10 +10,9 @@ from datetime import date, datetime
 import requests
 
 tz = get_current_timezone()
-DONT_DOWNLOAD=False
 
 def getfile(url):
-    if DONT_DOWNLOAD:
+    if nodownload:
         return ContentFile("")
     else:
         print("Downloading "+url)
@@ -325,8 +324,10 @@ def import_photo():
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
+        global nodownload
+        nodownload = False
         if args[0] == "nodownload":
-            DONT_DOWNLOAD=True
+            nodownload = True
 
         # transaction.set_autocommit(False)
         # sid = transaction.savepoint()
