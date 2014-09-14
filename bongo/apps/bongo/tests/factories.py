@@ -15,7 +15,6 @@ class UserFactory(factory.Factory):
     password = factory.PostGenerationMethodCall('set_password',
                                                 'defaultpassword')
 
-
 class JobFactory(factory.Factory):
     class Meta:
         model = models.Job

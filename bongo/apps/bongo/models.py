@@ -70,6 +70,10 @@ class Tag (models.Model):
 class Job(models.Model):
     title = models.CharField(max_length=40)
 
+    # returns a list of everyone with this job
+    def workers(self):
+        return self.creator_set.all()
+
     def __unicode__(self):
         return self.title
 

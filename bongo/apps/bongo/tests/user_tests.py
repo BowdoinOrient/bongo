@@ -44,3 +44,16 @@ class CreatorTestCase(TestCase):
         me.delete()
         photo.delete()
         video.delete()
+
+class JobTestCase(TestCase):
+    def test_foreign_key(self):
+        job = JobFactory.build(); job.save()
+        creator = CreatorFactory.build(); creator.save()
+        creator.job = job
+        creator.save()
+
+        self.assertEqual(job, creator.job)
+        self.assertIn(creator, job.workers())
+
+        job.delete()
+        creator.delete()
