@@ -28,18 +28,19 @@ class CreatorTestCase(TestCase):
     def test_works(self):
         """ Test the connection between a creator and the content they've made """
 
-        me = CreatorFactory.build()
-        me.save()
+        me = CreatorFactory.build(); me.save()
 
-        photo = PhotoFactory.build()
-        photo.save()
+        photo = PhotoFactory.build(); photo.save()
         photo.creators.add(me)
         photo.save()
 
-        video = VideoFactory.build()
-        video.save()
+        video = VideoFactory.build(); video.save()
         video.creators.add(me)
         video.save()
 
         self.assertIn(photo, me.works())
         self.assertIn(video, me.works())
+
+        me.delete()
+        photo.delete()
+        video.delete()

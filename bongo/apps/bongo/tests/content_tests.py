@@ -3,6 +3,26 @@ from django.test import TestCase
 from django.db import models
 
 class TextTestCase(TestCase):
+    def test_creator(self):
+        text = TextFactory.build(); text.save()
+
+        creator1 = CreatorFactory.build(); creator1.save()
+        creator2 = CreatorFactory.build(); creator2.save()
+
+        text.creators.add(creator1)
+        text.creators.add(creator2)
+        text.save()
+
+        for creator in text.creators.all():
+            self.assertIn(text, creator.works())
+
+        for creator in [creator1, creator2]:
+            self.assertIn(text, creator.works())
+
+        text.delete()
+        creator1.delete()
+        creator2.delete()
+
     def test_fields(self):
         text = TextFactory.build()
         self.assertIsNotNone(text.caption)
@@ -16,6 +36,26 @@ class TextTestCase(TestCase):
         text.delete()
 
 class VideoTestCase(TestCase):
+    def test_creator(self):
+        video = VideoFactory.build(); video.save()
+
+        creator1 = CreatorFactory.build(); creator1.save()
+        creator2 = CreatorFactory.build(); creator2.save()
+
+        video.creators.add(creator1)
+        video.creators.add(creator2)
+        video.save()
+
+        for creator in video.creators.all():
+            self.assertIn(video, creator.works())
+
+        for creator in [creator1, creator2]:
+            self.assertIn(video, creator.works())
+
+        video.delete()
+        creator1.delete()
+        creator2.delete()
+
     def test_fields(self):
         video = VideoFactory.build()
         self.assertIsNotNone(video.caption)
@@ -23,18 +63,80 @@ class VideoTestCase(TestCase):
 
 
 class PDFTestCase(TestCase):
+    def test_creator(self):
+        pdf = PDFFactory.build(); pdf.save()
+
+        creator1 = CreatorFactory.build(); creator1.save()
+        creator2 = CreatorFactory.build(); creator2.save()
+
+        pdf.creators.add(creator1)
+        pdf.creators.add(creator2)
+        pdf.save()
+
+        for creator in pdf.creators.all():
+            self.assertIn(pdf, creator.works())
+
+        for creator in [creator1, creator2]:
+            self.assertIn(pdf, creator.works())
+
+        pdf.delete()
+        creator1.delete()
+        creator2.delete()
+
     def test_fields(self):
         pdf = PDFFactory.build()
         self.assertIsNotNone(pdf.caption)
+        # @todo: test staticfile
 
 
 class PhotoTestCase(TestCase):
+    def test_creator(self):
+        photo = PhotoFactory.build(); photo.save()
+
+        creator1 = CreatorFactory.build(); creator1.save()
+        creator2 = CreatorFactory.build(); creator2.save()
+
+        photo.creators.add(creator1)
+        photo.creators.add(creator2)
+        photo.save()
+
+        for creator in photo.creators.all():
+            self.assertIn(photo, creator.works())
+
+        for creator in [creator1, creator2]:
+            self.assertIn(photo, creator.works())
+
+        photo.delete()
+        creator1.delete()
+        creator2.delete()
+
     def test_fields(self):
         photo = PhotoFactory.build()
         self.assertIsNotNone(photo.caption)
+        # @todo: test staticfile
 
 
 class HTMLTestCase(TestCase):
+    def test_creator(self):
+        html = HTMLFactory.build(); html.save()
+
+        creator1 = CreatorFactory.build(); creator1.save()
+        creator2 = CreatorFactory.build(); creator2.save()
+
+        html.creators.add(creator1)
+        html.creators.add(creator2)
+        html.save()
+
+        for creator in html.creators.all():
+            self.assertIn(html, creator.works())
+
+        for creator in [creator1, creator2]:
+            self.assertIn(html, creator.works())
+
+        html.delete()
+        creator1.delete()
+        creator2.delete()
+
     def test_fields(self):
         html = HTMLFactory.build()
         self.assertIsNotNone(html.caption)
@@ -42,10 +144,28 @@ class HTMLTestCase(TestCase):
 
 
 class PullquoteTestCase(TestCase):
+    def test_creator(self):
+        pullquote = PullquoteFactory.build(); pullquote.save()
+
+        creator1 = CreatorFactory.build(); creator1.save()
+        creator2 = CreatorFactory.build(); creator2.save()
+
+        pullquote.creators.add(creator1)
+        pullquote.creators.add(creator2)
+        pullquote.save()
+
+        for creator in pullquote.creators.all():
+            self.assertIn(pullquote, creator.works())
+
+        for creator in [creator1, creator2]:
+            self.assertIn(pullquote, creator.works())
+
+        pullquote.delete()
+        creator1.delete()
+        creator2.delete()
+
     def test_fields(self):
         pullquote = PullquoteFactory.build()
         self.assertIsNotNone(pullquote.caption)
         self.assertIsNotNone(pullquote.quote)
         self.assertIsNotNone(pullquote.attribution)
-
-
