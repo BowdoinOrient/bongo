@@ -41,8 +41,6 @@ def datetimeify(d):
 def import_ads():
     for old_ad in archive_models.Ads.objects.using('archive').all():
 
-        print ("Importing ad "+str(old_ad.id))
-
         (advertiser, created) = bongo_models.Advertiser.objects.get_or_create(name=old_ad.sponsor)
         (ad, created) = bongo_models.Ad.objects.get_or_create(
             pk=old_ad.id,
@@ -59,8 +57,6 @@ def import_ads():
 """ Import the old tips table into the new Tip model """
 def import_tips():
     for old_tip in archive_models.Tips.objects.using('archive').all():
-
-        print ("Importing tip "+str(old_tip.id))
 
         (tip, created) = bongo_models.Tip.objects.get_or_create(
             pk=old_tip.id,
@@ -80,8 +76,6 @@ def import_alerts():
             print "Refusing to commit an alert with a null datetime"
             continue
 
-        print ("Importing alert "+str(old_alert.id))
-
         (alert, created) = bongo_models.Alert.objects.get_or_create(
             pk=old_alert.id,
             # They are each datetimes in the archive, this is unneccesary. Convert to date.
@@ -96,8 +90,6 @@ def import_alerts():
 def import_volumes():
     for old_volume in archive_models.Volume.objects.using('archive').all():
 
-        print ("Importing volume "+str(old_volume.id))
-
         (volume, created) = bongo_models.Volume.objects.get_or_create(
             pk=old_volume.id,
             volume_number=old_volume.arabic,
@@ -109,8 +101,6 @@ def import_volumes():
 """ Import the old issues table into the new Issue model """
 def import_issues():
     for old_issue in archive_models.Issue.objects.using('archive').all():
-
-        print ("Importing issue "+str(old_issue.id))
 
         (issue, created) = bongo_models.Issue.objects.get_or_create(
             pk=old_issue.id,
@@ -126,8 +116,6 @@ def import_issues():
 def import_series():
     for old_series in archive_models.Series.objects.using('archive').all():
 
-        print ("Importing series "+str(old_series.id))
-
         (series, created) = bongo_models.Series.objects.get_or_create(
             pk=old_series.id,
             name=old_series.name
@@ -136,8 +124,6 @@ def import_series():
 """ Import the old sections table into the new Section model """
 def import_section():
     for old_section in archive_models.Section.objects.using('archive').all():
-
-        print ("Importing section "+str(old_section.id))
 
         (section, created) = bongo_models.Section.objects.get_or_create(
             pk=old_section.id,
@@ -149,8 +135,6 @@ def import_section():
 def import_job():
     for old_job in archive_models.Job.objects.using('archive').all():
 
-        print ("Importing job "+str(old_job.id))
-
         (job, created) = bongo_models.Job.objects.get_or_create(
             pk=old_job.id,
             title=old_job.name,
@@ -161,8 +145,6 @@ def import_job():
 
 def import_attachment():
     for old_attachment in archive_models.Attachments.objects.using('archive').all():
-
-        print ("Importing attachment "+str(old_attachment.id))
 
         if old_attachment.id <= 5:
             # Attachments 1-5 are absent in the current frontend and have the wrong content1/content2
@@ -220,8 +202,6 @@ def import_attachment():
 def import_content():
 
     for old_article in archive_models.Article.objects.using('archive').all():
-
-        print ("Importing article "+str(old_article.id))
 
         # get the Text
         try:
@@ -285,8 +265,6 @@ def import_content():
 def import_creator():
     for old_author in archive_models.Author.objects.using('archive').all():
 
-        print ("Importing author "+str(old_author.id))
-
         (creator, created) = bongo_models.Creator.objects.get_or_create(
             pk=old_author.id,
             name=old_author.name,
@@ -305,8 +283,6 @@ def import_photo():
     new_ids_created = 1
     for old_photo in archive_models.Photo.objects.using('archive').all():
 
-        print ("Importing photo "+str(old_photo.id))
-
         (photo, created) = bongo_models.Photo.objects.get_or_create(
             pk=old_photo.id,
             caption=old_photo.caption,
@@ -320,7 +296,7 @@ def import_photo():
 
             photo.staticfile.save(str(old_photo.id)+".jpg", getfile(image_url))
         except:
-            print("File really, really couldn't be found/")
+            print("File really, really couldn't be found")
 
         # Courtesy photos have a photographer id of 1, which doesn't exist.
         # We have to come up with a new id for this photographer that doesn't interfere with any existing id
