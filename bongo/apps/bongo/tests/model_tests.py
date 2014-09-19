@@ -1,6 +1,12 @@
 from factories import *
 from django.test import TestCase
 from django.db import models
+from django.contrib.auth.models import User
+
+"""
+Test content type models and related:
+test, video, PDF, photo, HTML, pullquote, post
+"""
 
 class TextTestCase(TestCase):
     def test_creator(self):
@@ -169,3 +175,94 @@ class PullquoteTestCase(TestCase):
         self.assertIsNotNone(pullquote.caption)
         self.assertIsNotNone(pullquote.quote)
         self.assertIsNotNone(pullquote.attribution)
+
+class PostTestCase(TestCase):
+    pass
+
+"""
+Test user-related models:
+creators, users, jobs
+"""
+
+class UserTestCase(TestCase):
+    def test_password(self):
+        """ Test that a user gets a password, and it works to log them in """
+
+        user = UserFactory.build()
+        self.assertNotEqual(user.password, u'')
+        self.assertEqual(user.check_password("defaultpassword"), True)
+
+class CreatorTestCase(TestCase):
+    def test_foreign_key(self):
+        """ Test that Creators are properly hooked up to Jobs and Users """
+
+        user = UserFactory.build()
+        creator = CreatorFactory.build()
+        job = JobFactory.build()
+
+        creator.user = user
+        creator.job = job
+
+        self.assertEquals(type(creator.user), User)
+        self.assertEquals(type(creator.job), models.Job)
+
+    def test_works(self):
+        """ Test the connection between a creator and the content they've made """
+
+        me = CreatorFactory.build(); me.save()
+
+        photo = PhotoFactory.build(); photo.save()
+        photo.creators.add(me)
+        photo.save()
+
+        video = VideoFactory.build(); video.save()
+        video.creators.add(me)
+        video.save()
+
+        self.assertIn(photo, me.works())
+        self.assertIn(video, me.works())
+
+        me.delete()
+        photo.delete()
+        video.delete()
+
+class JobTestCase(TestCase):
+    def test_foreign_key(self):
+        job = JobFactory.build(); job.save()
+        creator = CreatorFactory.build(); creator.save()
+        creator.job = job
+        creator.save()
+
+        self.assertEqual(job, creator.job)
+        self.assertIn(creator, job.workers())
+
+        job.delete()
+        creator.delete()
+
+"""
+Test metadata models:
+series, volumes, issues, sections, tags
+"""
+
+class SeriesTestCase(TestCase):
+    def test_m2m(self):
+        pass
+
+class VolumeTestCase(TestCase):
+    def test_foreign_key(self):
+        pass
+
+class IssueTestCase(TestCase):
+    def test_foreign_key(self):
+        pass
+
+class SectionTestCase(TestCase):
+    def test_foreign_key(self):
+        pass
+
+class TagTestCase(TestCase):
+    def test_foreign_key(self):
+        pass
+
+    def test_autogen(self):
+        pass
