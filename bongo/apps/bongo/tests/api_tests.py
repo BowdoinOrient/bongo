@@ -75,35 +75,35 @@ class APITestCase(TestCase):
 
     def test_Job_endpoint(self):
         obj = JobFactory.create(); obj.save()
-        crud_tests(self, obj, models.Job)
+        crud(self, obj, models.Job)
 
     def test_Creator_endpoint(self):
         obj = CreatorFactory.create(); obj.save()
-        crud_tests(self, obj, models.Creator)
+        crud(self, obj, models.Creator)
 
     def test_Text_endpoint(self):
         obj = TextFactory.create(); obj.save()
-        crud_tests(self, obj, models.Text)
+        crud(self, obj, models.Text)
 
     def test_Video_endpoint(self):
         obj = VideoFactory.create(); obj.save()
-        crud_tests(self, obj, models.Video)
+        crud(self, obj, models.Video)
 
     def test_HTML_endpoint(self):
         obj = HTMLFactory.create(); obj.save()
-        crud_tests(self, obj, models.HTML)
+        crud(self, obj, models.HTML)
 
     def test_Photo_endpoint(self):
         obj = PhotoFactory.create(); obj.save()
-        crud_tests(self, obj, models.Photo)
+        crud(self, obj, models.Photo)
 
     def test_Pullquote_endpoint(self):
         obj = PullquoteFactory.create(); obj.save()
-        crud_tests(self, obj, models.Pullquote)
+        crud(self, obj, models.Pullquote)
 
     def test_Series_endpoint(self):
         obj = SeriesFactory.create(); obj.save()
-        crud_tests(self, obj, models.Series)
+        crud(self, obj, models.Series)
 
     # def test_Issue_endpoint(self):
     #     obj = IssueFactory.create(); obj.save()
