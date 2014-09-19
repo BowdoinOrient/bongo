@@ -15,7 +15,7 @@ def authorize(client):
     return client
 
 
-def crud_tests(self, object, model, endpoint=None):
+def crud(self, object, model, endpoint=None):
     if not endpoint:
         # not sure if this is a hack or clever
         endpoint = "http://testserver/api/v1/" + str(type(object)).split('.')[-1][:-2] + "/"
@@ -67,4 +67,4 @@ def crud_tests(self, object, model, endpoint=None):
 class APITestCase(TestCase):
     def test_Series_endpoint(self):
         obj = SeriesFactory.create(); obj.save()
-        crud_tests(self, obj, models.Series)
+        crud(self=self, object=obj, model=models.Series)
