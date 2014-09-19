@@ -1,6 +1,5 @@
 from factories import *
 from django.test import TestCase
-from django.db import models
 from django.contrib.auth.models import User
 
 """
@@ -203,8 +202,13 @@ class CreatorTestCase(TestCase):
         creator.user = user
         creator.job = job
 
+        creator.save()
+
         self.assertEquals(type(creator.user), User)
-        self.assertEquals(type(creator.job), models.Job)
+        from bongo.apps.bongo.models import Job
+        self.assertEquals(type(creator.job), Job)
+
+        creator.delete()
 
     def test_works(self):
         """ Test the connection between a creator and the content they've made """
