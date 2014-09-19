@@ -4,8 +4,12 @@ from django.test import TestCase
 from django.test import Client
 from django.core.serializers import serialize
 from bongo.apps.bongo import models
+from django.forms.models import model_to_dict
 
 # @TODO: These tests don't do a very good job of cleaning up after themselves
+
+def debug_res(res):
+    print res.request.get('wsgi.input').read()
 
 
 def authorize(client):
@@ -47,24 +51,76 @@ def crud(self, object, model, endpoint=None):
     client = authorize(client)
 
     # test that a POST to /endpoint with {object} increases model.count by 1, when authenticated
-    res = client.post(endpoint, json.loads(serialize("json", [object]))[0]['fields'])
+    import ipdb; ipdb.set_trace()
+    res = client.post(endpoint, model_to_dict(object), content_type="application/json", secure=True)
     self.assertEqual(res.status_code, 201)
 
     # do the same as above for PUT
-    res = client.post(endpoint, json.loads(serialize("json", [object]))[0]['fields'])
+    res = client.post(endpoint, model_to_dict(object), content_type="application/json", secure=True)
     self.assertEqual(res.status_code, 201)
 
     # test that a PATCH to /endpoint/object.pk changes object.name to "derp", when authenticated
-    # WTF why does client.patch send content-type="application/octet-stream" by default
-    res = client.patch(endpoint+str(object.pk)+"/", payload={"name": "derp"}, content_type="application/json")
+    res = client.patch(endpoint+str(object.pk)+"/", data={"id": 999}, content_type="application/json", secure=True)
     self.assertEqual(res.status_code, 200)
 
     # test that a DELETE to /endpoint/object.pk decreases model.count by 1, when authenticated
-    res = client.delete(endpoint+str(object.pk)+"/")
+    res = client.delete(endpoint+str(object.pk)+"/", secure=True)
     self.assertEqual(res.status_code, 204)
 
 
 class APITestCase(TestCase):
+    def test_User_endpoint(self):
+        # we currently don't expose users over the API
+        pass
+
+    def test_Job_endpoint(self):
+        obj = JobFactory.create(); obj.save()
+        crud_tests(self, obj, models.Job)
+
+    def test_Creator_endpoint(self):
+        obj = CreatorFactory.create(); obj.save()
+        crud_tests(self, obj, models.Creator)
+
+    def test_Text_endpoint(self):
+        obj = TextFactory.create(); obj.save()
+        crud_tests(self, obj, models.Text)
+
+    def test_Video_endpoint(self):
+        obj = VideoFactory.create(); obj.save()
+        crud_tests(self, obj, models.Video)
+
+    def test_HTML_endpoint(self):
+        obj = HTMLFactory.create(); obj.save()
+        crud_tests(self, obj, models.HTML)
+
+    def test_Photo_endpoint(self):
+        obj = PhotoFactory.create(); obj.save()
+        crud_tests(self, obj, models.Photo)
+
+    def test_Pullquote_endpoint(self):
+        obj = PullquoteFactory.create(); obj.save()
+        crud_tests(self, obj, models.Pullquote)
+
     def test_Series_endpoint(self):
         obj = SeriesFactory.create(); obj.save()
-        crud(self=self, object=obj, model=models.Series)
+        crud_tests(self, obj, models.Series)
+
+    # def test_Issue_endpoint(self):
+    #     obj = IssueFactory.create(); obj.save()
+    #     crud_tests(self, obj, models.Issue)
+
+    # def test_Volume_endpoint(self):
+    #     obj = VolumeFactory.create(); obj.save()
+    #     crud_tests(self, obj, models.Volume)
+
+    # def test_Section_endpoint(self):
+    #     obj = SectionFactory.create(); obj.save()
+    #     crud_tests(self, obj, models.Section)
+
+    # def test_Tag_endpoint(self):
+    #     obj = TagFactory.create(); obj.save()
+    #     crud_tests(self, obj, models.Tag)
+
+    # def test_Post_endpoint(self):
+    #     obj = PostFactory.create(); obj.save()
+    #     crud_tests(self, obj, models.Post)
