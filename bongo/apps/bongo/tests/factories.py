@@ -2,7 +2,7 @@ import factory
 from bongo.apps.bongo import models
 from django.contrib.auth.models import User
 from random import choice, sample
-from string import lowercase, digits, capitalize, lowercase
+from string import lowercase, digits, capitalize
 
 class UserFactory(factory.Factory):
     class Meta:
@@ -10,8 +10,8 @@ class UserFactory(factory.Factory):
 
     first_name = capitalize(''.join(choice(lowercase) for i in range(6)))
     last_name = capitalize(''.join(choice(lowercase) for i in range(7)))
-    username = factory.LazyAttribute(lambda obj: obj.first_name[0] + obj.last_name)
-    email = factory.LazyAttribute(lambda obj: obj.username + "@bowdoin.edu")
+    username = factory.LazyAttribute(lambda obj: (obj.first_name[0] + obj.last_name).lower())
+    email = factory.LazyAttribute(lambda obj: (obj.username + "@bowdoin.edu").lower())
     password = factory.PostGenerationMethodCall('set_password',
                                                 'defaultpassword')
 
@@ -63,7 +63,7 @@ class HTMLFactory(factory.Factory):
         model = models.HTML
 
     caption = factory.Sequence(lambda n: 'This is html #{0}'.format(n))
-    content = "<h1>wooo html</h1>"
+    content = "<script type='text/javascript'>alert('lol xss');</script>"
 
 class PullquoteFactory(factory.Factory):
     class Meta:
@@ -74,7 +74,10 @@ class PullquoteFactory(factory.Factory):
     attribution = "Marshall Mathers, TDD evangelist"
 
 class SeriesFactory(factory.Factory):
-    pass
+    class Meta:
+        model = models.Series
+
+    name = factory.Sequence(lambda n: 'super punny series name #{0}'.format(n))
 
 class IssueFactory(factory.Factory):
     pass
