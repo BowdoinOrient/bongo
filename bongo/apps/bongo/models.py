@@ -166,7 +166,7 @@ class Video(models.Model):
 
 
 class PDF (models.Model):
-    staticfile = models.FileField(upload_to="pdfs")
+    staticfile = models.FileField(upload_to="pdfs", null=True)
     creators = models.ManyToManyField(Creator)
     caption = models.TextField(null=True, blank=True)
 
@@ -175,7 +175,7 @@ class PDF (models.Model):
 
 
 class Photo (models.Model):
-    staticfile = models.ImageField(upload_to="photos")
+    staticfile = models.ImageField(upload_to="photos", null=True)
     creators = models.ManyToManyField(Creator)
     caption = models.TextField(null=True, blank=True)
 
