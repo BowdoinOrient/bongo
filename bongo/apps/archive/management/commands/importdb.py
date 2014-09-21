@@ -3,7 +3,7 @@ from bongo.apps.bongo import models as bongo_models
 from django.core.management.base import BaseCommand
 from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
-from django.core.files.images import ImageFile
+from django.core.files.base import ContentFile
 from django.utils.text import slugify
 from django.db import transaction, models
 from datetime import date, datetime
@@ -13,16 +13,16 @@ tz = get_current_timezone()
 
 def getfile(url):
     if nodownload:
-        return ImageFile("")
+        return ContentFile("")
     else:
         print("Downloading "+url)
         r = requests.get(url)
 
         if r.status_code == 200:
-            return ImageFile(r.content)
+            return ContentFile(r.content)
         else:
             print("Error: File not found.")
-            return ImageFile("")
+            return ContentFile("")
 
 
 """ Convert a date to a datetime, do nothing to a datetime """
