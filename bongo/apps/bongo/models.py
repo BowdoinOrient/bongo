@@ -34,7 +34,7 @@ class Volume (models.Model):
 class Issue (models.Model):
     issue_date = models.DateField()  # friday, friday, this better validate to a friday
     issue_number = models.IntegerField()
-    volume = models.ForeignKey(Volume, null=True)
+    volume = models.ForeignKey(Volume)
     scribd = models.IntegerField(null=True,blank=True)
 
     def __unicode__(self):
@@ -166,7 +166,7 @@ class Video(models.Model):
 
 
 class PDF (models.Model):
-    staticfile = models.FileField(upload_to="pdfs", null=True, blank=True)
+    staticfile = models.FileField(upload_to="pdfs")
     creators = models.ManyToManyField(Creator)
     caption = models.TextField(null=True, blank=True)
 
@@ -175,7 +175,7 @@ class PDF (models.Model):
 
 
 class Photo (models.Model):
-    staticfile = models.ImageField(upload_to="photos", null=True, blank=True)
+    staticfile = models.ImageField(upload_to="photos")
     creators = models.ManyToManyField(Creator)
     caption = models.TextField(null=True, blank=True)
 
