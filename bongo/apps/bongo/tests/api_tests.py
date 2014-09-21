@@ -59,7 +59,10 @@ def crud(self, object, model, endpoint=None):
     self.assertEqual(res.status_code, 201)
 
     # test that a PATCH to /endpoint/object.pk changes one of its fields to "derp", when authenticated
-    newobj[newobj.keys()[-1]] = "derp"
+    if type(object) in [models.Volume]:
+        newobj[newobj.keys()[-1]] = 100
+    else:
+        newobj[newobj.keys()[-1]] = "derp"
     res = client.patch(endpoint+str(object.pk)+"/", newobj, secure=True)
     self.assertEqual(res.status_code, 200)
 
@@ -109,21 +112,21 @@ class APITestCase(TestCase):
         obj = SeriesFactory.create(); obj.save()
         crud(self, obj, models.Series)
 
-    # def test_Issue_endpoint(self):
-    #     obj = IssueFactory.create(); obj.save()
-    #     crud_tests(self, obj, models.Issue)
+    def test_Volume_endpoint(self):
+        obj = VolumeFactory.create(); obj.save()
+        crud(self, obj, models.Volume)
 
-    # def test_Volume_endpoint(self):
-    #     obj = VolumeFactory.create(); obj.save()
-    #     crud_tests(self, obj, models.Volume)
+    def test_Issue_endpoint(self):
+        obj = IssueFactory.create(); obj.save()
+        crud(self, obj, models.Issue)
 
-    # def test_Section_endpoint(self):
-    #     obj = SectionFactory.create(); obj.save()
-    #     crud_tests(self, obj, models.Section)
+    def test_Section_endpoint(self):
+        obj = SectionFactory.create(); obj.save()
+        crud(self, obj, models.Section)
 
-    # def test_Tag_endpoint(self):
-    #     obj = TagFactory.create(); obj.save()
-    #     crud_tests(self, obj, models.Tag)
+    def test_Tag_endpoint(self):
+        obj = TagFactory.create(); obj.save()
+        crud(self, obj, models.Tag)
 
     # def test_Post_endpoint(self):
     #     obj = PostFactory.create(); obj.save()
