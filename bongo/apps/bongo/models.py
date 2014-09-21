@@ -34,7 +34,7 @@ class Volume (models.Model):
 class Issue (models.Model):
     issue_date = models.DateField()  # friday, friday, this better validate to a friday
     issue_number = models.IntegerField()
-    volume = models.ForeignKey(Volume)
+    volume = models.ForeignKey(Volume, null=True)
     scribd = models.IntegerField(null=True,blank=True)
 
     def __unicode__(self):
