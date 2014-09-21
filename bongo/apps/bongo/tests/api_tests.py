@@ -1,16 +1,12 @@
 import json
 from factories import *
 from django.test import TestCase
-from django.test import Client
+from rest_framework.test import APIClient
 from django.core.serializers import serialize
 from bongo.apps.bongo import models
 from django.forms.models import model_to_dict
 
 # @TODO: These tests don't do a very good job of cleaning up after themselves
-
-def debug_res(res):
-    print res.request.get('wsgi.input').read()
-
 
 def authorize(client):
     user = UserFactory.build()
@@ -24,7 +20,9 @@ def crud(self, object, model, endpoint=None):
         # not sure if this is a hack or clever
         endpoint = "http://testserver/api/v1/" + str(type(object)).split('.')[-1][:-2] + "/"
 
-    client = Client()
+    # use DRF's APICLient rather than django.test.Client because the latter is totally broken with regards to content_type
+    # seriously, who uses application/octet-stream
+    client = APIClient()
 
     # test that a GET to /endpoint/object.pk returns this object
     res = client.get(endpoint+str(object.pk)+"/")
@@ -51,16 +49,18 @@ def crud(self, object, model, endpoint=None):
     client = authorize(client)
 
     # test that a POST to /endpoint with {object} increases model.count by 1, when authenticated
-    import ipdb; ipdb.set_trace()
-    res = client.post(endpoint, model_to_dict(object), content_type="application/json", secure=True)
+    res = client.post(endpoint, model_to_dict(object, exclude=["profpic", "staticfile"]), secure=True)
     self.assertEqual(res.status_code, 201)
 
-    # do the same as above for PUT
-    res = client.post(endpoint, model_to_dict(object), content_type="application/json", secure=True)
+    # test that a PUT to /endpoint/:newID makes a copy of object with id:newid
+    newobj = model_to_dict(object, exclude=["profpic", "staticfile"])
+    newobj['id'] = 999
+    res = client.put(endpoint+"999/", newobj, secure=True)
     self.assertEqual(res.status_code, 201)
 
-    # test that a PATCH to /endpoint/object.pk changes object.name to "derp", when authenticated
-    res = client.patch(endpoint+str(object.pk)+"/", data={"id": 999}, content_type="application/json", secure=True)
+    # test that a PATCH to /endpoint/object.pk changes one of its fields to "derp", when authenticated
+    newobj[newobj.keys()[-1]] = "derp"
+    res = client.patch(endpoint+str(object.pk)+"/", newobj, secure=True)
     self.assertEqual(res.status_code, 200)
 
     # test that a DELETE to /endpoint/object.pk decreases model.count by 1, when authenticated
@@ -96,6 +96,10 @@ class APITestCase(TestCase):
     def test_Photo_endpoint(self):
         obj = PhotoFactory.create(); obj.save()
         crud(self, obj, models.Photo)
+
+    def test_PDF_endpoint(self):
+        obj = PDFFactory.create(); obj.save()
+        crud(self, obj, models.PDF)
 
     def test_Pullquote_endpoint(self):
         obj = PullquoteFactory.create(); obj.save()
