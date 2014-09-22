@@ -22,7 +22,3 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = ['--with-fixture-bundling', '--nologcapture']
 
 NOSE_TESTMATCH = '(?:^|[b_./-])[Tt]ests'
-
-REST_FRAMEWORK = {
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
-}
