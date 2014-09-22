@@ -96,7 +96,13 @@ class IssueFactory(factory.Factory):
 
     issue_date = date(1871, 1, 1) + timedelta(52560)
     issue_number = choice(range(24))
-    volume = factory.SubFactory(VolumeFactory)
+
+    @factory.post_generation
+    def idgaf(self, create, extracted, **kwargs):
+        if create:
+            v = VolumeFactory.create(); v.save()
+            self.volume = v
+            self.save()
 
 class SectionFactory(factory.Factory):
     class Meta:
