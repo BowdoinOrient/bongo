@@ -30,6 +30,7 @@ class CreatorFactory(factory.Factory):
     name = capitalize(''.join(choice(lowercase) for i in range(6)))
     job = factory.SubFactory(JobFactory)
     twitter = "@"+''.join(choice(lowercase) for i in range(8))
+    profpic = factory.django.ImageField()
 
 class TextFactory(factory.Factory):
     class Meta:
@@ -58,6 +59,7 @@ class PhotoFactory(factory.Factory):
         model = models.Photo
 
     caption = factory.Sequence(lambda n: 'This is photo #{0}'.format(n))
+    staticfile = factory.django.ImageField()
 
 class HTMLFactory(factory.Factory):
     class Meta:
