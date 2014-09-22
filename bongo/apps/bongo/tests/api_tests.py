@@ -146,6 +146,6 @@ class APITestCase(TestCase):
         obj = TagFactory.create(); obj.save()
         crud(self, obj, models.Tag)
 
-    # def test_Post_endpoint(self):
-    #     obj = PostFactory.create(); obj.save()
-    #     crud_tests(self, obj, models.Post)
+    def test_Post_endpoint(self):
+        obj = PostFactory.create(); obj.save()
+        crud(self, obj, models.Post)

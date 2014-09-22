@@ -3,7 +3,7 @@ from bongo.apps.bongo import models
 from django.contrib.auth.models import User
 from random import choice, sample, randint
 from string import lowercase, digits, capitalize
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 class UserFactory(factory.Factory):
     class Meta:
@@ -120,3 +120,22 @@ class TagFactory(factory.Factory):
 class PostFactory(factory.Factory):
     class Meta:
         model = models.Post
+
+    published = datetime(1871, 1, 1) + timedelta(52560)
+    is_published = choice([False, True])
+    title = u''.join(choice(lowercase) for i in range(20))
+    opinion = choice([False, True])
+    views_local = choice(range(0,10000))
+    views_global = choice(range(0,10000))
+    primary_type = choice(["text","photo","video","liveblog","html","generic"])
+
+    @factory.post_generation
+    def idgaf(self, create, extracted, **kwargs):
+        if create:
+            v = VolumeFactory.create(); v.save()
+            i = IssueFactory.create(); i.save()
+            s = SectionFactory.create(); s.save()
+            self.volume = v
+            self.issue = i
+            self.section = s
+            self.save()

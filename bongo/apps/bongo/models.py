@@ -248,8 +248,6 @@ class Post (models.Model):
     views_local = models.IntegerField(editable=False, default=0)
     views_global = models.IntegerField(editable=False, default=0)
 
-    creators = models.ManyToManyField(Creator)
-
     text = models.ManyToManyField(Text, null=True, blank=True)
     video = models.ManyToManyField(Video, null=True, blank=True)
     pdf = models.ManyToManyField(PDF, null=True, blank=True)
@@ -269,15 +267,20 @@ class Post (models.Model):
     primary_type = models.CharField(max_length=8, choices=types, default="generic")
 
     def content(self):
-        return (
-            text.all() +
-            video.all() +
-            pdf.all() +
-            photo.all() +
-            html.all() +
-            pullquote.all()
+        return chain(
+            self.text.all(),
+            self.video.all(),
+            self.pdf.all(),
+            self.photo.all(),
+            self.html.all(),
+            self.pullquote.all()
         )
 
+    def creators(self):
+        crtrs = ()
+        for cont in self.content():
+            chain(crtrs, cont.creators.all())
+        return crtrs
 
     def save(self, *args, **kwargs):
         if not self.slug:
