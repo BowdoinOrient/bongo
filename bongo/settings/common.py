@@ -183,9 +183,10 @@ TEMPLATE_DIRS = (
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_SERIALIZER_CLASS': 'bongo.apps.bongo.pagination.CustomPaginationSerializer',
-    'PAGINATE_BY': 20,                 # Default to 10
+    'PAGINATE_BY': 20,                 # Default to 20
     'PAGINATE_BY_PARAM': 'limit',  # Allow client to override, using `?limit=xxx`.
-    'MAX_PAGINATE_BY': 100             # Maximum limit allowed when using `?limit=xxx`.
+    'MAX_PAGINATE_BY': 100,             # Maximum limit allowed when using `?limit=xxx`.
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
 CORS_ORIGIN_WHITELIST = (

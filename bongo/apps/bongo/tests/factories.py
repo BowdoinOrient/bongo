@@ -1,8 +1,9 @@
 import factory
 from bongo.apps.bongo import models
 from django.contrib.auth.models import User
-from random import choice, sample
+from random import choice, sample, randint
 from string import lowercase, digits, capitalize
+from datetime import date, timedelta, datetime
 
 class UserFactory(factory.Factory):
     class Meta:
@@ -29,6 +30,7 @@ class CreatorFactory(factory.Factory):
     name = capitalize(''.join(choice(lowercase) for i in range(6)))
     job = factory.SubFactory(JobFactory)
     twitter = "@"+''.join(choice(lowercase) for i in range(8))
+    profpic = factory.django.ImageField()
 
 class TextFactory(factory.Factory):
     class Meta:
@@ -57,6 +59,7 @@ class PhotoFactory(factory.Factory):
         model = models.Photo
 
     caption = factory.Sequence(lambda n: 'This is photo #{0}'.format(n))
+    staticfile = factory.django.ImageField()
 
 class HTMLFactory(factory.Factory):
     class Meta:
@@ -79,17 +82,60 @@ class SeriesFactory(factory.Factory):
 
     name = factory.Sequence(lambda n: 'super punny series name #{0}'.format(n))
 
-class IssueFactory(factory.Factory):
-    pass
-
 class VolumeFactory(factory.Factory):
-    pass
+    class Meta:
+        model = models.Volume
+
+    volume_number = choice(range(143))+1
+    volume_year_start = factory.LazyAttribute(lambda obj: obj.volume_number+1870)
+    volume_year_end = factory.LazyAttribute(lambda obj: obj.volume_number+1871)
+
+class IssueFactory(factory.Factory):
+    class Meta:
+        model = models.Issue
+
+    issue_date = date(1871, 1, 1) + timedelta(52560)
+    issue_number = choice(range(24))
+
+    @factory.post_generation
+    def idgaf(self, create, extracted, **kwargs):
+        if create:
+            v = VolumeFactory.create(); v.save()
+            self.volume = v
+            self.save()
 
 class SectionFactory(factory.Factory):
-    pass
+    class Meta:
+        model = models.Section
+
+    section = choice(["News","Features","A&E","Opinion","Sports"])
+    priority = choice(range(5))
 
 class TagFactory(factory.Factory):
-    pass
+    class Meta:
+        model = models.Tag
+
+    tag = ''.join(choice(lowercase) for i in range(10))
 
 class PostFactory(factory.Factory):
-    pass
+    class Meta:
+        model = models.Post
+
+    published = datetime(1871, 1, 1) + timedelta(52560)
+    is_published = choice([False, True])
+    title = u''.join(choice(lowercase) for i in range(20))
+    opinion = choice([False, True])
+    views_local = choice(range(0,10000))
+    views_global = choice(range(0,10000))
+    primary_type = choice(["text","photo","video","liveblog","html","generic"])
+
+    @factory.post_generation
+    def idgaf(self, create, extracted, **kwargs):
+        if create:
+            v = VolumeFactory.create(); v.save()
+            i = IssueFactory.create(); i.save()
+            s = SectionFactory.create(); s.save()
+            self.volume = v
+            self.issue = i
+            self.section = s
+            self.save()

@@ -11,14 +11,6 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
-    'archive': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DB02Orient_test',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
 }
 
 INSTALLED_APPS += (
@@ -27,6 +19,6 @@ INSTALLED_APPS += (
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-NOSE_ARGS = ['--with-fixture-bundling']
+NOSE_ARGS = ['--with-fixture-bundling', '--nologcapture']
 
 NOSE_TESTMATCH = '(?:^|[b_./-])[Tt]ests'

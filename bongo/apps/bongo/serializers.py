@@ -81,10 +81,13 @@ class PullquoteSerializer(serializers.ModelSerializer):
         depth = 2
 
 class PostSerializer(serializers.ModelSerializer):
+    content = serializers.Field(source='content')
+    creators = serializers.Field(source='creators')
+
     class Meta:
         model = Post
         fields = (
-            'id', 
+            'id',
             'created',
             'updated',
             'published',
@@ -99,8 +102,8 @@ class PostSerializer(serializers.ModelSerializer):
             'opinion',
             'views_local',
             'views_global',
-            'creators',
             'content',
+            'creators',
             'primary_type'
         )
         depth = 2
