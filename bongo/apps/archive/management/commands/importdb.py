@@ -1,5 +1,6 @@
 from bongo.apps.archive import models as archive_models
 from bongo.apps.bongo import models as bongo_models
+from bongo.settings.common import MEDIA_ROOT
 from django.core.management.base import BaseCommand
 from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
@@ -8,21 +9,33 @@ from django.utils.text import slugify
 from django.db import transaction, models
 from datetime import date, datetime
 import requests
+import os
 
 tz = get_current_timezone()
 
-def getfile(url):
-    if nodownload:
-        return ContentFile("")
-    else:
-        print("Downloading "+url)
-        r = requests.get(url)
+filenames = []
+pathnames = []
+for (dirpath, dirs, files) in os.walk(MEDIA_ROOT):
+    pathnames.extend(os.path.join(dirpath, filename) for filename in files)
+    filenames.extend(files)
 
-        if r.status_code == 200:
-            return ContentFile(r.content)
-        else:
-            print("Error: File not found.")
-            return ContentFile("")
+
+def staticfiler(obj, filename, url):
+    # check to see if the file exists on the filesystem already
+    if filename in filenames:
+        path = pathnames[filenames.index(filename)]
+        handle = open(path, 'rb')
+        f = ContentFile(handle.read())
+        handle.close()
+        os.remove(path)
+    else:
+        if not nodownload:
+            r = requests.get(url)
+            if r.status_code == 200:
+                f = ContentFile(r.content)
+        f = ContentFile("")
+
+    obj.save(filename, f)
 
 
 """ Convert a date to a datetime, do nothing to a datetime """
@@ -49,7 +62,7 @@ def import_ads():
             owner=advertiser,
         )
 
-        ad.adfile.save(old_ad.filename, getfile("http://bowdoinorient.com/ads/"+old_ad.filename))
+        staticfiler(ad.adfile, old_ad.filename, "http://bowdoinorient.com/ads/"+old_ad.filename)
         ad.save()
 
 
@@ -274,7 +287,7 @@ def import_creator():
             creator.save()
 
         if old_author.photo:
-            creator.profpic.save(slugify(old_author.name)+".jpg", getfile("http://bowdoinorient.com/images/authors/"+old_author.photo))
+            staticfiler(creator.profpic, slugify(old_author.name)+".jpg", "http://bowdoinorient.com/images/authors/"+old_author.photo)
             creator.save()
 
 
@@ -293,7 +306,7 @@ def import_photo():
                 fname=(old_photo.filename_original if old_photo.filename_original else old_photo.filename_large)
             )
 
-            photo.staticfile.save(str(old_photo.id)+".jpg", getfile(image_url))
+            staticfiler(photo.staticfile, str(old_photo.id)+".jpg", image_url)
         except:
             print("File really, really couldn't be found")
 
@@ -326,7 +339,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         global nodownload
         nodownload = False
-        if args[0] == "nodownload":
+        if len(args) > 0 and args[0] == "nodownload":
             nodownload = True
 
         # transaction.set_autocommit(False)
