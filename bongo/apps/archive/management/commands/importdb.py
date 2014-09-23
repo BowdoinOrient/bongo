@@ -30,10 +30,18 @@ def staticfiler(obj, filename, url):
         os.remove(path)
     else:
         if not nodownload:
-            r = requests.get(url)
-            if r.status_code == 200:
-                f = ContentFile(r.content)
-        f = ContentFile("")
+            try:
+                r = requests.get(url)
+                if r.status_code == 200:
+                    f = ContentFile(r.content)
+                else:
+                    print("Error: {} was a {}".format(url, r.status_code))
+                    f = ContentFile("")
+            except Exception as e:
+                print(e)
+                f = ContentFile("")
+        else:
+            f = ContentFile("")
 
     obj.save(filename, f)
 
