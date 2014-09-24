@@ -1,7 +1,5 @@
 from os import environ
 from common import *
-from logentries import LogentriesHandler
-import logging
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
@@ -58,12 +56,20 @@ RAVEN_CONFIG = {
 ### END RAVEN #####
 
 ###### LOGENTRIES #####
-LOGGING['handlers']['logentries_handler'] = {
-    'token': environ.get('{}_LOGENTRIES_TOKEN'.format(SITE_NAME.upper())),
-    'class': 'logentries.LogentriesHandler'
+
+from logentries import LogentriesHandler
+import logging
+
+'handlers': {
+    'logentries_handler': {
+        'token': environ.get('{}_LOGENTRIES_TOKEN'.format(SITE_NAME.upper())),
+        'class': 'logentries.LogentriesHandler'
+    },
 }
 
-LOGGING['loggers']['logentries'] = {
-    'handlers': ['logentries_handler'],
-    'level': 'INFO',
+'loggers': {
+    'logentries': {
+        'handlers': ['logentries_handler'],
+        'level': 'INFO',
+    },
 }
