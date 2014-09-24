@@ -311,7 +311,7 @@ def import_photo():
         )
 
         try:
-            image_url = "http://bowdoinorient.com/images/{date}/{fname}".format(
+            image_url = "http://orient-backup.s3.amazonaws.com/images/{date}/{fname}".format(
                 date=(old_photo.article_date if old_photo.article_date else archive_models.Article.objects.using('archive').get(id__exact=old_photo.article_id).date),
                 fname=(old_photo.filename_original if old_photo.filename_original else old_photo.filename_large)
             )
