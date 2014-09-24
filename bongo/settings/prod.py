@@ -1,5 +1,7 @@
 from os import environ
 from common import *
+from logentries import LogentriesHandler
+import logging
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
@@ -56,20 +58,41 @@ RAVEN_CONFIG = {
 ### END RAVEN #####
 
 ###### LOGENTRIES #####
+# json is a terrible choice for these settings dicts. makes it so I have to copy
+# this block over from common.py instead of doing a += like we do with everything else
 
-from logentries import LogentriesHandler
-import logging
-
-'handlers': {
-    'logentries_handler': {
-        'token': environ.get('{}_LOGENTRIES_TOKEN'.format(SITE_NAME.upper())),
-        'class': 'logentries.LogentriesHandler'
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+    'require_debug_false': {
+        '()': 'django.utils.log.RequireDebugFalse'
+        }
     },
-}
-
-'loggers': {
-    'logentries': {
-        'handlers': ['logentries_handler'],
-        'level': 'INFO',
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler'
+        },
+        'logentries_handler': {
+            'token': environ.get('{}_LOGENTRIES_TOKEN'.format(SITE_NAME.upper())),
+            'class': 'logentries.LogentriesHandler'
+        },
     },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins', 'console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'logentries': {
+            'handlers': ['logentries_handler'],
+            'level': 'INFO',
+        },
+    }
 }
