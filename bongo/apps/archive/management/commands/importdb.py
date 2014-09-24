@@ -21,29 +21,42 @@ for (dirpath, dirs, files) in os.walk(MEDIA_ROOT):
 
 
 def staticfiler(obj, filename, url):
-    # check to see if the file exists on the filesystem already
+    # couple of cases here:
+    #   - file already exists on the system, has filesize of 0
+    #   - file already exists on system, has a filesize > 0
+    #   - file does not exist, nodownload is set
+    #   - file does not exist, nodownload is off, is a 404
+    #   - file does not exist, nodownload is off, download fails
+    #   - file does not exist, nodownload is off, download succeeds
+
+    handle = False
     if filename in filenames:
         path = pathnames[filenames.index(filename)]
-        handle = open(path, 'rb')
-        f = ContentFile(handle.read())
-        handle.close()
+        if os.stat(path).st_size > 0:
+            handle = open(path, 'rb')
+            f = ContentFile(handle.read())
+            handle.close()
         os.remove(path)
-    else:
-        if not nodownload:
-            try:
-                r = requests.get(url)
-                if r.status_code == 200:
-                    f = ContentFile(r.content)
-                else:
-                    print("Error: {} was a {}".format(url, r.status_code))
-                    f = ContentFile("")
-            except Exception as e:
-                print(e)
+
+    if not nodownload:
+        try:
+            r = requests.get(url)
+            if r.status_code == 200:
+                f = ContentFile(r.content)
+            else:
+                print("Error: {} was a {}".format(url, r.status_code))
                 f = ContentFile("")
-        else:
+        except Exception as e:
+            print(e)
             f = ContentFile("")
+    else:
+        f = ContentFile("")
 
     obj.save(filename, f)
+
+    if handle:
+        os.remove(path)
+
 
 
 """ Convert a date to a datetime, do nothing to a datetime """
