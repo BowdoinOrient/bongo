@@ -94,7 +94,7 @@ def tail():
     """Follow the logs of the supervisord processes."""
 
     with cd("/home/orient/bongo"):
-        run('tail -f logs/{}.log'.format(SITE_NAME))
+        run('tail -f logs/bongo.log')
 
 ######### END SERVE AND RESTART
 

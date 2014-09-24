@@ -1,5 +1,6 @@
 from bongo.apps.archive import models as archive_models
 from bongo.apps.bongo import models as bongo_models
+from bongo.settings.common import MEDIA_ROOT
 from django.core.management.base import BaseCommand
 from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
@@ -8,21 +9,54 @@ from django.utils.text import slugify
 from django.db import transaction, models
 from datetime import date, datetime
 import requests
+import os
 
 tz = get_current_timezone()
 
-def getfile(url):
-    if nodownload:
-        return ContentFile("")
-    else:
-        print("Downloading "+url)
-        r = requests.get(url)
+filenames = []
+pathnames = []
+for (dirpath, dirs, files) in os.walk(MEDIA_ROOT):
+    pathnames.extend(os.path.join(dirpath, filename) for filename in files)
+    filenames.extend(files)
 
-        if r.status_code == 200:
-            return ContentFile(r.content)
-        else:
-            print("Error: File not found.")
-            return ContentFile("")
+
+def staticfiler(obj, filename, url):
+    # couple of cases here:
+    #   - file already exists on the system, has filesize of 0
+    #   - file already exists on system, has a filesize > 0
+    #   - file does not exist, nodownload is set
+    #   - file does not exist, nodownload is off, is a 404
+    #   - file does not exist, nodownload is off, download fails
+    #   - file does not exist, nodownload is off, download succeeds
+
+    handle = False
+    if filename in filenames:
+        path = pathnames[filenames.index(filename)]
+        if os.stat(path).st_size > 0:
+            handle = open(path, 'rb')
+            f = ContentFile(handle.read())
+            handle.close()
+        os.remove(path)
+
+    if not nodownload:
+        try:
+            r = requests.get(url)
+            if r.status_code == 200:
+                f = ContentFile(r.content)
+            else:
+                print("Error: {} was a {}".format(url, r.status_code))
+                f = ContentFile("")
+        except Exception as e:
+            print(e)
+            f = ContentFile("")
+    else:
+        f = ContentFile("")
+
+    obj.save(filename, f)
+
+    if handle:
+        os.remove(path)
+
 
 
 """ Convert a date to a datetime, do nothing to a datetime """
@@ -49,7 +83,7 @@ def import_ads():
             owner=advertiser,
         )
 
-        ad.adfile.save(old_ad.filename, getfile("http://bowdoinorient.com/ads/"+old_ad.filename))
+        staticfiler(ad.adfile, old_ad.filename, "http://bowdoinorient.com/ads/"+old_ad.filename)
         ad.save()
 
 
@@ -233,8 +267,6 @@ def import_content():
 
         (post, created) = bongo_models.Post.objects.get_or_create(
             pk=old_article.id,
-            created=old_article.date_created,
-            updated=old_article.date_updated,
             published=old_article.date_published,
             is_published=(True if old_article.published == 1 else False),  # I love you Python
             opinion=(True if old_article.opinion == 1 else False),
@@ -245,6 +277,10 @@ def import_content():
             views_local=old_article.views_bowdoin,
             views_global=old_article.views,
         )
+
+        if created:
+            post.created = old_article.date_created
+            post.updated = old_article.date_updated
 
         post.series.add(bongo_models.Series.objects.get(pk__exact=old_article.series))
 
@@ -258,7 +294,7 @@ def import_content():
         for old_author in old_authors:
             post.creators.add(bongo_models.Creator.objects.get(pk__exact=old_author.id))
 
-        post.save()
+        post.save(auto_dates=False)  # prevent auto-save of created and updated fields
 
 
 def import_creator():
@@ -274,7 +310,7 @@ def import_creator():
             creator.save()
 
         if old_author.photo:
-            creator.profpic.save(slugify(old_author.name)+".jpg", getfile("http://bowdoinorient.com/images/authors/"+old_author.photo))
+            staticfiler(creator.profpic, slugify(old_author.name)+".jpg", "http://bowdoinorient.com/images/authors/"+old_author.photo)
             creator.save()
 
 
@@ -288,19 +324,20 @@ def import_photo():
         )
 
         try:
-            image_url = "http://bowdoinorient.com/images/{date}/{fname}".format(
+            image_url = "http://orient-backup.s3.amazonaws.com/images/{date}/{fname}".format(
                 date=(old_photo.article_date if old_photo.article_date else archive_models.Article.objects.using('archive').get(id__exact=old_photo.article_id).date),
                 fname=(old_photo.filename_original if old_photo.filename_original else old_photo.filename_large)
             )
 
-            photo.staticfile.save(str(old_photo.id)+".jpg", getfile(image_url))
+            staticfiler(photo.staticfile, str(old_photo.id)+".jpg", image_url)
         except:
             print("File really, really couldn't be found")
 
         # Courtesy photos have a photographer id of 1, which doesn't exist.
         # We have to come up with a new id for this photographer that doesn't interfere with any existing id
         if old_photo.photographer_id == 1:
-            photo.creators.add(bongo_models.Creator.objects.create(name=old_photo.credit, courtesyof=True, pk=archive_models.Author.objects.using('archive').latest('id').id + new_ids_created))
+            (photographer, created) = bongo_models.Creator.objects.get_or_create(name=old_photo.credit, courtesyof=True, pk=archive_models.Author.objects.using('archive').latest('id').id + new_ids_created)
+            photo.creators.add(photographer)
             new_ids_created += 1
         elif old_photo.photographer_id == 0:
             pass
@@ -326,7 +363,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         global nodownload
         nodownload = False
-        if args[0] == "nodownload":
+        if len(args) > 0 and args[0] == "nodownload":
             nodownload = True
 
         # transaction.set_autocommit(False)
