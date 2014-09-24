@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date, datetime
+from django.utils.timezone import get_current_timezone
+from django.utils.timezone import make_aware
 from django.utils.text import slugify
 from itertools import chain
 import nltk.data
@@ -226,10 +228,8 @@ layout for that post (a standard article, liveblog, a photo gallery, etc.)
 """
 
 class Post (models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    # @TODO: auto-now and auto_now_add are in "accelerated deprecation" (https://code.djangoproject.com/ticket/21798)
-    # and might be gone in 1.7 final. in that case a custom save() function would be needed.
+    created = models.DateTimeField(editable=False)
+    updated = models.DateTimeField(editable=False)
 
     published = models.DateTimeField()
     is_published = models.BooleanField(default=False)  # allow for drafts
@@ -283,8 +283,17 @@ class Post (models.Model):
         return crtrs
 
     def save(self, *args, **kwargs):
+        auto_dates = kwargs.pop('auto_dates', True)
         if not self.slug:
             self.slug = slugify(self.title)[:180]
+
+        # generally we want created to update to the time whenever we create the obj
+        # and updated to update every time
+        # but during import, we want to use old dates and don't want to overwrite them
+        if auto_dates:
+            if not self.created:
+                self.created = make_aware(datetime.now(), get_current_timezone())
+            self.updated = make_aware(datetime.now(), get_current_timezone())
 
         super(Post, self).save(*args, **kwargs)
 

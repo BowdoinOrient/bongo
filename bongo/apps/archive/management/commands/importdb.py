@@ -254,8 +254,6 @@ def import_content():
 
         (post, created) = bongo_models.Post.objects.get_or_create(
             pk=old_article.id,
-            created=old_article.date_created,
-            updated=old_article.date_updated,
             published=old_article.date_published,
             is_published=(True if old_article.published == 1 else False),  # I love you Python
             opinion=(True if old_article.opinion == 1 else False),
@@ -266,6 +264,10 @@ def import_content():
             views_local=old_article.views_bowdoin,
             views_global=old_article.views,
         )
+
+        if created:
+            post.created = old_article.date_created
+            post.updated = old_article.date_updated
 
         post.series.add(bongo_models.Series.objects.get(pk__exact=old_article.series))
 
@@ -279,7 +281,7 @@ def import_content():
         for old_author in old_authors:
             post.creators.add(bongo_models.Creator.objects.get(pk__exact=old_author.id))
 
-        post.save()
+        post.save(auto_dates=False)  # prevent auto-save of created and updated fields
 
 
 def import_creator():
