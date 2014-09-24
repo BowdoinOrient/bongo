@@ -323,7 +323,7 @@ def import_photo():
         # Courtesy photos have a photographer id of 1, which doesn't exist.
         # We have to come up with a new id for this photographer that doesn't interfere with any existing id
         if old_photo.photographer_id == 1:
-            photo.creators.add(bongo_models.Creator.objects.create(name=old_photo.credit, courtesyof=True, pk=archive_models.Author.objects.using('archive').latest('id').id + new_ids_created))
+            photo.creators.add(bongo_models.Creator.objects.get_or_create(name=old_photo.credit, courtesyof=True, pk=archive_models.Author.objects.using('archive').latest('id').id + new_ids_created))
             new_ids_created += 1
         elif old_photo.photographer_id == 0:
             pass
