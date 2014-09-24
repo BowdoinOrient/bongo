@@ -46,6 +46,30 @@ CACHES = {
 }
 ########## END CACHE CONFIGURATION
 
+
+#### RAVEN ###
+
 RAVEN_CONFIG = {
     'dsn': environ.get('{}_RAVEN_DSN'.format(SITE_NAME.upper())),
+}
+
+### END RAVEN #####
+
+###### LOGENTRIES #####
+
+from logentries import LogentriesHandler
+import logging
+
+'handlers': {
+    'logentries_handler': {
+        'token': environ.get('{}_LOGENTRIES_TOKEN'.format(SITE_NAME.upper())),
+        'class': 'logentries.LogentriesHandler'
+    },
+}
+
+'loggers': {
+    'logentries': {
+        'handlers': ['logentries_handler'],
+        'level': 'INFO',
+    },
 }
