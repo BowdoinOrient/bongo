@@ -153,7 +153,9 @@ CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
 
 BROKER_URL='amqp://localhost'
 
-CELERY_ACCEPT_CONTENT = []  # make Celery shut up about deprecation
+CELERY_ACCEPT_CONTENT = ['json']  # make Celery shut up about deprecation
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 ########## END CELERY CONFIGURATION
 
 SUIT_CONFIG = {
