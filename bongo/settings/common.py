@@ -12,7 +12,6 @@ import os
 from datetime import timedelta
 from djcelery import setup_loader
 from os.path import join, normpath
-from S3 import CallingFormat
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -202,5 +201,4 @@ CORS_ORIGIN_WHITELIST = (
 AWS_ACCESS_KEY_ID = open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_id'))).read().strip()
 AWS_SECRET_ACCESS_KEY = open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_secret_key'))).read().strip()
 AWS_STORAGE_BUCKET_NAME = "bongo-static"
-AWS_CALLING_FORMAT = CallingFormat.SUBDOMAIN
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
