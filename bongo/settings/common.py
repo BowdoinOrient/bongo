@@ -197,8 +197,3 @@ CORS_ORIGIN_WHITELIST = (
     'bjacobel.com',
     'bowdoinorient.com',
 )
-
-AWS_ACCESS_KEY_ID = open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_id'))).read().strip()
-AWS_SECRET_ACCESS_KEY = open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_secret_key'))).read().strip()
-AWS_STORAGE_BUCKET_NAME = "bongo-static"
-STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
