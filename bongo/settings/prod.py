@@ -49,6 +49,14 @@ CACHES = {
 ########## END CACHE CONFIGURATION
 
 
+########## AMAZON CONFIGURATION
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY")
+
+########## END AMAZON
+
 #### RAVEN ###
 
 RAVEN_CONFIG = {

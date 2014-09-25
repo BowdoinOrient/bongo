@@ -25,8 +25,7 @@ def staticfiler(obj, filename, url):
     #   - file already exists on the system, has filesize of 0
     #   - file already exists on system, has a filesize > 0
     #   - file does not exist, nodownload is set
-    #   - file does not exist, nodownload is off, is a 404
-    #   - file does not exist, nodownload is off, download fails
+    #   - file does not exist, nodownload is off, reading from local copy fails
     #   - file does not exist, nodownload is off, download succeeds
 
     stale_copy = False
