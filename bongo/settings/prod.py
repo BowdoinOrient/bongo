@@ -1,5 +1,7 @@
 from os import environ
 from common import *
+from logentries import LogentriesHandler
+import logging
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
@@ -27,6 +29,7 @@ SECRET_KEY = environ.get('{}_SECRET_KEY'.format(SITE_NAME.upper()), '')
 # See: http://django-storages.readthedocs.org/en/latest/index.html
 INSTALLED_APPS += (
     'djsupervisor',
+    'raven.contrib.django.raven_compat',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
@@ -44,3 +47,12 @@ CACHES = {
     }
 }
 ########## END CACHE CONFIGURATION
+
+
+#### RAVEN ###
+
+RAVEN_CONFIG = {
+    'dsn': environ.get('{}_RAVEN_DSN'.format(SITE_NAME.upper())),
+}
+
+### END RAVEN #####

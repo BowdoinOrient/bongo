@@ -16,6 +16,8 @@ envr = {
     "BONGO_POSTGRES_PASS" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/postgres_pass'))).read().strip()),
     "AWS_ACCESS_KEY_ID" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_id'))).read().strip()),
     "AWS_SECRET_ACCESS_KEY" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_secret_key'))).read().strip()),
+    "BONGO_RAVEN_DSN" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/raven_dsn'))).read().strip()),
+    "BONGO_LOGENTRIES_TOKEN" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/logentries_token'))).read().strip()),
 }
 
 prefix_string = ""
