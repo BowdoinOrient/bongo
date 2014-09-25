@@ -39,7 +39,7 @@ def staticfiler(obj, filename, url):
 
     if not stale_copy and not nodownload:
         try:
-            archive_file = open(MEDIA_ROOT+"/images/"+url, 'rb')
+            archive_file = open(MEDIA_ROOT+"/images/images/"+url, 'rb')
             f = ContentFile(archive_copy.read())
             archive_copy.close()
         except Exception as e:
