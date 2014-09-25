@@ -29,33 +29,27 @@ def staticfiler(obj, filename, url):
     #   - file does not exist, nodownload is off, download fails
     #   - file does not exist, nodownload is off, download succeeds
 
-    handle = False
+    stale_copy = False
     if filename in filenames:
         path = pathnames[filenames.index(filename)]
         if os.stat(path).st_size > 0:
-            handle = open(path, 'rb')
-            f = ContentFile(handle.read())
-            handle.close()
+            stale_copy = open(path, 'rb')
+            f = ContentFile(stale_copy.read())
+            stale_copy.close()
         os.remove(path)
 
-    if not nodownload:
+    if not stale_copy and not nodownload:
         try:
-            r = requests.get(url)
-            if r.status_code == 200:
-                f = ContentFile(r.content)
-            else:
-                print("Error: {} was a {}".format(url, r.status_code))
-                f = ContentFile("")
+            archive_file = open(MEDIA_ROOT+"/images/"+url, 'rb')
+            f = ContentFile(archive_copy.read())
+            archive_copy.close()
         except Exception as e:
             print(e)
-            f = ContentFile("")
+            f = ContentFile(request.get("http://bowdoinorient.com"+url).get().content)
     else:
         f = ContentFile("")
 
     obj.save(filename, f)
-
-    if handle:
-        os.remove(path)
 
 
 
@@ -83,7 +77,7 @@ def import_ads():
             owner=advertiser,
         )
 
-        staticfiler(ad.adfile, old_ad.filename, "http://bowdoinorient.com/ads/"+old_ad.filename)
+        staticfiler(ad.adfile, old_ad.filename, "/ads/"+old_ad.filename)
         ad.save()
 
 
@@ -310,7 +304,7 @@ def import_creator():
             creator.save()
 
         if old_author.photo:
-            staticfiler(creator.profpic, slugify(old_author.name)+".jpg", "http://bowdoinorient.com/images/authors/"+old_author.photo)
+            staticfiler(creator.profpic, slugify(old_author.name)+".jpg", "/images/authors/"+old_author.photo)
             creator.save()
 
 
@@ -324,7 +318,7 @@ def import_photo():
         )
 
         try:
-            image_url = "http://orient-backup.s3.amazonaws.com/images/{date}/{fname}".format(
+            image_url = "/images/{date}/{fname}".format(
                 date=(old_photo.article_date if old_photo.article_date else archive_models.Article.objects.using('archive').get(id__exact=old_photo.article_id).date),
                 fname=(old_photo.filename_original if old_photo.filename_original else old_photo.filename_large)
             )
