@@ -44,7 +44,7 @@ def staticfiler(obj, filename, url):
             archive_file.close()
         except Exception as e:
             print(e)
-            f = ContentFile(request.get("http://bowdoinorient.com"+url).get().content)
+            f = ContentFile(requests.get("http://bowdoinorient.com"+url).get().content)
     else:
         f = ContentFile("")
 
