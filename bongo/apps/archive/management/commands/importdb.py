@@ -284,6 +284,8 @@ def import_content():
                 body=old_articlebody.body
             )
 
+            post.text.add(text)
+
         for old_author in old_authors:
             post.creators.add(bongo_models.Creator.objects.get(pk__exact=old_author.id))
 
