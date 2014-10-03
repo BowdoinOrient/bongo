@@ -31,7 +31,7 @@ def staticfiler(obj, filename, local_path, remote_uri):
 
     if not stale_copy and not nodownload:
         f = ContentFile(requests.get("http://bowdoinorient.com/"+remote_uri).content)
-    else if not stale_copy and nodownload:
+    elif not stale_copy and nodownload:
         f = ContentFile("")
 
     obj.save(filename, f)
