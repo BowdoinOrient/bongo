@@ -2,7 +2,6 @@ from os import environ
 from common import *
 from logentries import LogentriesHandler
 import logging
-from storages.backends.s3boto import S3BotoStorage
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
@@ -60,6 +59,7 @@ S3_URL = 'http://s3.amazonaws.com/{}'.format(AWS_STORAGE_BUCKET_NAME)
 STATIC_URL = S3_URL + "/static/"
 MEDIA_URL = S3_URL + "/media/"
 
+from storages.backends.s3boto import S3BotoStorage
 DEFAULT_FILE_STORAGE = lambda: S3BotoStorage(location='media')
 STATICFILES_STORAGE  = lambda: S3BotoStorage(location='static')
 
