@@ -19,7 +19,6 @@ envr = {
     "AWS_SECRET_ACCESS_KEY" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_secret_key'))).read().strip()),
     "BONGO_RAVEN_DSN" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/raven_dsn'))).read().strip()),
     "BONGO_LOGENTRIES_TOKEN" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/logentries_token'))).read().strip()),
-    "BONGO_NEWRELIC_KEY": open(normpath(join(DJANGO_ROOT, 'settings/secrets/newrelic_key'))).read().strip(),
 }
 
 prefix_string = ""
@@ -66,7 +65,7 @@ def deploy(branch='master'):
     r = requests.post(
         "https://api.newrelic.com/deployments.xml",
         params=payload,
-        headers={"x-api-key": envr['BONGO_NEWRELIC_KEY']}
+        headers={"x-api-key": open(normpath(join(DJANGO_ROOT, 'settings/secrets/newrelic_key'))).read().strip()}
     )
 
 ############ END DEPLOY
