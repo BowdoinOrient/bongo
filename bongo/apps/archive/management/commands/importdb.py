@@ -30,14 +30,8 @@ def staticfiler(obj, filename, local_path, remote_uri):
         storage.delete(local_path)
 
     if not stale_copy and not nodownload:
-        try:
-            archive_file = storage.open(remote_uri, 'rb')
-            f = ContentFile(archive_file.read())
-            archive_file.close()
-        except Exception as e:
-            print(e)
-            f = ContentFile(requests.get("http://bowdoinorient.com/"+remote_uri).content)
-    else:
+        f = ContentFile(requests.get("http://bowdoinorient.com/"+remote_uri).content)
+    else if not stale_copy and nodownload:
         f = ContentFile("")
 
     obj.save(filename, f)
