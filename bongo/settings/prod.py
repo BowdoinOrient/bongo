@@ -51,17 +51,16 @@ CACHES = {
 
 ########## AMAZON CONFIGURATION
 
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
 AWS_STORAGE_BUCKET_NAME = "bongo-static"
 AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY")
-
 S3_URL = 'http://s3.amazonaws.com/{}'.format(AWS_STORAGE_BUCKET_NAME)
+
 STATIC_URL = S3_URL + "/static/"
 MEDIA_URL = S3_URL + "/media/"
-
-from storages.backends.s3boto import S3BotoStorage
-DEFAULT_FILE_STORAGE = lambda: S3BotoStorage(location='media')
-STATICFILES_STORAGE  = lambda: S3BotoStorage(location='static')
 
 ########## END AMAZON
 
