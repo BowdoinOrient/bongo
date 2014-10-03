@@ -19,7 +19,7 @@ envr = {
     "AWS_SECRET_ACCESS_KEY" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_secret_key'))).read().strip()),
     "BONGO_RAVEN_DSN" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/raven_dsn'))).read().strip()),
     "BONGO_LOGENTRIES_TOKEN" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/logentries_token'))).read().strip()),
-    "BONGO_NEWRELIC_KEY": shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/newrelic_key'))).read().strip()),
+    "BONGO_NEWRELIC_KEY": open(normpath(join(DJANGO_ROOT, 'settings/secrets/newrelic_key'))).read().strip(),
 }
 
 prefix_string = ""
@@ -57,11 +57,10 @@ def deploy(branch='master'):
             run('pip -q install -r bongo/reqs/prod.txt')
 
     payload = {
-        "deployment[app_name]": "Bongo",
         "deployment[application_id]": 3917299,
-        "deployment[revision]": local("git rev-parse HEAD"),
-        "deployment[description]": local("git log --pretty=format:'%s' -n 1"),
-        "deployment[user]": local("whoami")+"@"+local("hostname"),
+        "deployment[revision]": local("git rev-parse HEAD", capture=True),
+        "deployment[description]": local("git log --pretty=format:'%s' -n 1", capture=True),
+        "deployment[user]": local("whoami", capture=True)+"@"+local("hostname", capture=True),
     }
 
     r = requests.post(
