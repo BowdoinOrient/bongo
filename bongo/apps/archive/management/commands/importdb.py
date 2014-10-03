@@ -1,7 +1,7 @@
 from bongo.apps.archive import models as archive_models
 from bongo.apps.bongo import models as bongo_models
-from bongo.settings.common import MEDIA_ROOT
 from django.core.management.base import BaseCommand
+from django.core.files.storage import default_storage as storage
 from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
 from django.core.files.base import ContentFile
@@ -13,14 +13,7 @@ import os
 
 tz = get_current_timezone()
 
-filenames = []
-pathnames = []
-for (dirpath, dirs, files) in os.walk(MEDIA_ROOT):
-    pathnames.extend(os.path.join(dirpath, filename) for filename in files)
-    filenames.extend(files)
-
-
-def staticfiler(obj, filename, url):
+def staticfiler(obj, filename, local_path, remote_uri):
     # couple of cases here:
     #   - file already exists on the system, has filesize of 0
     #   - file already exists on system, has a filesize > 0
@@ -29,22 +22,21 @@ def staticfiler(obj, filename, url):
     #   - file does not exist, nodownload is off, download succeeds
 
     stale_copy = False
-    if filename in filenames:
-        path = pathnames[filenames.index(filename)]
-        if os.stat(path).st_size > 0:
-            stale_copy = open(path, 'rb')
+    if storage.exists(local_path):
+        if storage.size(local_path) > 0:
+            stale_copy = storage.open(local_path, 'rb')
             f = ContentFile(stale_copy.read())
             stale_copy.close()
-        os.remove(path)
+        storage.delete(local_path)
 
     if not stale_copy and not nodownload:
         try:
-            archive_file = open(MEDIA_ROOT+"/images/images/"+url, 'rb')
+            archive_file = storage.open(remote_uri, 'rb')
             f = ContentFile(archive_file.read())
             archive_file.close()
         except Exception as e:
             print(e)
-            f = ContentFile(requests.get("http://bowdoinorient.com"+url).content)
+            f = ContentFile(requests.get("http://bowdoinorient.com/"+remote_uri).content)
     else:
         f = ContentFile("")
 
@@ -76,7 +68,7 @@ def import_ads():
             owner=advertiser,
         )
 
-        staticfiler(ad.adfile, old_ad.filename, "/ads/"+old_ad.filename)
+        staticfiler(ad.adfile, old_ad.filename, "ads/"+old_ad.filename, "ads/"+old_ad.filename)
         ad.save()
 
 
@@ -305,7 +297,7 @@ def import_creator():
             creator.save()
 
         if old_author.photo:
-            staticfiler(creator.profpic, slugify(old_author.name)+".jpg", "/images/authors/"+old_author.photo)
+            staticfiler(creator.profpic, slugify(old_author.name)+".jpg", "headshots/"+slugify(old_author.name)+".jpg", "images/authors/"+old_author.photo)
             creator.save()
 
 
@@ -319,12 +311,12 @@ def import_photo():
         )
 
         try:
-            image_url = "/images/{date}/{fname}".format(
+            image_url = "images/{date}/{fname}".format(
                 date=(old_photo.article_date if old_photo.article_date else archive_models.Article.objects.using('archive').get(id__exact=old_photo.article_id).date),
                 fname=(old_photo.filename_original if old_photo.filename_original else old_photo.filename_large)
             )
 
-            staticfiler(photo.staticfile, str(old_photo.id)+".jpg", image_url)
+            staticfiler(photo.staticfile, str(old_photo.id)+".jpg", "photos/"+str(old_photo.id)+".jpg", image_url)
         except:
             print("File really, really couldn't be found")
 
