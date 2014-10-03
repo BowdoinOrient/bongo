@@ -21,20 +21,34 @@ def staticfiler(obj, filename, local_path, remote_uri):
     #   - file does not exist, nodownload is off, reading from local copy fails
     #   - file does not exist, nodownload is off, download succeeds
 
+    print "\nlooking for file " + filename
+
     stale_copy = False
     if storage.exists(local_path):
+        print ("it already exists")
         if storage.size(local_path) > 0:
             stale_copy = storage.open(local_path, 'rb')
             f = ContentFile(stale_copy.read())
             stale_copy.close()
+        else:
+            print ("but its filesize is 0")
         storage.delete(local_path)
 
     if not stale_copy and not nodownload:
-        f = ContentFile(requests.get("http://bowdoinorient.com/"+remote_uri).content)
+        print ("Getting it from the old server")
+        while True:
+            r = requests.get("http://bowdoinorient.com/"+remote_uri)
+            if r.status_code == 200:
+                f = ContentFile(r.content)
+                break
+            print ('Failed, trying again...')
     elif not stale_copy and nodownload:
+        print ("not downloading it")
         f = ContentFile("")
 
     obj.save(filename, f)
+
+    print ("done")
 
 
 
