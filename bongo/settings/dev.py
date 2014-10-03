@@ -58,3 +58,6 @@ os.environ['REUSE_DB'] = '1'
 
 AWS_ACCESS_KEY_ID = open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_id'))).read().strip()
 AWS_SECRET_ACCESS_KEY = open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_secret_key'))).read().strip()
+
+STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'static'))
+MEDIA_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'media'))
