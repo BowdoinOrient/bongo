@@ -5,6 +5,7 @@ from fabric.colors import red, green, blue
 from bongo.settings.common import DJANGO_ROOT
 from os.path import join, normpath
 import fabtools
+import requests
 import time
 
 def shellquote(s):
@@ -18,6 +19,7 @@ envr = {
     "AWS_SECRET_ACCESS_KEY" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_secret_key'))).read().strip()),
     "BONGO_RAVEN_DSN" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/raven_dsn'))).read().strip()),
     "BONGO_LOGENTRIES_TOKEN" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/logentries_token'))).read().strip()),
+    "BONGO_NEWRELIC_KEY": shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/newrelic_key'))).read().strip()),
 }
 
 prefix_string = ""
@@ -53,6 +55,20 @@ def deploy(branch='master'):
 
         with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo'):
             run('pip -q install -r bongo/reqs/prod.txt')
+
+    payload = {
+        "deployment[app_name]": "Bongo",
+        "deployment[application_id]": 3917299,
+        "deployment[revision]": local("git rev-parse HEAD"),
+        "deployment[description]": local("git log --pretty=format:'%s' -n 1"),
+        "deployment[user]": local("whoami")+"@"+local("hostname"),
+    }
+
+    r = requests.post(
+        "https://api.newrelic.com/deployments.xml",
+        params=payload,
+        headers={"x-api-key": envr['BONGO_NEWRELIC_KEY']}
+    )
 
 ############ END DEPLOY
 
