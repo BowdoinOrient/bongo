@@ -9,6 +9,7 @@ from django.utils.text import slugify
 from django.db import transaction, models
 from datetime import date, datetime
 from optparse import make_option
+from __future__ import print_function
 import requests
 import os
 
@@ -22,21 +23,22 @@ def staticfiler(obj, filename, local_path, remote_uri):
     #   - file does not exist, nodownload is off, reading from local copy fails
     #   - file does not exist, nodownload is off, download succeeds
 
-    if options.get("verbose"): print("\nlooking for file " + filename)
+    if options.get("verbose"): print("looking for file {}...".format(filename), end=" ")
 
     stale_copy = False
     if storage.exists(local_path):
-        if options.get("verbose"): print ("it already exists")
+        if options.get("verbose"): print ("It already exists", end="")
         if storage.size(local_path) > 0:
             stale_copy = storage.open(local_path, 'rb')
             f = ContentFile(stale_copy.read())
             stale_copy.close()
+            if options.get("verbose"): print("")
         else:
-            if options.get("verbose"): print ("but its filesize is 0")
+            if options.get("verbose"): print (", but its filesize is 0.")
         storage.delete(local_path)
 
     if not stale_copy and not options.get('nodownload'):
-        if options.get("verbose"): print ("Getting it from the old server")
+        if options.get("verbose"): print ("Getting it from the old server...", end=" ")
 
         r = requests.get("http://bowdoinorient.com/"+remote_uri)
 
@@ -45,13 +47,13 @@ def staticfiler(obj, filename, local_path, remote_uri):
         else:
             if options.get("verbose"): print ('Failed because of a {} response code'.format(r.status_code))
     elif not stale_copy and options.get('nodownload'):
-        if options.get("verbose"): print ("not downloading it")
+        if options.get("verbose"): print ("Not downloading it...", end=" ")
         f = ContentFile("")
 
     obj.save(filename, f)
     f.close()
 
-    if options.get("verbose"): print ("done")
+    if options.get("verbose"): print ("done.")
 
 
 
