@@ -112,7 +112,7 @@ def import_alerts():
         if options.get("verbose"): print("importing alert #{}".format(old_alert.pk))
 
         if not old_alert.end_date or not old_alert.start_date:
-            print "Refusing to commit an alert with a null datetime"
+            if options.get("verbose"): print("Refusing to commit an alert with a null datetime")
             continue
 
         (alert, created) = bongo_models.Alert.objects.get_or_create(
