@@ -37,12 +37,13 @@ def staticfiler(obj, filename, local_path, remote_uri):
 
     if not stale_copy and not options.get('nodownload'):
         if options.get("verbose"): print ("Getting it from the old server")
-        while True:
-            r = requests.get("http://bowdoinorient.com/"+remote_uri)
-            if r.status_code == 200:
-                f = ContentFile(r.content)
-                break
-            if options.get("verbose"): print ('Failed, trying again...')
+
+        r = requests.get("http://bowdoinorient.com/"+remote_uri)
+
+        if r.status_code == 200:
+            f = ContentFile(r.content)
+        else:
+            if options.get("verbose"): print ('Failed because of a {} response code'.format r.status_code)
     elif not stale_copy and options.get('nodownload'):
         if options.get("verbose"): print ("not downloading it")
         f = ContentFile("")
