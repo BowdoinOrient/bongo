@@ -8,6 +8,7 @@ from django.core.files.base import ContentFile
 from django.utils.text import slugify
 from django.db import transaction, models
 from datetime import date, datetime
+from optparse import make_option
 import requests
 import os
 
@@ -21,34 +22,34 @@ def staticfiler(obj, filename, local_path, remote_uri):
     #   - file does not exist, nodownload is off, reading from local copy fails
     #   - file does not exist, nodownload is off, download succeeds
 
-    print "\nlooking for file " + filename
+    if options.get("verbose"): print("\nlooking for file " + filename)
 
     stale_copy = False
     if storage.exists(local_path):
-        print ("it already exists")
+        if options.get("verbose"): print ("it already exists")
         if storage.size(local_path) > 0:
             stale_copy = storage.open(local_path, 'rb')
             f = ContentFile(stale_copy.read())
             stale_copy.close()
         else:
-            print ("but its filesize is 0")
+            if options.get("verbose"): print ("but its filesize is 0")
         storage.delete(local_path)
 
-    if not stale_copy and not nodownload:
-        print ("Getting it from the old server")
+    if not stale_copy and not options.get('nodownload'):
+        if options.get("verbose"): print ("Getting it from the old server")
         while True:
             r = requests.get("http://bowdoinorient.com/"+remote_uri)
             if r.status_code == 200:
                 f = ContentFile(r.content)
                 break
-            print ('Failed, trying again...')
-    elif not stale_copy and nodownload:
-        print ("not downloading it")
+            if options.get("verbose"): print ('Failed, trying again...')
+    elif not stale_copy and options.get('nodownload'):
+        if options.get("verbose"): print ("not downloading it")
         f = ContentFile("")
 
     obj.save(filename, f)
 
-    print ("done")
+    if options.get("verbose"): print ("done")
 
 
 
@@ -66,6 +67,7 @@ def datetimeify(d):
 """ There aren't actually any, so this is pointless """
 def import_ads():
     for old_ad in archive_models.Ads.objects.using('archive').all():
+        if options.get("verbose"): print("importing ad #{}".format(old_ad.pk))
 
         (advertiser, created) = bongo_models.Advertiser.objects.get_or_create(name=old_ad.sponsor)
         (ad, created) = bongo_models.Ad.objects.get_or_create(
@@ -83,6 +85,7 @@ def import_ads():
 """ Import the old tips table into the new Tip model """
 def import_tips():
     for old_tip in archive_models.Tips.objects.using('archive').all():
+        if options.get("verbose"): print("importing tip #{}".format(old_tip.pk))
 
         (tip, created) = bongo_models.Tip.objects.get_or_create(
             pk=old_tip.id,
@@ -97,6 +100,7 @@ def import_tips():
 """ Import the old alerts table into the new Alert model """
 def import_alerts():
     for old_alert in archive_models.Alerts.objects.using('archive').all():
+        if options.get("verbose"): print("importing alert #{}".format(old_alert.pk))
 
         if not old_alert.end_date or not old_alert.start_date:
             print "Refusing to commit an alert with a null datetime"
@@ -115,6 +119,7 @@ def import_alerts():
 """ Import the old volumes table into the new Volume model """
 def import_volumes():
     for old_volume in archive_models.Volume.objects.using('archive').all():
+        if options.get("verbose"): print("importing volume #{}".format(old_volume.pk))
 
         (volume, created) = bongo_models.Volume.objects.get_or_create(
             pk=old_volume.id,
@@ -127,6 +132,7 @@ def import_volumes():
 """ Import the old issues table into the new Issue model """
 def import_issues():
     for old_issue in archive_models.Issue.objects.using('archive').all():
+        if options.get("verbose"): print("importing issue #{}".format(old_issue.pk))
 
         (issue, created) = bongo_models.Issue.objects.get_or_create(
             pk=old_issue.id,
@@ -141,6 +147,7 @@ def import_issues():
 """ Import the old series table into the new Series model """
 def import_series():
     for old_series in archive_models.Series.objects.using('archive').all():
+        if options.get("verbose"): print("importing series #{}".format(old_series.pk))
 
         (series, created) = bongo_models.Series.objects.get_or_create(
             pk=old_series.id,
@@ -150,6 +157,7 @@ def import_series():
 """ Import the old sections table into the new Section model """
 def import_section():
     for old_section in archive_models.Section.objects.using('archive').all():
+        if options.get("verbose"): print("importing section #{}".format(old_section.pk))
 
         (section, created) = bongo_models.Section.objects.get_or_create(
             pk=old_section.id,
@@ -160,6 +168,7 @@ def import_section():
 """ Import the old jobs table into the new Job model """
 def import_job():
     for old_job in archive_models.Job.objects.using('archive').all():
+        if options.get("verbose"): print("importing job #{}".format(old_job.pk))
 
         (job, created) = bongo_models.Job.objects.get_or_create(
             pk=old_job.id,
@@ -171,6 +180,7 @@ def import_job():
 
 def import_attachment():
     for old_attachment in archive_models.Attachments.objects.using('archive').all():
+        if options.get("verbose"): print("importing attachment #{}".format(old_attachment.pk))
 
         if old_attachment.id <= 5:
             # Attachments 1-5 are absent in the current frontend and have the wrong content1/content2
@@ -228,6 +238,7 @@ def import_attachment():
 def import_content():
 
     for old_article in archive_models.Article.objects.using('archive').all():
+        if options.get("verbose"): print("importing article #{}".format(old_article.pk))
 
         # get the Text
         try:
@@ -294,6 +305,7 @@ def import_content():
 
 def import_creator():
     for old_author in archive_models.Author.objects.using('archive').all():
+        if options.get("verbose"): print("importing author #{}".format(old_author.pk))
 
         (creator, created) = bongo_models.Creator.objects.get_or_create(
             pk=old_author.id,
@@ -312,6 +324,7 @@ def import_creator():
 def import_photo():
     new_ids_created = 1
     for old_photo in archive_models.Photo.objects.using('archive').all():
+        if options.get("verbose"): print("importing photo #{}".format(old_photo.pk))
 
         (photo, created) = bongo_models.Photo.objects.get_or_create(
             pk=old_photo.id,
@@ -355,11 +368,18 @@ def import_photo():
 
 class Command(BaseCommand):
 
-    def handle(self, *args, **options):
-        global nodownload
-        nodownload = False
-        if len(args) > 0 and args[0] == "nodownload":
-            nodownload = True
+    help = "Echo all positional arguments."
+
+    option_list = BaseCommand.option_list + (
+        make_option('--verbose', dest='verbose', action='store_true',
+                    default=False, help="Print verbose logging."),
+        make_option('--fake', dest='nodownload', action='store_true',
+                    default=False, help="Fake downloading of files.")
+    )
+
+    def handle(self, *args, **opts):
+        global options
+        options = opts
 
         # transaction.set_autocommit(False)
         # sid = transaction.savepoint()
