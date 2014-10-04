@@ -43,7 +43,7 @@ def staticfiler(obj, filename, local_path, remote_uri):
         if r.status_code == 200:
             f = ContentFile(r.content)
         else:
-            if options.get("verbose"): print ('Failed because of a {} response code'.format r.status_code)
+            if options.get("verbose"): print ('Failed because of a {} response code'.format(r.status_code))
     elif not stale_copy and options.get('nodownload'):
         if options.get("verbose"): print ("not downloading it")
         f = ContentFile("")
