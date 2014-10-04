@@ -48,6 +48,7 @@ def staticfiler(obj, filename, local_path, remote_uri):
                 f = ContentFile(r.content)
             else:
                 if options.get("verbose"): print ('Failed because of a {} response code'.format(r.status_code))
+                f = ContentFile("")
         except requests.exceptions.RequestException as e:
             if options.get("verbose"): print (e)
             f = ContentFile("")
