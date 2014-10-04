@@ -55,3 +55,5 @@ NOSE_ARGS = ['--with-fixture-bundling', '--nologcapture']
 NOSE_TESTMATCH = '(?:^|[b_./-])[Tt]ests'
 
 os.environ['REUSE_DB'] = '1'
+
+CELERY_ALWAYS_EAGER = True
