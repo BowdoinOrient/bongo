@@ -42,24 +42,22 @@ def staticfiler(obj, filename, local_path, remote_uri):
         if options.get("verbose"): print ("Getting it from bowodoinorient.com/{}...".format(remote_uri), end=" ")
 
         try:
-            r = requests.get("http://bowdoinorient.com/"+remote_uri)
+            r = requests.get("http://bowdoinorient.com/"+remote_uri, timeout=1)
 
             if r.status_code == 200:
                 f = ContentFile(r.content)
             else:
                 if options.get("verbose"): print ('Failed because of a {} response code'.format(r.status_code))
-        except Exception as e:
+        except requests.exceptions.RequestException as e:
             if options.get("verbose"): print (e)
             f = ContentFile("")
 
     elif not stale_copy and options.get('nodownload'):
-        if options.get("verbose"): print ("Not downloading it...", end=" ")
+        if options.get("verbose"): print ("Faking the download.")
         f = ContentFile("")
 
     obj.save(filename, f)
     f.close()
-
-    if options.get("verbose"): print ("done.")
 
 
 
@@ -341,15 +339,12 @@ def import_photo():
             caption=old_photo.caption,
         )
 
-        try:
-            image_url = "images/{date}/{fname}".format(
-                date=(old_photo.article_date if old_photo.article_date else archive_models.Article.objects.using('archive').get(id__exact=old_photo.article_id).date),
-                fname=(old_photo.filename_original if old_photo.filename_original else old_photo.filename_large)
-            )
+        image_url = "images/{date}/{fname}".format(
+            date=(old_photo.article_date if old_photo.article_date else archive_models.Article.objects.using('archive').get(id__exact=old_photo.article_id).date),
+            fname=(old_photo.filename_original if old_photo.filename_original else old_photo.filename_large)
+        )
 
-            staticfiler(photo.staticfile, str(old_photo.id)+".jpg", "photos/"+str(old_photo.id)+".jpg", image_url)
-        except:
-            print("File really, really couldn't be found")
+        staticfiler(photo.staticfile, str(old_photo.id)+".jpg", "photos/"+str(old_photo.id)+".jpg", image_url)
 
         # Courtesy photos have a photographer id of 1, which doesn't exist.
         # We have to come up with a new id for this photographer that doesn't interfere with any existing id
