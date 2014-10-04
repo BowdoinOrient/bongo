@@ -48,6 +48,7 @@ def staticfiler(obj, filename, local_path, remote_uri):
         f = ContentFile("")
 
     obj.save(filename, f)
+    f.close()
 
     if options.get("verbose"): print ("done")
 
@@ -66,7 +67,7 @@ def datetimeify(d):
 """ Import the old ads table into the new Advertiser, Ad models """
 """ There aren't actually any, so this is pointless """
 def import_ads():
-    for old_ad in archive_models.Ads.objects.using('archive').all():
+    for old_ad in archive_models.Ads.objects.using('archive').all().iterator():
         if options.get("verbose"): print("importing ad #{}".format(old_ad.pk))
 
         (advertiser, created) = bongo_models.Advertiser.objects.get_or_create(name=old_ad.sponsor)
@@ -84,7 +85,7 @@ def import_ads():
 
 """ Import the old tips table into the new Tip model """
 def import_tips():
-    for old_tip in archive_models.Tips.objects.using('archive').all():
+    for old_tip in archive_models.Tips.objects.using('archive').all().iterator():
         if options.get("verbose"): print("importing tip #{}".format(old_tip.pk))
 
         (tip, created) = bongo_models.Tip.objects.get_or_create(
@@ -99,7 +100,7 @@ def import_tips():
 
 """ Import the old alerts table into the new Alert model """
 def import_alerts():
-    for old_alert in archive_models.Alerts.objects.using('archive').all():
+    for old_alert in archive_models.Alerts.objects.using('archive').all().iterator():
         if options.get("verbose"): print("importing alert #{}".format(old_alert.pk))
 
         if not old_alert.end_date or not old_alert.start_date:
@@ -118,7 +119,7 @@ def import_alerts():
 
 """ Import the old volumes table into the new Volume model """
 def import_volumes():
-    for old_volume in archive_models.Volume.objects.using('archive').all():
+    for old_volume in archive_models.Volume.objects.using('archive').all().iterator():
         if options.get("verbose"): print("importing volume #{}".format(old_volume.pk))
 
         (volume, created) = bongo_models.Volume.objects.get_or_create(
@@ -131,7 +132,7 @@ def import_volumes():
 
 """ Import the old issues table into the new Issue model """
 def import_issues():
-    for old_issue in archive_models.Issue.objects.using('archive').all():
+    for old_issue in archive_models.Issue.objects.using('archive').all().iterator():
         if options.get("verbose"): print("importing issue #{}".format(old_issue.pk))
 
         (issue, created) = bongo_models.Issue.objects.get_or_create(
@@ -146,7 +147,7 @@ def import_issues():
 
 """ Import the old series table into the new Series model """
 def import_series():
-    for old_series in archive_models.Series.objects.using('archive').all():
+    for old_series in archive_models.Series.objects.using('archive').all().iterator():
         if options.get("verbose"): print("importing series #{}".format(old_series.pk))
 
         (series, created) = bongo_models.Series.objects.get_or_create(
@@ -156,7 +157,7 @@ def import_series():
 
 """ Import the old sections table into the new Section model """
 def import_section():
-    for old_section in archive_models.Section.objects.using('archive').all():
+    for old_section in archive_models.Section.objects.using('archive').all().iterator():
         if options.get("verbose"): print("importing section #{}".format(old_section.pk))
 
         (section, created) = bongo_models.Section.objects.get_or_create(
@@ -167,7 +168,7 @@ def import_section():
 
 """ Import the old jobs table into the new Job model """
 def import_job():
-    for old_job in archive_models.Job.objects.using('archive').all():
+    for old_job in archive_models.Job.objects.using('archive').all().iterator():
         if options.get("verbose"): print("importing job #{}".format(old_job.pk))
 
         (job, created) = bongo_models.Job.objects.get_or_create(
@@ -179,7 +180,7 @@ def import_job():
 """ Holy shit all of these last few are interrelated so this is going to be a piece of work """
 
 def import_attachment():
-    for old_attachment in archive_models.Attachments.objects.using('archive').all():
+    for old_attachment in archive_models.Attachments.objects.using('archive').all().iterator():
         if options.get("verbose"): print("importing attachment #{}".format(old_attachment.pk))
 
         if old_attachment.id <= 5:
@@ -237,7 +238,7 @@ def import_attachment():
 """ this is complex """
 def import_content():
 
-    for old_article in archive_models.Article.objects.using('archive').all():
+    for old_article in archive_models.Article.objects.using('archive').all().iterator():
         if options.get("verbose"): print("importing article #{}".format(old_article.pk))
 
         # get the Text
@@ -304,7 +305,7 @@ def import_content():
 
 
 def import_creator():
-    for old_author in archive_models.Author.objects.using('archive').all():
+    for old_author in archive_models.Author.objects.using('archive').all().iterator():
         if options.get("verbose"): print("importing author #{}".format(old_author.pk))
 
         (creator, created) = bongo_models.Creator.objects.get_or_create(
@@ -323,7 +324,7 @@ def import_creator():
 
 def import_photo():
     new_ids_created = 1
-    for old_photo in archive_models.Photo.objects.using('archive').all():
+    for old_photo in archive_models.Photo.objects.using('archive').all().iterator():
         if options.get("verbose"): print("importing photo #{}".format(old_photo.pk))
 
         (photo, created) = bongo_models.Photo.objects.get_or_create(
