@@ -38,14 +38,19 @@ def staticfiler(obj, filename, local_path, remote_uri):
         storage.delete(local_path)
 
     if not stale_copy and not options.get('nodownload'):
-        if options.get("verbose"): print ("Getting it from the old server...", end=" ")
+        if options.get("verbose"): print ("Getting it from bowodoinorient.com/{}...".format(remote_uri), end=" ")
 
-        r = requests.get("http://bowdoinorient.com/"+remote_uri)
+        try:
+            r = requests.get("http://bowdoinorient.com/"+remote_uri)
 
-        if r.status_code == 200:
-            f = ContentFile(r.content)
-        else:
-            if options.get("verbose"): print ('Failed because of a {} response code'.format(r.status_code))
+            if r.status_code == 200:
+                f = ContentFile(r.content)
+            else:
+                if options.get("verbose"): print ('Failed because of a {} response code'.format(r.status_code))
+        except Exception as e:
+            if options.get("verbose"): print (e)
+            f = ContentFile("")
+
     elif not stale_copy and options.get('nodownload'):
         if options.get("verbose"): print ("Not downloading it...", end=" ")
         f = ContentFile("")
