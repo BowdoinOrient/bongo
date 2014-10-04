@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from bongo.apps.archive import models as archive_models
 from bongo.apps.bongo import models as bongo_models
 from django.core.management.base import BaseCommand
@@ -9,7 +11,6 @@ from django.utils.text import slugify
 from django.db import transaction, models
 from datetime import date, datetime
 from optparse import make_option
-from __future__ import print_function
 import requests
 import os
 
