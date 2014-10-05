@@ -347,7 +347,7 @@ def import_photo():
             )
 
             staticfiler(photo.staticfile, str(old_photo.id)+".jpg", "photos/"+str(old_photo.id)+".jpg", image_url)
-        except bongo.apps.archive.models.DoesNotExist as e:
+        except Exception as e:
             if options.get("verbose"): print(e)
 
         # Courtesy photos have a photographer id of 1, which doesn't exist.
