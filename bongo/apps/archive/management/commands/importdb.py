@@ -8,7 +8,6 @@ from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
-from django.db import transaction, models
 from datetime import date, datetime
 from optparse import make_option
 import requests
@@ -44,10 +43,10 @@ def staticfiler(obj, filename, local_path, remote_uri):
         storage.delete(local_path)
 
     if not stale_copy and not options.get('nodownload'):
-        if options.get("verbose"): print ("Getting it from bowodoinorient.com/{}...".format(remote_uri), end=" ")
+        if options.get("verbose"): print ("Getting it from bowdoinorient.com/{}...".format(remote_uri), end=" ")
 
         try:
-            r = requests.get("http://bowdoinorient.com/"+remote_uri, timeout=1)
+            r = session.get("http://bowdoinorient.com/"+remote_uri, timeout=1)
 
             if r.status_code == 200:
                 f = ContentFile(r.content)
@@ -400,8 +399,8 @@ class Command(BaseCommand):
         global options
         options = opts
 
-        # transaction.set_autocommit(False)
-        # sid = transaction.savepoint()
+        global session
+        session = requests.Session()
 
         import_ads()
         import_tips()
@@ -415,5 +414,3 @@ class Command(BaseCommand):
         import_content()
         import_attachment()
         import_photo()
-
-        # transaction.savepoint_rollback(sid)
