@@ -392,7 +392,7 @@ class Command(BaseCommand):
         make_option('--verbose', dest='verbose', action='store_true',
                     default=False, help="Print verbose logging."),
         make_option('--fake', dest='nodownload', action='store_true',
-                    default=False, help="Fake downloading of files.")
+                    default=False, help="Fake downloading of files."),
         make_option('--ignore_empties', dest='ign_empt', action='store_true',
                     default=False, help="Do not attempt to replace empty files.")
     )
