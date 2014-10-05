@@ -137,6 +137,7 @@ LOGGING = {
 CELERY_ACCEPT_CONTENT = ['json']  # make Celery shut up about deprecation
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+serialization.registry._decoders.pop("application/x-python-serialize")
 
 # See: http://celery.readthedocs.org/en/latest/configuration.html#celery-task-result-expires
 CELERY_TASK_RESULT_EXPIRES = timedelta(minutes=30)
