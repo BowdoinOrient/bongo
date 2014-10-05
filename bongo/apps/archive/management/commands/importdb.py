@@ -33,7 +33,7 @@ def staticfiler(obj, filename, local_path, remote_uri):
     stale_copy = False
     if storage.exists(local_path):
         if options.get("verbose"): print ("It already exists", end="")
-        if storage.size(local_path) > 0:
+        if storage.size(local_path) > 0 or options.get("ign_empt"):
             stale_copy = storage.open(local_path, 'rb')
             f = ContentFile(stale_copy.read())
             stale_copy.close()
@@ -393,6 +393,8 @@ class Command(BaseCommand):
                     default=False, help="Print verbose logging."),
         make_option('--fake', dest='nodownload', action='store_true',
                     default=False, help="Fake downloading of files.")
+        make_option('--ignore_empties', dest='ign_empt', action='store_true',
+                    default=False, help="Do not attempt to replace empty files.")
     )
 
     def handle(self, *args, **opts):
