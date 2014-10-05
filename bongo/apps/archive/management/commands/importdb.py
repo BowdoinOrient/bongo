@@ -13,7 +13,6 @@ from datetime import date, datetime
 from optparse import make_option
 import requests
 import resource
-import os
 
 from django.test import override_settings
 
