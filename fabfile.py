@@ -43,7 +43,7 @@ env.hosts = ['citadel.bjacobel.com']
 ########## DEPLOY
 
 @task
-def deploy(branch='master'):
+def deploy(branch='develop'):
 
     local("git push origin " + branch)
 
