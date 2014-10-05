@@ -12,9 +12,15 @@ from django.db import transaction, models
 from datetime import date, datetime
 from optparse import make_option
 import requests
+import resource
 import os
 
+from django.test import override_settings
+
 tz = get_current_timezone()
+
+def memcheck():
+    return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000000.0
 
 def staticfiler(obj, filename, local_path, remote_uri):
     # couple of cases here:
@@ -244,14 +250,19 @@ def import_attachment():
 
 
 """ this is complex """
+@override_settings(DEBUG=False)
 def import_content():
+    archive_articles = archive_models.Article.objects.using('archive').all().iterator()
+    archive_articlebodies = archive_models.Articlebody.objects.using('archive')
+    archive_articleauthors = archive_models.Articleauthor.objects.using('archive')
+    archive_authors = archive_models.Author.objects.using('archive')
 
-    for old_article in archive_models.Article.objects.using('archive').all().iterator():
+    for old_article in archive_articles:
         if options.get("verbose"): print("importing article #{}".format(old_article.pk))
 
         # get the Text
         try:
-            old_articlebody = archive_models.Articlebody.objects.using('archive').filter(article_id=old_article.id).order_by("-timestamp")[0]
+            old_articlebody = archive_articlebodies.filter(article_id=old_article.id).order_by("-timestamp")[0]
         except:
             old_articlebody = None
 
@@ -259,8 +270,8 @@ def import_content():
 
         old_authors = []
         try:
-            for old_articleauthor in archive_models.Articleauthor.objects.using('archive').get(article_id__exact=old_article.id):
-                old_authors.append(archive_models.Author.objects.using('archive').get(id__exact=old_articleauthor.author_id))
+            for old_articleauthor in archive_articleauthors.get(article_id__exact=old_article.id):
+                old_authors.append(archive_authors.get(id__exact=old_articleauthor.author_id))
         except:
             pass
 
@@ -362,7 +373,7 @@ def import_photo():
             try:
                 photo.creators.add(bongo_models.Creator.objects.get(pk__exact=old_photo.photographer_id))
             except:
-                print("Issues crediting this photo to author #"+str(old_photo.photographer_id))
+                if options.get("verbose"): print("Issues crediting this photo to author #"+str(old_photo.photographer_id))
 
         photo.save()
 
@@ -371,7 +382,7 @@ def import_photo():
             post_owner.photo.add(photo)
             post_owner.save()
         except:
-            print("Photo's owner has been deleted... sad :(")
+            if options.get("verbose"): print("Photo's owner has been deleted... sad :(")
 
 
 
