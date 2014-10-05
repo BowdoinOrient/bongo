@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import os
 from datetime import timedelta
 from djcelery import setup_loader
+from kombu import serialization
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -151,7 +152,11 @@ CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
 
 BROKER_URL='amqp://localhost'
 
-CELERY_ACCEPT_CONTENT = []  # make Celery shut up about deprecation
+# make Celery shut up about deprecation
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+serialization.registry._decoders.pop("application/x-python-serialize")
 ########## END CELERY CONFIGURATION
 
 SUIT_CONFIG = {
