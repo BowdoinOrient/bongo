@@ -87,10 +87,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL ='/static/'
-STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'static'))
-
 MEDIA_URL='/media/'
-MEDIA_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'media'))
 
 DJANGO_ROOT = os.path.normpath(BASE_DIR)
 
@@ -137,6 +134,10 @@ LOGGING = {
 }
 
 ########## CELERY CONFIGURATION
+CELERY_ACCEPT_CONTENT = ['json']  # make Celery shut up about deprecation
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
 # See: http://celery.readthedocs.org/en/latest/configuration.html#celery-task-result-expires
 CELERY_TASK_RESULT_EXPIRES = timedelta(minutes=30)
 
@@ -151,12 +152,6 @@ CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
 
 BROKER_URL='amqp://localhost'
-
-# make Celery shut up about deprecation
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-serialization.registry._decoders.pop("application/x-python-serialize")
 ########## END CELERY CONFIGURATION
 
 SUIT_CONFIG = {
