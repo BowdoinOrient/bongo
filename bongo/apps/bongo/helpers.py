@@ -21,4 +21,4 @@ def tagify(text):
     extractor = extract.TermExtractor()
     extractor.filter = extract.DefaultFilter(singleStrengthMinOccur=4)
 
-    return extractor(text)[:5]
+    return [w for (w, x, y) in extractor(text)[:5] if len(w) < 25]

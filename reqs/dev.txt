@@ -4,3 +4,4 @@ fabtools==0.19.0
 factory_boy
 -e git+git://github.com/bjacobel/django-nose.git#egg=django-nose
 ipdbplugin
+fake-factory

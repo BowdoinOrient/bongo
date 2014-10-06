@@ -2,3 +2,4 @@
 coveralls==0.4.1
 factory_boy
 -e git+git://github.com/bjacobel/django-nose.git#egg=django-nose
+fake-factory

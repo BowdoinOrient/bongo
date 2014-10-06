@@ -5,6 +5,8 @@ from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
 from django.utils.text import slugify
 from itertools import chain
+from helpers import tagify
+import operator
 import nltk.data
 import re
 
@@ -281,6 +283,26 @@ class Post (models.Model):
         for cont in self.content():
             chain(crtrs, cont.creators.all())
         return crtrs
+
+    def similar_tags(self):
+        similarity = {}
+        for tag in self.tags.all():
+            for similar_post in tag.post_set.all():
+                if not similar_post.__eq__(self):
+                    if similar_post in similarity:
+                        similarity[similar_post] += 1
+                    else:
+                        similarity[similar_post] = 1
+
+        return [post for (post, count) in sorted(similarity.items(), key=operator.itemgetter(1))]
+
+
+    def taggit(self):
+        if self.text.all():
+            for t in tagify(self.text.all()[0].body):
+                (tag, created) = Tag.objects.get_or_create(tag=t)
+                self.tags.add(tag)
+                self.save()
 
     def save(self, *args, **kwargs):
         auto_dates = kwargs.pop('auto_dates', True)
