@@ -12,3 +12,4 @@ pytz
 requests==2.2.1
 boto==2.32.1
 django-storages==1.1.8
+topia.termextract==1.1.0

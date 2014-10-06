@@ -1,5 +1,4 @@
-import nltk
-from nltk.collocations import *
+from topia.termextract import extract
 from HTMLParser import HTMLParser
 
 class MLStripper(HTMLParser):
@@ -17,23 +16,9 @@ def strip_tags(html):
     return s.get_data()
 
 def tagify(text):
-    bigram_measures = nltk.collocations.BigramAssocMeasures()
+    text = strip_tags(text)
 
-    tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-    print tokenizer.tokenize(
-        strip_tags(
-            text
-        )
-    )
-    import ipdb; ipdb.set_trace()
+    extractor = extract.TermExtractor()
+    extractor.filter = extract.DefaultFilter(singleStrengthMinOccur=4)
 
-    finder = BigramCollocationFinder.from_words(
-        tokenizer.tokenize(
-            strip_tags(
-                text
-            )
-        )
-    )
-
-    finder.apply_freq_filter(3)
-    return finder.nbest(bigram_measures.pmi, 5)
+    return extractor(text)[:5]
