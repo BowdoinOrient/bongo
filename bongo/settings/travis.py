@@ -22,7 +22,3 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = ['--with-fixture-bundling', '--nologcapture']
 
 NOSE_TESTMATCH = '(?:^|[b_./-])[Tt]ests'
-
-RAVEN_CONFIG = {
-    "dsn": "http://dd2c825ff9b1417d88a99573903ebf80:91631495b10b45f8a1cdbc492088da6a@localhost:9000/1",
-}
