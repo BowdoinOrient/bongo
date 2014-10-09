@@ -2,7 +2,7 @@ from common import *
 from os.path import join, normpath
 from os import environ
 
-DEBUG = True
+#DEBUG = True
 
 SECRET_KEY = open(
     normpath(
