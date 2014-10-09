@@ -8,3 +8,5 @@ urlpatterns = patterns('',
     url(r'^api/v1/', include(api_urls)),
 
 )
+
+handler404 = 'bongo.apps.bongo.views.custom404'
