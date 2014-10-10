@@ -29,7 +29,11 @@ You'll need:
 ####deployment:
 Deployment is handled via Fabric. `fab ?` will show you all the available commands. `fab setup` should take you from a blank Ubuntu or Debian install to ready to deploy, then you can `fab deploy` and `fab start`.
 
-####tests:  [![Build Status](https://travis-ci.org/BowdoinOrient/bongo.svg?branch=develop)](https://travis-ci.org/BowdoinOrient/bongo) [![Coverage Status](https://coveralls.io/repos/BowdoinOrient/bongo/badge.png?branch=develop)](https://coveralls.io/r/BowdoinOrient/bongo?branch=master)
+####tests:  
+You can run Bongo's test suite with `python manage.py test`. The current build status is:
+
+[![Build Status](https://img.shields.io/travis/BowdoinOrient/bongo/develop.svg?style=flat)](https://travis-ci.org/BowdoinOrient/bongo) [![Coverage Status](https://img.shields.io/coveralls/BowdoinOrient/bongo/develop.svg?style=flat)](https://coveralls.io/r/BowdoinOrient/bongo?branch=develop)
+
 
 ####using the api
 Bongo is a fairly typical RESTful API.
