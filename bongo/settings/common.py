@@ -98,7 +98,7 @@ STATICFILES_FINDERS = (
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ('Brian Jacobel', 'bjacobel@bowdoin.edu'),
+    ('Brian Jacobel', 'bjacobel@gmail.com'),
     ('Andrew Daniels', 'adaniels@bowdoin.edu'),
 )
 

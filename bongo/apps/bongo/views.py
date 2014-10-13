@@ -27,7 +27,7 @@ def custom404(request):
                 pil_img = Image.open(f)
 
                 (cW, cH) = pil_img.size
-                (nW, nH) = (photo_size, cH / int(1.0*cW/photo_size))
+                (nW, nH) = (photo_size, int(1.0 * cH / (1.0 * cW / photo_size)))
 
                 resized = pil_img.resize((nW, nH))
 
