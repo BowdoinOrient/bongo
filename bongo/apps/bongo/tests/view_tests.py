@@ -34,3 +34,14 @@ class CropperCase(TestCase):
 
         # filesize of 50x50 should be less than that of the 100x100
         self.assertLess(byte_len_cropped, byte_len)
+
+        # test an enlargement too, why not
+        res = client.get("/media/{}_1000.jpg".format(photo.staticfile.name[:-4]))
+        self.assertEqual(res.status_code, 200)
+
+        byte_len_enlarged = 0
+        for chunk in res.streaming_content:
+            byte_len_enlarged += len(chunk)
+
+        # filesize of 50x50 should be less than that of the 100x100
+        self.assertGreater(byte_len_enlarged, byte_len)
