@@ -59,7 +59,9 @@ class PhotoFactory(factory.Factory):
         model = models.Photo
 
     caption = factory.Sequence(lambda n: 'This is photo #{0}'.format(n))
-    staticfile = factory.django.ImageField()
+    staticfile = factory.django.ImageField(
+        filename=''.join(choice(digits) for i in range(8))+".jpg"
+    )
 
 class HTMLFactory(factory.Factory):
     class Meta:
