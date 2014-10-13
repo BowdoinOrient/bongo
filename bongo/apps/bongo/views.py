@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.conf import settings
 from bongo.apps.bongo import models
 import re
+from PIL import Image
 
 def custom404(request):
     # detect requests for photos we think we have, reroute them
@@ -13,7 +14,7 @@ def custom404(request):
 
         if len(requested_photo) > 1:
             photo_id = requested_photo[0]
-            photo_size = requested_photo[1][:-4]
+            photo_size = int(requested_photo[1][:-4])
 
         else:
             photo_id = requested_photo[0][:-4]
@@ -23,7 +24,16 @@ def custom404(request):
 
         if photo_exists and photo_size:
             with storage.open("photos/"+photo_id+".jpg", 'rb') as f:
-                return StreamingHttpResponse(f.read(), content_type="image/jpeg")
+                pil_img = Image.open(f)
+
+                (cW, cH) = pil_img.size
+                (nW, nH) = (photo_size, cH / int(1.0*cW/photo_size))
+
+                resized = pil_img.resize((nW, nH))
+
+                b = resized.tobytes("jpeg", "RGB")
+
+                return StreamingHttpResponse(b, content_type="image/jpeg")
 
     return render(request, "custom404.html", status=404)
 

@@ -25,11 +25,12 @@ class CropperCase(TestCase):
             byte_len += len(chunk)
 
         # photo exists, yes size -> 200 and crop
-        res = client.get("/media/{}_1024.jpg".format(photo.staticfile.name[:-4]))
+        res = client.get("/media/{}_50.jpg".format(photo.staticfile.name[:-4]))
         self.assertEqual(res.status_code, 200)
 
         byte_len_cropped = 0
         for chunk in res.streaming_content:
             byte_len_cropped += len(chunk)
 
+        # filesize of 50x50 should be less than that of the 100x100
         self.assertLess(byte_len_cropped, byte_len)
