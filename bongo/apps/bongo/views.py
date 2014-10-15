@@ -14,7 +14,7 @@ def custom404(request):
 
         if len(requested_photo) > 1:
             photo_id = requested_photo[0]
-            photo_size = int(requested_photo[1][:-4])
+            photo_size = int(requested_photo[-1][:-4])
 
         else:
             photo_id = requested_photo[0][:-4]

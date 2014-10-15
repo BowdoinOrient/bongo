@@ -60,7 +60,9 @@ class PhotoFactory(factory.Factory):
         model = models.Photo
 
     caption = factory.Sequence(lambda n: 'Photo #{0}'.format(n))
-    staticfile = factory.django.ImageField(filename="99999999.jpg")
+    staticfile = factory.django.ImageField(
+        filename=factory.fuzzy.FuzzyText(chars=digits, suffix=".jpg").fuzz()
+    )
 
 class HTMLFactory(factory.Factory):
     class Meta:
