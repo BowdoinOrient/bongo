@@ -1,7 +1,6 @@
 from factories import *
 from django.test import TestCase
 from django.contrib.auth.models import User
-from django.core.files.storage import default_storage as storage
 
 """
 Test content type models and related:
@@ -116,14 +115,10 @@ class PhotoTestCase(TestCase):
         creator1.delete()
         creator2.delete()
 
-        storage.delete(photo.staticfile.file)
-
     def test_fields(self):
         photo = PhotoFactory.build()
         self.assertIsNotNone(photo.caption)
         self.assertIsNotNone(photo.staticfile.file)
-
-        storage.delete(photo.staticfile.file)
 
 
 class HTMLTestCase(TestCase):
@@ -234,8 +229,6 @@ class CreatorTestCase(TestCase):
         me.delete()
         photo.delete()
         video.delete()
-
-        storage.delete(photo.staticfile.file)
 
 class JobTestCase(TestCase):
     def test_foreign_key(self):

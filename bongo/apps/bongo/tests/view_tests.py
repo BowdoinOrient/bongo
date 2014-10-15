@@ -46,6 +46,3 @@ class CropperCase(TestCase):
 
         # filesize of 50x50 should be less than that of the 100x100
         self.assertGreater(byte_len_enlarged, byte_len)
-
-        storage.delete(photo.staticfile.file)
-        photo.delete()
