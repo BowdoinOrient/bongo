@@ -1,7 +1,8 @@
 import factory
+from factory import fuzzy
 from bongo.apps.bongo import models
 from django.contrib.auth.models import User
-from random import choice, sample, randint
+from random import choice, sample, randint, jumpahead
 from string import lowercase, digits, capitalize
 from datetime import date, timedelta, datetime
 
@@ -9,8 +10,8 @@ class UserFactory(factory.Factory):
     class Meta:
         model = User
 
-    first_name = capitalize(''.join(choice(lowercase) for i in range(6)))
-    last_name = capitalize(''.join(choice(lowercase) for i in range(7)))
+    first_name = factory.fuzzy.FuzzyText(chars=lowercase)
+    last_name = factory.fuzzy.FuzzyText(chars=lowercase)
     username = factory.LazyAttribute(lambda obj: (obj.first_name[0] + obj.last_name).lower())
     email = factory.LazyAttribute(lambda obj: (obj.username + "@bowdoin.edu").lower())
     password = factory.PostGenerationMethodCall('set_password',
@@ -20,16 +21,16 @@ class JobFactory(factory.Factory):
     class Meta:
         model = models.Job
 
-    title = choice(["Editor in Chief", "Opinion Editor", "Contributor", "Staff Writer", "Columnist"])
+    title = factory.fuzzy.FuzzyChoice(["Editor in Chief", "Opinion Editor", "Contributor", "Staff Writer", "Columnist"])
 
 class CreatorFactory(factory.Factory):
     class Meta:
         model = models.Creator
 
     user = factory.SubFactory(UserFactory)
-    name = capitalize(''.join(choice(lowercase) for i in range(6)))
+    name = factory.fuzzy.FuzzyText(chars=lowercase)
     job = factory.SubFactory(JobFactory)
-    twitter = "@"+''.join(choice(lowercase) for i in range(8))
+    twitter = factory.fuzzy.FuzzyText(prefix="@")
     profpic = factory.django.ImageField()
 
 class TextFactory(factory.Factory):
@@ -45,8 +46,8 @@ class VideoFactory(factory.Factory):
         model = models.Video
 
     caption = factory.Sequence(lambda n: 'This is video #{0}'.format(n))
-    host = choice(["Vimeo", "YouTube", "Vine"])
-    uid = ''.join(choice(lowercase + digits) for i in range(15))
+    host = factory.fuzzy.FuzzyChoice(["Vimeo", "YouTube", "Vine"])
+    uid = factory.fuzzy.FuzzyText()
 
 class PDFFactory(factory.Factory):
     class Meta:
@@ -58,10 +59,8 @@ class PhotoFactory(factory.Factory):
     class Meta:
         model = models.Photo
 
-    caption = factory.Sequence(lambda n: 'This is photo #{0}'.format(n))
-    staticfile = factory.django.ImageField(
-        filename=''.join(choice(digits) for i in range(8))+".jpg"
-    )
+    caption = factory.Sequence(lambda n: 'Photo #{0}'.format(n))
+    staticfile = factory.django.ImageField(filename="99999999.jpg")
 
 class HTMLFactory(factory.Factory):
     class Meta:
@@ -88,7 +87,7 @@ class VolumeFactory(factory.Factory):
     class Meta:
         model = models.Volume
 
-    volume_number = choice(range(143))+1
+    volume_number = factory.fuzzy.FuzzyInteger(1, 143)
     volume_year_start = factory.LazyAttribute(lambda obj: obj.volume_number+1870)
     volume_year_end = factory.LazyAttribute(lambda obj: obj.volume_number+1871)
 
@@ -96,8 +95,8 @@ class IssueFactory(factory.Factory):
     class Meta:
         model = models.Issue
 
-    issue_date = date(1871, 1, 1) + timedelta(52560)
-    issue_number = choice(range(24))
+    issue_date = factory.fuzzy.FuzzyDate(date(1871, 1, 1), date(1871, 1, 1) + timedelta(52560))
+    issue_number = factory.fuzzy.FuzzyInteger(24)
 
     @factory.post_generation
     def idgaf(self, create, extracted, **kwargs):
@@ -110,26 +109,26 @@ class SectionFactory(factory.Factory):
     class Meta:
         model = models.Section
 
-    section = choice(["News","Features","A&E","Opinion","Sports"])
-    priority = choice(range(5))
+    section = factory.fuzzy.FuzzyChoice(["News","Features","A&E","Opinion","Sports"])
+    priority = factory.fuzzy.FuzzyInteger(5)
 
 class TagFactory(factory.Factory):
     class Meta:
         model = models.Tag
 
-    tag = ''.join(choice(lowercase) for i in range(10))
+    tag = factory.fuzzy.FuzzyText(chars=lowercase)
 
 class PostFactory(factory.Factory):
     class Meta:
         model = models.Post
 
-    published = datetime(1871, 1, 1) + timedelta(52560)
-    is_published = choice([False, True])
-    title = u''.join(choice(lowercase) for i in range(20))
-    opinion = choice([False, True])
-    views_local = choice(range(0,10000))
-    views_global = choice(range(0,10000))
-    primary_type = choice(["text","photo","video","liveblog","html","generic"])
+    published = factory.fuzzy.FuzzyDate(date(1871, 1, 1), date(1871, 1, 1) + timedelta(52560))
+    is_published = factory.fuzzy.FuzzyChoice([False, True])
+    title = factory.fuzzy.FuzzyText(chars=lowercase)
+    opinion = factory.fuzzy.FuzzyChoice([False, True])
+    views_local = factory.fuzzy.FuzzyInteger(10000)
+    views_global = factory.fuzzy.FuzzyInteger(10000)
+    primary_type = factory.fuzzy.FuzzyChoice(["text","photo","video","liveblog","html","generic"])
 
     @factory.post_generation
     def idgaf(self, create, extracted, **kwargs):

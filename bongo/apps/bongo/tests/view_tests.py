@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.test import Client
 from factories import PhotoFactory
+from django.core.files.storage import default_storage as storage
 
 class CropperCase(TestCase):
     def test_cropper(self):
@@ -45,3 +46,6 @@ class CropperCase(TestCase):
 
         # filesize of 50x50 should be less than that of the 100x100
         self.assertGreater(byte_len_enlarged, byte_len)
+
+        storage.delete(photo.staticfile.file)
+        photo.delete()

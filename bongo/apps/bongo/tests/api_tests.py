@@ -127,6 +127,9 @@ class APITestCase(TestCase):
         obj = PhotoFactory.create(); obj.save()
         crud(self, obj, models.Photo)
 
+        from django.core.files.storage import default_storage as storage
+        storage.delete(obj.staticfile.file)
+
     def test_PDF_endpoint(self):
         obj = PDFFactory.create(); obj.save()
         crud(self, obj, models.PDF)
