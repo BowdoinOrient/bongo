@@ -8,7 +8,7 @@ from PIL import Image
 
 def custom404(request):
     # detect requests for photos we think we have, reroute them
-    if re.match("/media/photos/", request.path):
+    if re.search("photos/", request.path):
         requested_photo = re.split("/", request.path)[-1]
         requested_photo = re.split("_", requested_photo)
 
@@ -21,6 +21,7 @@ def custom404(request):
             photo_size = None
 
         photo_exists = storage.exists("photos/{}.jpg".format(photo_id))
+        storage.exists("photos/1002.jpg")
 
         if photo_exists and photo_size:
             with storage.open("photos/"+photo_id+".jpg", 'rb') as f:
