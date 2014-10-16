@@ -7,8 +7,10 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/v1/', include(api_urls)),
-    url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes':True}),
 
 )
+
+if settings.DEBUG:
+    urlpatterns += (url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes':True}),)
 
 handler404 = 'bongo.apps.bongo.views.custom404'
