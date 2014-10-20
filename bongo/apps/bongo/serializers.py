@@ -85,6 +85,7 @@ class PullquoteSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     content = serializers.Field(source='content')
     creators = serializers.Field(source='creators')
+    section = SectionSerializer()
 
     class Meta:
         model = Post
