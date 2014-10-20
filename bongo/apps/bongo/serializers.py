@@ -25,7 +25,7 @@ class SectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Section
-        fields = ('id', 'section', 'priority')
+        fields = ('id', 'section', 'classname', 'priority')
         depth = 2
 
 class TagSerializer(serializers.ModelSerializer):
