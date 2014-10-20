@@ -57,6 +57,12 @@ class Section (models.Model):
     def __unicode__(self):
         return self.section
 
+    def classname(self):
+        if self.section == "A&E":
+            return "artsent"
+        else:
+            return self.section.lower()
+
 
 """ potential system for reccommending content. For now only a Post can have tags, but
 there's potential for them to be assigned to individual content instead and then have

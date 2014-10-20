@@ -21,6 +21,8 @@ class IssueSerializer(serializers.ModelSerializer):
         depth = 2
 
 class SectionSerializer(serializers.ModelSerializer):
+    classname = serializers.Field(source='classname')
+
     class Meta:
         model = Section
         fields = ('id', 'section', 'priority')

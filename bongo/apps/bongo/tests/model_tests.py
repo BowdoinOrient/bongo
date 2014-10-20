@@ -264,6 +264,11 @@ class SectionTestCase(TestCase):
     def test_foreign_key(self):
         pass
 
+    def test_shortname(self):
+        section = SectionFactory.build(); section.save()
+        self.assertLess(len(section.classname()), 9)
+        self.assertEqual(section.classname(), section.classname().lower())
+
 class TagTestCase(TestCase):
     def test_foreign_key(self):
         pass
