@@ -54,7 +54,7 @@ CACHES = {
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-AWS_STORAGE_BUCKET_NAME = "bongo-static"
+AWS_STORAGE_BUCKET_NAME = "bowdoinorient-bongo"
 AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY")
 S3_URL = 'http://s3.amazonaws.com/{}'.format(AWS_STORAGE_BUCKET_NAME)
