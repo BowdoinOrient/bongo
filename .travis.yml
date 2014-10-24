@@ -12,8 +12,8 @@ env:
     - BONGO_SECRET_KEY="totallynotmyrealsecretkey"
     - BONGO_LOGENTRIES_TOKEN="nopenotreal"
     - BONGO_RAVEN_DSN="lolnope"
-    - secure: "wBTz3aSTO/TDUVMT4VvZyHU7zlV21PUAl/SiElV3DW2gRD12qf3E9kOHYsAWR4yWtkLR8hghSXM/1dPQOq06raDao1bR50TIzZaNj9ex74jNu4Yw+//qaj+kW5eMDNjdG1iiQw6rfs8hgCb5jtr4SpcqaM9C94UmHjKKXhOsvis="
-    - secure: "ja54st17Qy7jN4wbNWNBufY2j55zGrfGQM1dnI0y1FtXGgxr+uuUqmllPeh40/It9veXjekvvbSn/agDGcQdM7X1xNJy1Z+KWxQtjdlT15jJkSd6Ty0JjnHlySIKT5cW1MSvl+QxeEF8BnaqGp+rVaqhuJ2YWN/suHPmQuVAG6U="
+    secure: "fQbky6XqlOcEtd97/GNvOca7VK4n2cyV7USf+2Bt+aFC3LyZRyPSSYjjdxUBjeRheGhdov/sjxcpwWIEJ6lF/JxOjyv4ekEQBlLHk1q34pQxPmaYcJ6DOIm/U6Vv/IRyOtBizc3TqutLOzpLlfxdDr0SbGyM+EJbNBdb1tUrLNo="
+    secure: "rrGk1BvBIx5TZhHxrG/d8ClMcESzj0Y/puRiK0xZHFufdazaHiN5z9LLwrz+hM1K5FGQBYpgpCEwUekRtHNPpVTJX4bzgdjeH/SrQmxwJWCIZeHLuqwtMpG03BxkcJxgtReXgSH5Ibfqc5AmRvyTapIGQLBDaYZp5ghzFfZGQNo="
 before_script:
   - psql -c 'create database bongo_test;' -U postgres
   - python manage.py syncdb --noinput
