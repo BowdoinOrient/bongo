@@ -340,7 +340,7 @@ class Post (models.Model):
             except Exception as e:
                 print e
 
-            cache.set("popularity_{}".format(self.pk),popularity,7200)
+            cache.set(cache_key, popularity, 7200)
 
             return popularity
 
