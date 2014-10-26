@@ -4,10 +4,13 @@ from datetime import datetime
 from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
 from django.utils.text import slugify
+from django.core.cache import cache
 from itertools import chain
 from helpers import tagify
 import operator
 import nltk.data
+import requests
+import json
 
 
 """ Series and Issues are helpful for grouping and archiving
@@ -308,6 +311,38 @@ class Post (models.Model):
                 (tag, created) = Tag.objects.get_or_create(tag=t)
                 self.tags.add(tag)
                 self.save()
+
+
+    def popularity(self):
+        cache_key = "popularity_{}".format(self.pk)
+        cached = cache.get(cache_key)
+
+        if cached:
+            return cached
+        else:
+            popularity = self.views_global - ((make_aware(datetime.now(), get_current_timezone()) - self.published).total_seconds() / 10**4.5)
+
+            url = "http://bowdoinorient.com/article/{}".format(self.pk)
+
+            # get twitter shares
+            try:
+                res = requests.get("http://urls.api.twitter.com/1/urls/count.json", params={"url":url})
+                if res.status_code == 200:
+                    popularity = popularity + res.json()['count'] * 7.5
+            except Exception as e:
+                print e
+
+            # get facebook interactions
+            try:
+                res = requests.post("https://api.facebook.com/restserver.php", data=json.dumps({"method":"links.getStats", "format":"json", "urls":url}), headers={"content-type":"application/json"})
+                if res.status_code == 200:
+                    popularity = popularity + res.json()[0]['total_count'] * 5
+            except Exception as e:
+                print e
+
+            cache.set("popularity_{}".format(self.pk),popularity,7200)
+
+            return popularity
 
     def save(self, *args, **kwargs):
         auto_dates = kwargs.pop('auto_dates', True)
