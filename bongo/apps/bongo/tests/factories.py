@@ -1,16 +1,19 @@
 import factory
+from faker import Faker
 from bongo.apps.bongo import models
 from django.contrib.auth.models import User
 from random import choice, sample, randint
 from string import lowercase, digits, capitalize
 from datetime import date, timedelta, datetime
 
+fake = Faker()
+
 class UserFactory(factory.Factory):
     class Meta:
         model = User
 
-    first_name = capitalize(''.join(choice(lowercase) for i in range(6)))
-    last_name = capitalize(''.join(choice(lowercase) for i in range(7)))
+    first_name = factory.LazyAttribute(lambda x: fake.first_name())
+    last_name = factory.LazyAttribute(lambda x: fake.last_name())
     username = factory.LazyAttribute(lambda obj: (obj.first_name[0] + obj.last_name).lower())
     email = factory.LazyAttribute(lambda obj: (obj.username + "@bowdoin.edu").lower())
     password = factory.PostGenerationMethodCall('set_password',
@@ -27,7 +30,7 @@ class CreatorFactory(factory.Factory):
         model = models.Creator
 
     user = factory.SubFactory(UserFactory)
-    name = capitalize(''.join(choice(lowercase) for i in range(6)))
+    name = factory.LazyAttribute(lambda x: fake.name())
     job = factory.SubFactory(JobFactory)
     twitter = "@"+''.join(choice(lowercase) for i in range(8))
     profpic = factory.django.ImageField()
@@ -37,7 +40,7 @@ class TextFactory(factory.Factory):
         model = models.Text
 
     caption = factory.Sequence(lambda n: 'This is text #{0}'.format(n))
-    body = "It has a loooooooooooooong body"
+    body = fake.text(max_nb_chars=1000)
     excerpt = "The excerpt isn't correct until it's saved"
 
 class VideoFactory(factory.Factory):
@@ -123,7 +126,7 @@ class PostFactory(factory.Factory):
 
     published = datetime(1871, 1, 1) + timedelta(52560)
     is_published = choice([False, True])
-    title = u''.join(choice(lowercase) for i in range(20))
+    title = factory.LazyAttribute(lambda x: u''.join(choice(lowercase+" ") for i in range(20)))
     opinion = choice([False, True])
     views_local = choice(range(0,10000))
     views_global = choice(range(0,10000))

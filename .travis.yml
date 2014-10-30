@@ -11,7 +11,7 @@ env:
     - DJANGO_SETTINGS_MODULE="bongo.settings.travis"
     - BONGO_SECRET_KEY="totallynotmyrealsecretkey"
     - BONGO_LOGENTRIES_TOKEN="nopenotreal"
-    - BONGO_RAVEN_DSN="lolnope"
+    - BONGO_RAVEN_DSN="http://dd2c825ff9b1417d88a99573903ebf80:91631495b10b45f8a1cdbc492088da6a@localhost:9000/1"
     - secure: "fQbky6XqlOcEtd97/GNvOca7VK4n2cyV7USf+2Bt+aFC3LyZRyPSSYjjdxUBjeRheGhdov/sjxcpwWIEJ6lF/JxOjyv4ekEQBlLHk1q34pQxPmaYcJ6DOIm/U6Vv/IRyOtBizc3TqutLOzpLlfxdDr0SbGyM+EJbNBdb1tUrLNo="
     - secure: "rrGk1BvBIx5TZhHxrG/d8ClMcESzj0Y/puRiK0xZHFufdazaHiN5z9LLwrz+hM1K5FGQBYpgpCEwUekRtHNPpVTJX4bzgdjeH/SrQmxwJWCIZeHLuqwtMpG03BxkcJxgtReXgSH5Ibfqc5AmRvyTapIGQLBDaYZp5ghzFfZGQNo="
 before_script:

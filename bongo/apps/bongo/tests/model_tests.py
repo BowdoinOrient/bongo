@@ -175,8 +175,25 @@ class PullquoteTestCase(TestCase):
         self.assertIsNotNone(pullquote.quote)
         self.assertIsNotNone(pullquote.attribution)
 
+
 class PostTestCase(TestCase):
-    pass
+    def test_similar_tags(self):
+        post = PostFactory.create(); post.save()
+        similar_post = PostFactory.create(); post.save()
+        text = TextFactory.create(); text.save()
+
+        post.text.add(text)
+        post.save()
+
+        similar_post.text.add(text)
+        similar_post.save()
+
+        post.taggit()
+        similar_post.taggit()
+
+        # If this fails, change the lorem ipsum in the factory to be something nonrandom
+        self.assertEqual(post.similar_tags()[0], similar_post)
+
 
 """
 Test user-related models:

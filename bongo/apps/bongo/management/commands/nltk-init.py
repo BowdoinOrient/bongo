@@ -11,3 +11,5 @@ class Command(BaseCommand):
         except:
             print("Downloading NLTK tokenizers...")
             nltk.download("punkt")
+
+        nltk.download("stopwords")
