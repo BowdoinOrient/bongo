@@ -2,7 +2,7 @@
 django-supervisor==0.3.2
 eventlet==0.15.2
 gunicorn==19.1.1
-python-memcached==1.53
+python3-memcached==1.5.1
 raven==5.0.0
 logentries==0.2.1
 newrelic==2.30.0.27
