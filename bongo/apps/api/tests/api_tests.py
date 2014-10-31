@@ -1,11 +1,9 @@
 import json
-from factories import *
+from bongo.apps.bongo.tests.factories import *
 from django.test import TestCase
 from rest_framework.test import APIClient
-from django.core.serializers import serialize
 from bongo.apps.bongo import models
 from django.forms.models import model_to_dict
-from django.db import models as builtin_models
 
 # @TODO: These tests don't do a very good job of cleaning up after themselves
 

@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from bongo.apps.bongo import urls as api_urls
+from bongo.apps.api import urls as api_urls
 
 urlpatterns = patterns('',
 

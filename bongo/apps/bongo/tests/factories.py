@@ -2,8 +2,8 @@ import factory
 from faker import Faker
 from bongo.apps.bongo import models
 from django.contrib.auth.models import User
-from random import choice, sample, randint
-from string import lowercase, digits, capitalize
+from random import choice
+from string import lowercase, digits
 from datetime import date, timedelta, datetime
 
 fake = Faker()

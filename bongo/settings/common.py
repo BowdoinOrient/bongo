@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     # Local apps
     'bongo.apps.bongo',
     'bongo.apps.archive',
+    'bongo.apps.api',
 
     # for the API
     'rest_framework',
@@ -183,7 +184,7 @@ TEMPLATE_DIRS = (
 )
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_SERIALIZER_CLASS': 'bongo.apps.bongo.pagination.CustomPaginationSerializer',
+    'DEFAULT_PAGINATION_SERIALIZER_CLASS': 'bongo.apps.api.pagination.CustomPaginationSerializer',
     'PAGINATE_BY': 20,                 # Default to 20
     'PAGINATE_BY_PARAM': 'limit',  # Allow client to override, using `?limit=xxx`.
     'MAX_PAGINATE_BY': 100,             # Maximum limit allowed when using `?limit=xxx`.
