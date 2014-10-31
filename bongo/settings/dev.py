@@ -1,6 +1,5 @@
 from common import *
 from os.path import join, normpath
-from os import environ
 
 DEBUG = True
 
