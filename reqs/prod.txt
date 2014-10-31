@@ -1,6 +1,6 @@
 -r common.txt
 django-supervisor==0.3.2
-gevent==0.13.8
+eventlet==0.15.2
 gunicorn==0.14.3
 python-memcached==1.53
 raven==5.0.0
