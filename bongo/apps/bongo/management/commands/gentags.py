@@ -1,5 +1,5 @@
-from django.bongo.management.base import BaseCommand
-from bongo.apps.bongo.models import Post, Text
+from django.core.management.base import BaseCommand
+from bongo.apps.bongo.models import Text
 from bongo.apps.bongo.helpers import tagify
 
 class Object:

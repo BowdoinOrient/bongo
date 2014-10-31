@@ -1,4 +1,4 @@
-from django.bongo.management.base import BaseCommand
+from django.core.management.base import BaseCommand
 import nltk
 
 class Command(BaseCommand):
