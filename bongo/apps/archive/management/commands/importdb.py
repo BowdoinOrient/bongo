@@ -2,11 +2,11 @@ from __future__ import print_function
 
 from bongo.apps.archive import models as archive_models
 from bongo.apps.bongo import models as bongo_models
-from django.core.management.base import BaseCommand
-from django.core.files.storage import default_storage as storage
+from django.bongo.management.base import BaseCommand
+from django.bongo.files.storage import default_storage as storage
 from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
-from django.core.files.base import ContentFile
+from django.bongo.files.base import ContentFile
 from django.utils.text import slugify
 from datetime import date, datetime
 from optparse import make_option

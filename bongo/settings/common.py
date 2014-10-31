@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     # Local apps
     'bongo.apps.bongo',
     'bongo.apps.archive',
+    'bongo.apps.api',
 
     # for the API
     'rest_framework',

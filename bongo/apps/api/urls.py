@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url, include
-from bongo.apps.bongo import api
+from bongo.apps.api import endpoints as api
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()

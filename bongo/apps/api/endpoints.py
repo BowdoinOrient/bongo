@@ -1,9 +1,8 @@
 from bongo.apps.bongo.models import *
-from bongo.apps.bongo.serializers import *
+from serializers import *
 from rest_framework import viewsets, permissions, filters
-from rest_framework.decorators import action, link
+from rest_framework.decorators import link
 from rest_framework.response import Response
-from django.core import serializers
 
 
 """ I know this is a gigantic mess - I'm searching for a better way.

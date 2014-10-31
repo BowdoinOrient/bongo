@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import date, datetime
+from datetime import datetime
 from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
 from django.utils.text import slugify
@@ -8,7 +8,6 @@ from itertools import chain
 from helpers import tagify
 import operator
 import nltk.data
-import re
 
 
 """ Series and Issues are helpful for grouping and archiving
