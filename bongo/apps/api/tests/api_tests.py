@@ -26,7 +26,7 @@ def crud(self, object, model, endpoint=None):
     # test that a GET to /endpoint/object.pk returns this object
     res = client.get(endpoint+str(object.pk)+"/")
     self.assertEqual(res.status_code, 200)
-    for key, value in json.loads(res.content).iteritems():
+    for key, value in json.loads(res.content.decode("utf-8")).items():
         self.assertIn(key, dir(object))
         if key == 'id':
             self.assertEquals(object.pk, value)
@@ -36,7 +36,7 @@ def crud(self, object, model, endpoint=None):
     # aren't enough objects in the test DB to trigger pagination
     res = client.get(endpoint+"?limit=100")
     self.assertEqual(res.status_code, 200)
-    self.assertIn(object.pk, [v for k, v in json.loads(res.content)['body'][0].items() if k=='id'])
+    self.assertIn(object.pk, [v for k, v in json.loads(res.content.decode("utf-8"))['body'][0].items() if k=='id'])
 
     # test that a POST to /endpoint with {object} 403s when not authenticated
     self.assertEqual(client.post(endpoint).status_code, 403)
@@ -60,7 +60,7 @@ def crud(self, object, model, endpoint=None):
         self.assertEqual(res.status_code, 201)
         self.assertEqual(type(object).objects.count(), count+1)
     except AssertionError:
-        if res.status_code == 400 and 'body' in json.loads(res.content) and json.loads(res.content).get('body').get('staticfile') == [u'This field is required.']:
+        if res.status_code == 400 and 'body' in json.loads(res.content.decode("utf-8")) and json.loads(res.content.decode("utf-8")).get('body').get('staticfile') == [u'This field is required.']:
             # We don't really want to test file upload, so let this slide
             pass
 
@@ -73,20 +73,20 @@ def crud(self, object, model, endpoint=None):
         self.assertEqual(res.status_code, 201)
         self.assertEqual(type(object).objects.count(), count+1)
     except AssertionError:
-        if res.status_code == 400 and 'body' in json.loads(res.content) and json.loads(res.content).get('body').get('staticfile') == [u'This field is required.']:
+        if res.status_code == 400 and 'body' in json.loads(res.content.decode("utf-8")) and json.loads(res.content.decode("utf-8")).get('body').get('staticfile') == [u'This field is required.']:
             pass
     obj_as_dict['id'] = tmp
 
     # test that a PATCH to /endpoint/object.pk changes one of its fields to "derp", when authenticated
     if type(object) in [models.Volume]:
-        obj_as_dict[obj_as_dict.keys()[-1]] = 100
+        obj_as_dict[list(obj_as_dict.keys())[-1]] = 100
     else:
-        obj_as_dict[obj_as_dict.keys()[-1]] = "derp"
+        obj_as_dict[list(obj_as_dict.keys())[-1]] = "derp"
     res = client.patch(endpoint+str(object.pk)+"/", obj_as_dict, secure=True)
     try:
         self.assertEqual(res.status_code, 201)
     except AssertionError:
-        if res.status_code == 400 and 'body' in json.loads(res.content) and json.loads(res.content).get('body').get('staticfile') == [u'This field is required.']:
+        if res.status_code == 400 and 'body' in json.loads(res.content.decode("utf-8")) and json.loads(res.content.decode("utf-8")).get('body').get('staticfile') == [u'This field is required.']:
             pass
 
     # test that a DELETE to /endpoint/object.pk decreases model.count by 1, when authenticated
@@ -164,13 +164,13 @@ class APITestCase(TestCase):
         client = APIClient()
 
         res = client.get("http://testserver/api/v1/issue/?limit=1")
-        js = json.loads(res.content)
+        js = json.loads(res.content.decode("utf-8"))
 
         self.assertEqual(len(js), 3)
         self.assertEqual(len(js['body']), 1)
         self.assertEqual(js['body'][0]['id'], issue1.pk)
 
         res = client.get(js['links']['next'])
-        js = json.loads(res.content)
+        js = json.loads(res.content.decode("utf-8"))
         self.assertEqual(js['body'][0]['id'], issue2.pk)
         self.assertEqual(js['links']['next'], None)

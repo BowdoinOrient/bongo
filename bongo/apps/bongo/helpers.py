@@ -8,6 +8,7 @@ except ImportError:
 
 class MLStripper(htmlparse):
     def __init__(self):
+        self.convert_charrefs=False
         self.reset()
         self.fed = []
     def handle_data(self, d):
