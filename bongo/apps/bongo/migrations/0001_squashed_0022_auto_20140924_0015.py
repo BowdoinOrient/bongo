@@ -151,17 +151,6 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name=b'Content',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                (b'caption', models.TextField(null=True, blank=True)),
-                (b'creators', models.ManyToManyField(to=b'bongo.Creator')),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
             name=b'Issue',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -216,19 +205,8 @@ class Migration(migrations.Migration):
             preserve_default=True,
         ),
         migrations.AlterModelOptions(
-            name='content',
-            options={'verbose_name_plural': 'Content'},
-        ),
-        migrations.AlterModelOptions(
             name='series',
             options={'verbose_name_plural': 'Series'},
-        ),
-        migrations.RemoveField(
-            model_name=b'content',
-            name=b'creators',
-        ),
-        migrations.DeleteModel(
-            name='Content',
         ),
         migrations.CreateModel(
             name='HTML',
