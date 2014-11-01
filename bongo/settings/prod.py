@@ -1,7 +1,5 @@
 from os import environ
-from common import *
-from logentries import LogentriesHandler
-import logging
+from bongo.settings.common import *
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {

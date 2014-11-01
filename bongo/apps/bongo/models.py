@@ -6,7 +6,7 @@ from django.utils.timezone import make_aware
 from django.utils.text import slugify
 from django.core.cache import cache
 from itertools import chain
-from helpers import tagify
+from bongo.apps.bongo.helpers import tagify
 import operator
 import nltk.data
 import requests

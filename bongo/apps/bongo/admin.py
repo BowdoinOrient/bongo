@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import *
+from bongo.apps.bongo.models import *
 
 # Some of these we will definitely want to customize later
 # But for now the default admin view is fine

@@ -1,7 +1,12 @@
 from topia.termextract import extract
-from HTMLParser import HTMLParser
 
-class MLStripper(HTMLParser):
+# Python 3 moves HTMLParser to html.parser
+try:
+    from HTMLParser import HTMLParser as htmlparse
+except ImportError:
+    from html.parser import HTMLParser as htmlparse
+
+class MLStripper(htmlparse):
     def __init__(self):
         self.reset()
         self.fed = []
