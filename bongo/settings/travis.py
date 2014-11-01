@@ -1,4 +1,4 @@
-from prod import *
+from bongo.settings.prod import *
 
 # The same settings as production, but no database password.
 
