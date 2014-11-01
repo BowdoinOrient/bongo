@@ -4,7 +4,7 @@ Bongo is the third version of the Bowdoin Orient Network Update System. Previous
 
 ####setup:
 You'll need:
-- Python 2.7 (Why? mostly because Fabric doesn't support Python 3.)
+- Python 2.7 or 3.4 (2.7 if you'd like to use Fabric)
 - Postgres ([Postgres.app](http://postgresapp.com) is a good option if you're on OS X).
 
 1. Run the following commands in psql or [PG Commander](https://eggerapps.at/pgcommander/) to set up Postgres:
