@@ -181,7 +181,6 @@ class Migration(migrations.Migration):
                 (b'primary_type', models.CharField(default=b'generic', max_length=8, choices=[(b'text', b'Article'), (b'photo', b'Photo(s)'), (b'video', b'Video(s)'), (b'liveblog', b'Liveblog'), (b'html', b'Interactive/Embedded'), (b'generic', b'Other')])),
                 (b'series', models.ManyToManyField(to=b'bongo.Series', null=True, blank=True)),
                 (b'tags', models.ManyToManyField(to=b'bongo.Tag', null=True, blank=True)),
-                (b'creators', models.ManyToManyField(to=b'bongo.Creator')),
                 ('opinion', models.BooleanField(default=False)),
             ],
             options={
@@ -321,10 +320,6 @@ class Migration(migrations.Migration):
             name='video',
             field=models.ManyToManyField(to=b'bongo.Video', null=True, blank=True),
             preserve_default=True,
-        ),
-        migrations.RemoveField(
-            model_name='post',
-            name=b'creators',
         ),
         migrations.AlterField(
             model_name='post',
