@@ -184,7 +184,7 @@ def setup():
         sudo('psql -c "CREATE DATABASE bongo;"')
 
     # fire up nginx
-    sudo(nginx)
+    sudo('nginx')
 
     print(green("Server setup successfully. Now run ") + blue("fab deploy."))
     print(red("Note: ")+"the server has NOT been secured. Do not neglect to set up a firewall,")
