@@ -1,4 +1,4 @@
-from factories import *
+from bongo.apps.bongo.tests.factories import *
 from django.test import TestCase
 from django.contrib.auth.models import User
 

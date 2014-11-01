@@ -3,7 +3,7 @@ from faker import Faker
 from bongo.apps.bongo import models
 from django.contrib.auth.models import User
 from random import choice
-from string import lowercase, digits
+from string import ascii_lowercase as lowercase, digits
 from datetime import date, timedelta, datetime
 
 fake = Faker()

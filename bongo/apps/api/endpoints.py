@@ -1,5 +1,5 @@
 from bongo.apps.bongo.models import *
-from serializers import *
+from bongo.apps.api.serializers import *
 from rest_framework import viewsets, permissions, filters
 from rest_framework.decorators import link
 from rest_framework.response import Response
