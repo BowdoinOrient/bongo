@@ -1,4 +1,4 @@
-django>=1.7,<1.8
+-e git+git://github.com/django/django.git@6d0547c1ad4c370a6efb136fb3ba8422b012643f#egg=django
 django-suit>=0.2.7
 djangorestframework==2.3.14
 django-cors-headers==0.12
