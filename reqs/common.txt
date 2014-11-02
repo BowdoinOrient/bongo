@@ -10,6 +10,6 @@ NLTK==3.0.0
 Pillow==2.4.0
 pytz
 requests==2.2.1
-boto==2.32.1
+boto==2.34.0
 django-storages==1.1.8
 -e git+git://github.com/bjacobel/topia.termextract.git#egg=topia.termextract
