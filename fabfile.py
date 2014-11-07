@@ -29,7 +29,7 @@ for key, value in envr.iteritems():
 prefix_string = prefix_string[:-4]
 
 ########## GLOBALS
-env.run = 'python manage.py'
+env.run = 'python3 manage.py'
 env.user = 'orient'
 env.hosts = ['citadel.bjacobel.com']
 ########## END GLOBALS
@@ -85,7 +85,7 @@ def start():
                 if not exists('/home/orient/bongo/logs'):
                     run('mkdir logs')
 
-                run('python manage.py supervisor --daemon')
+                run('python3 manage.py supervisor --daemon')
 
 @task
 def stop():
@@ -159,7 +159,6 @@ def setup():
             'libevent-dev',
             'postgresql postgresql-contrib',
             'rabbitmq-server',
-            'python2.7-dev',
             'nginx',
             'memcached',
             'git',
