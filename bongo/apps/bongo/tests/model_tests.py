@@ -194,6 +194,14 @@ class PostTestCase(TestCase):
         # If this fails, change the lorem ipsum in the factory to be something nonrandom
         self.assertEqual(post.similar_tags()[0], similar_post)
 
+    def test_popularity(self):
+        post1 = PostFactory.create(); post1.views_global = 1
+        post2 = PostFactory.create(); post2.views_global = 2
+        post3 = PostFactory.create(); post3.views_global = 3
+
+        self.assertGreater(post2.popularity(), post1.popularity())
+        self.assertGreater(post3.popularity(), post2.popularity())
+
 
 """
 Test user-related models:

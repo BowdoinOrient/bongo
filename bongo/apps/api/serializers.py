@@ -85,7 +85,6 @@ class PullquoteSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     content = serializers.Field(source='content')
     creators = serializers.Field(source='creators')
-    popularity = serializers.Field(source='popularity')
     section = SectionSerializer()
 
     class Meta:
@@ -108,7 +107,6 @@ class PostSerializer(serializers.ModelSerializer):
             'views_global',
             'content',
             'creators',
-            'popularity',
             'primary_type'
         )
         depth = 2

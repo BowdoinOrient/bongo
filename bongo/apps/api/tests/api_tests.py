@@ -174,18 +174,3 @@ class APITestCase(TestCase):
         js = json.loads(res.content)
         self.assertEqual(js['body'][0]['id'], issue2.pk)
         self.assertEqual(js['links']['next'], None)
-
-    def test_popularity(self):
-        post1 = PostFactory.create(); post1.views_global = 1
-        post2 = PostFactory.create(); post2.views_global = 2
-        post3 = PostFactory.create(); post3.views_global = 3
-
-        client = APIClient()
-
-        res = client.get("http://testserver/api/v1/post/popular")
-        js = json.loads(res.content)['body']
-
-        print js
-
-        self.assertGreater(js[0]['popularity'], js[1]['popularity'])
-        self.assertGreater(js[1]['popularity'], js[2]['popularity'])
