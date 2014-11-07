@@ -157,10 +157,10 @@ def setup():
         # Install system packages not included on standard Debian installs
         packages = [
             'libevent-dev',
+            'libmemcached-dev',
             'postgresql postgresql-contrib',
             'rabbitmq-server',
             'nginx',
-            'memcached',
             'git',
         ]
 
