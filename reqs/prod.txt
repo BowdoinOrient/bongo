@@ -1,6 +1,6 @@
 -r common.txt
 -e git+git://github.com/Supervisor/supervisor.git#egg=supervisor
--e git+git://github.com/BowdoinOrient/django-supervisor.git#egg=django-supervisor
+greenlet==0.4.5
 eventlet==0.15.2
 gunicorn==19.1.1
 -e git+git://github.com/lericson/pylibmc.git#egg=pylibmc

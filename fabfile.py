@@ -85,7 +85,7 @@ def start():
                 if not exists('/home/orient/bongo/logs'):
                     run('mkdir logs')
 
-                run('python3 manage.py supervisor --daemon')
+                run('supervisord')
 
 @task
 def stop():
