@@ -1,5 +1,5 @@
 django==1.7.1
-django-suit==0.2.1
+django-suit==0.2.7
 djangorestframework==2.3.14
 django-cors-headers==0.12
 psycopg2==2.5.2
@@ -11,5 +11,6 @@ Pillow==2.4.0
 pytz
 requests==2.2.1
 boto==2.34.0
+django-bower==5.0.1
 -e git+git://github.com/BowdoinOrient/django-storages-py3.git@py3#egg=django-storages-py3
 -e git+git://github.com/BowdoinOrient/topia.termextract.git#egg=topia.termextract

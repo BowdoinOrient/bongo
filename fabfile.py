@@ -2,7 +2,7 @@ from fabric.api import env, run, local, task, prefix, cd, sudo, settings
 from fabric.context_managers import shell_env
 from fabric.contrib.files import exists
 from fabric.colors import red, green, blue
-from bongo.settings.common import DJANGO_ROOT
+from bongo.settings.common import BASE_DIR
 from os.path import join, normpath
 import fabtools
 import requests
@@ -13,12 +13,12 @@ def shellquote(s):
 
 envr = {
     "DJANGO_SETTINGS_MODULE" : "bongo.settings.prod",
-    "BONGO_SECRET_KEY" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/secret_key'))).read().strip()),
-    "BONGO_POSTGRES_PASS" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/postgres_pass'))).read().strip()),
-    "AWS_ACCESS_KEY_ID" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_id'))).read().strip()),
-    "AWS_SECRET_ACCESS_KEY" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/aws_secret_key'))).read().strip()),
-    "BONGO_RAVEN_DSN" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/raven_dsn'))).read().strip()),
-    "BONGO_LOGENTRIES_TOKEN" : shellquote(open(normpath(join(DJANGO_ROOT, 'settings/secrets/logentries_token'))).read().strip()),
+    "BONGO_SECRET_KEY" : shellquote(open(normpath(join(BASE_DIR, 'settings/secrets/secret_key'))).read().strip()),
+    "BONGO_POSTGRES_PASS" : shellquote(open(normpath(join(BASE_DIR, 'settings/secrets/postgres_pass'))).read().strip()),
+    "AWS_ACCESS_KEY_ID" : shellquote(open(normpath(join(BASE_DIR, 'settings/secrets/aws_id'))).read().strip()),
+    "AWS_SECRET_ACCESS_KEY" : shellquote(open(normpath(join(BASE_DIR, 'settings/secrets/aws_secret_key'))).read().strip()),
+    "BONGO_RAVEN_DSN" : shellquote(open(normpath(join(BASE_DIR, 'settings/secrets/raven_dsn'))).read().strip()),
+    "BONGO_LOGENTRIES_TOKEN" : shellquote(open(normpath(join(BASE_DIR, 'settings/secrets/logentries_token'))).read().strip()),
 }
 
 prefix_string = ""
@@ -65,7 +65,7 @@ def deploy(branch='develop'):
     r = requests.post(
         "https://api.newrelic.com/deployments.xml",
         params=payload,
-        headers={"x-api-key": open(normpath(join(DJANGO_ROOT, 'settings/secrets/newrelic_key'))).read().strip()}
+        headers={"x-api-key": open(normpath(join(BASE_DIR, 'settings/secrets/newrelic_key'))).read().strip()}
     )
 
 ############ END DEPLOY

@@ -35,6 +35,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djangobower',
 
     # Suit has to come before contrib.admin
     'suit',
@@ -91,12 +92,13 @@ USE_TZ = True
 STATIC_URL ='/static/'
 MEDIA_URL='/media/'
 
-DJANGO_ROOT = os.path.normpath(BASE_DIR)
-
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'djangobower.finders.BowerFinder',
 )
+
+BOWER_COMPONENTS_ROOT = BASE_DIR + 'components/'
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
