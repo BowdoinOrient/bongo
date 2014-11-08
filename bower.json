@@ -2,9 +2,9 @@
   "name": "bongo",
   "version": "0.0.0",
   "dependencies": {
-    "moment": "~2.8.1"
+    "moment": "~2.8.1",
+    "zepto": "~1.1.4"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "appPath": "bongo/apps/frontend/templates"
 }

@@ -98,8 +98,6 @@ STATICFILES_FINDERS = (
     'djangobower.finders.BowerFinder',
 )
 
-BOWER_COMPONENTS_ROOT = BASE_DIR + 'components/'
-
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
     ('Brian Jacobel', 'bjacobel@bowdoin.edu'),

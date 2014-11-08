@@ -6,6 +6,7 @@ Bongo is the third version of the Bowdoin Orient Network Update System. Previous
 You'll need:
 - Python 2.7 or 3.4
 - Postgres ([Postgres.app](http://postgresapp.com) is a good option if you're on OS X).
+- NPM and Bower
 
 1. Run the following commands in psql or [PG Commander](https://eggerapps.at/pgcommander/) to set up Postgres:
 
@@ -17,6 +18,7 @@ You'll need:
         pip install -r reqs/dev.txt
         python manage.py makemigrations bongo
         python manage.py migrate
+        python manage.py bower install
         python manage.py collectstatic
         python manage.py gruntserver
 
