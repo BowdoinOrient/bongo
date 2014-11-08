@@ -40,7 +40,7 @@ class TextFactory(factory.Factory):
         model = models.Text
 
     caption = factory.Sequence(lambda n: 'This is text #{0}'.format(n))
-    body = fake.text(max_nb_chars=10000)
+    body = fake.text(max_nb_chars=3000)
     excerpt = "The excerpt isn't correct until it's saved"
 
 class VideoFactory(factory.Factory):

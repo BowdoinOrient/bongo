@@ -178,20 +178,25 @@ class PullquoteTestCase(TestCase):
 
 class PostTestCase(TestCase):
     def test_similar_tags(self):
-        post = PostFactory.create(); post.save()
-        similar_post = PostFactory.create(); post.save()
-        text = TextFactory.create(); text.save()
 
-        post.text.add(text)
-        post.save()
+        # Create post objects until both have tags (ugh)
+        while True:
+            post = PostFactory.create(); post.save()
+            similar_post = PostFactory.create(); post.save()
+            text = TextFactory.create(); text.save()
 
-        similar_post.text.add(text)
-        similar_post.save()
+            post.text.add(text)
+            post.save()
 
-        post.taggit()
-        similar_post.taggit()
+            similar_post.text.add(text)
+            similar_post.save()
 
-        # If this fails, change the lorem ipsum in the factory to be something nonrandom
+            post.taggit()
+            similar_post.taggit()
+
+            if post.tags.all().count() > 0 and similar_post.tags.all().count() > 0:
+                break
+
         self.assertEqual(post.similar_tags()[0], similar_post)
 
     def test_popularity(self):
