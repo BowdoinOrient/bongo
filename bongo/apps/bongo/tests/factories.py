@@ -3,7 +3,7 @@ from faker import Faker
 from bongo.apps.bongo import models
 from django.contrib.auth.models import User
 from random import choice
-from string import lowercase, digits
+from string import ascii_lowercase as lowercase, digits
 from datetime import date, timedelta, datetime
 
 fake = Faker()
@@ -40,7 +40,7 @@ class TextFactory(factory.Factory):
         model = models.Text
 
     caption = factory.Sequence(lambda n: 'This is text #{0}'.format(n))
-    body = fake.text(max_nb_chars=1000)
+    body = fake.text(max_nb_chars=3000)
     excerpt = "The excerpt isn't correct until it's saved"
 
 class VideoFactory(factory.Factory):

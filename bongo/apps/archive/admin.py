@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import *
+from bongo.apps.archive.models import *
 
 
 class MultiDBModelAdmin(admin.ModelAdmin):

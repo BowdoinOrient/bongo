@@ -1,5 +1,5 @@
 from fabric.api import env, run, local, task, prefix, cd, sudo, settings
-from fabric.context_managers import shell_env, prefix
+from fabric.context_managers import shell_env
 from fabric.contrib.files import exists
 from fabric.colors import red, green, blue
 from bongo.settings.common import DJANGO_ROOT
@@ -29,7 +29,7 @@ for key, value in envr.iteritems():
 prefix_string = prefix_string[:-4]
 
 ########## GLOBALS
-env.run = 'python manage.py'
+env.run = 'python3 manage.py'
 env.user = 'orient'
 env.hosts = ['citadel.bjacobel.com']
 ########## END GLOBALS
@@ -52,7 +52,7 @@ def deploy(branch='develop'):
     with cd("/home/orient"):
         fabtools.require.git.working_copy("git@github.com:bowdoinorient/bongo.git", branch=branch)
 
-        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo'):
+        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo3'):
             run('pip -q install -r bongo/reqs/prod.txt')
 
     payload = {
@@ -79,13 +79,13 @@ def start():
     """Serve the app using supervisord"""
 
     with cd("/home/orient/bongo"):
-        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo'):
+        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo3'):
             with prefix(prefix_string):
                 # check to make sure logs dir exists, make it if not
                 if not exists('/home/orient/bongo/logs'):
                     run('mkdir logs')
 
-                run('python manage.py supervisor --daemon')
+                run('supervisord')
 
 @task
 def stop():
@@ -122,7 +122,7 @@ def syncdb():
     """Run a syncdb"""
 
     with cd("/home/orient/bongo"):
-        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo'):
+        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo3'):
             with prefix(prefix_string):
                 run('%(run)s syncdb --noinput' % env)
 
@@ -136,7 +136,7 @@ def collectstatic():
     """Collect all static files, and copy them to S3 for production usage."""
 
     with cd("/home/orient/bongo"):
-        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo'):
+        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo3'):
             with prefix(prefix_string):
                 run('%(run)s fasts3collectstatic --noinput' % env)
 ########## END FILE MANAGEMENT
@@ -157,11 +157,10 @@ def setup():
         # Install system packages not included on standard Debian installs
         packages = [
             'libevent-dev',
+            'libmemcached-dev',
             'postgresql postgresql-contrib',
             'rabbitmq-server',
-            'python2.7-dev',
             'nginx',
-            'memcached',
             'git',
         ]
 
@@ -172,8 +171,8 @@ def setup():
     run('pip install virtualenv')
 
     if not exists('/home/orient/.virtualenvs/bongo'):
-        run('mkdir -p /home/orient/.virtualenvs/bongo')
-        run('virtualenv /home/orient/.virtualenvs/bongo')
+        run('mkdir -p /home/orient/.virtualenvs/bongo3')
+        run('virtualenv -p /usr/bin/python3 /home/orient/.virtualenvs/bongo3')
 
     print(red("Create a password for the postgres account."))
     sudo('passwd postgres')
@@ -184,7 +183,7 @@ def setup():
         sudo('psql -c "CREATE DATABASE bongo;"')
 
     # fire up nginx
-    sudo(nginx)
+    sudo('nginx')
 
     print(green("Server setup successfully. Now run ") + blue("fab deploy."))
     print(red("Note: ")+"the server has NOT been secured. Do not neglect to set up a firewall,")
@@ -197,6 +196,6 @@ def managepy(command):
     """run an arbitrary 'python manage.py' command"""
 
     with cd("/home/orient/bongo"):
-        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo'):
+        with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo3'):
             with prefix(prefix_string):
                 run(env.run +" "+ command)

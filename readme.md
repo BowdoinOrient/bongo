@@ -4,7 +4,7 @@ Bongo is the third version of the Bowdoin Orient Network Update System. Previous
 
 ####setup:
 You'll need:
-- Python 2.7 (Why? mostly because Fabric doesn't support Python 3.)
+- Python 2.7 or 3.4
 - Postgres ([Postgres.app](http://postgresapp.com) is a good option if you're on OS X).
 
 1. Run the following commands in psql or [PG Commander](https://eggerapps.at/pgcommander/) to set up Postgres:
@@ -27,7 +27,15 @@ You'll need:
     - `aws_secret_key`: The secret key for the AWS/S3 account bongo static files are hosted on
 
 ####deployment:
-Deployment is handled via Fabric. `fab ?` will show you all the available commands. `fab setup` should take you from a blank Ubuntu or Debian install to ready to deploy, then you can `fab deploy` and `fab start`.
+Deployment is currently handled via Fabric. Because Fabric doesn't and won't support Python 3, you must deploy from Python 2.
+
+Useful commands include:
+- `fab deploy`, which will update the git repo and virtualenv on the production server. Deploy a specific branch with `fab deploy:<branch>`.
+- `fab start/fab stop`, which run and kill the server,
+- `fab restart`, which is an alias for the above two, and
+- `fab managepy`, which lets you run an arbitrary `python manage.py` command in production. For instance, `fab managepy:migrate` will run deployed database migrations.
+
+Replacement of Fabric with Ansible is planned so that Bongo will be fully Python 3 compatible, so don't get too attached to it.
 
 ####tests:  
 You can run Bongo's test suite with `python manage.py test`. The current build status is:

@@ -1,7 +1,5 @@
 from os import environ
-from common import *
-from logentries import LogentriesHandler
-import logging
+from bongo.settings.common import *
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
@@ -28,7 +26,6 @@ SECRET_KEY = environ.get('{}_SECRET_KEY'.format(SITE_NAME.upper()), '')
 
 # See: http://django-storages.readthedocs.org/en/latest/index.html
 INSTALLED_APPS += (
-    'djsupervisor',
     'raven.contrib.django.raven_compat',
 )
 
@@ -42,7 +39,7 @@ ALLOWED_HOSTS = [
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#caches
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
         'LOCATION': '127.0.0.1:11211',
     }
 }

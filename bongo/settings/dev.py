@@ -1,4 +1,4 @@
-from common import *
+from bongo.settings.common import *
 from os.path import join, normpath
 
 DEBUG = True
