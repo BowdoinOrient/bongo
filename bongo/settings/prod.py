@@ -26,7 +26,6 @@ SECRET_KEY = environ.get('{}_SECRET_KEY'.format(SITE_NAME.upper()), '')
 
 # See: http://django-storages.readthedocs.org/en/latest/index.html
 INSTALLED_APPS += (
-    'djsupervisor',
     'raven.contrib.django.raven_compat',
 )
 
