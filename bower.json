@@ -1,0 +1,10 @@
+{
+  "name": "bongo",
+  "version": "0.0.0",
+  "dependencies": {
+    "moment": "~2.8.1"
+  },
+  "devDependencies": {
+  },
+  "appPath": "bongo/apps/frontend/templates"
+}

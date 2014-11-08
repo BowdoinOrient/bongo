@@ -16,3 +16,9 @@ bongo/media/*
 # coveralls
 .coverage
 
+/.tmp
+
+/.sass-cache
+
+*.log
+

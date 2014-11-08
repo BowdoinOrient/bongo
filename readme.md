@@ -18,7 +18,7 @@ You'll need:
         python manage.py makemigrations bongo
         python manage.py migrate
         python manage.py collectstatic
-        python manage.py runserver
+        python manage.py gruntserver
 
 3. `bongo/settings/secrets` is a directory designed for application secrets, keys, and passwords. It should contain several files, each containing the following information on a single line:
     - `postgres_pass`: a password for the `bongo` postgres role in production

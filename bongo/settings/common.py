@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'bongo.apps.bongo',
     'bongo.apps.archive',
     'bongo.apps.api',
+    'bongo.apps.frontend',
 
     # for the API
     'rest_framework',
@@ -181,6 +182,7 @@ TEMPLATE_LOADERS = (
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
 TEMPLATE_DIRS = (
     os.path.normpath(os.path.join(BASE_DIR, 'templates')),
+    os.path.normpath(os.path.join(BASE_DIR, 'apps/frontend/templates')),
 )
 
 REST_FRAMEWORK = {
