@@ -4,6 +4,7 @@ python:
 services:
   - postgresql
   - rabbitmq
+  - memcached
 install:
   - pip install -r reqs/travis.txt
 env:
