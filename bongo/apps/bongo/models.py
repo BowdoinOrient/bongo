@@ -330,7 +330,7 @@ class Post (models.Model):
                 if res.status_code == 200:
                     popularity = popularity + res.json()['count'] * 7.5
             except Exception as e:
-                print e
+                print(e)
 
             # get facebook interactions
             try:
@@ -338,7 +338,7 @@ class Post (models.Model):
                 if res.status_code == 200:
                     popularity = popularity + res.json()[0]['total_count'] * 5
             except Exception as e:
-                print e
+                print(e)
 
             cache.set(cache_key, popularity, 7200)
 
