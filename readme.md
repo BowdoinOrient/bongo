@@ -6,7 +6,6 @@ Bongo is the third version of the Bowdoin Orient Network Update System. Previous
 You'll need:
 - Python 2.7 or 3.4
 - Postgres ([Postgres.app](http://postgresapp.com) is a good option if you're on OS X).
-- NPM and Bower
 
 1. Run the following commands in psql or [PG Commander](https://eggerapps.at/pgcommander/) to set up Postgres:
 
@@ -16,17 +15,18 @@ You'll need:
 2. Then you'll need to run:
 
         pip install -r reqs/dev.txt
-        python manage.py makemigrations bongo
         python manage.py migrate
-        python manage.py bower install
         python manage.py collectstatic
-        python manage.py gruntserver
+        python manage.py runserver
 
 3. `bongo/settings/secrets` is a directory designed for application secrets, keys, and passwords. It should contain several files, each containing the following information on a single line:
     - `postgres_pass`: a password for the `bongo` postgres role in production
     - `secret_key`: the [Django secret key](https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-SECRET_KEY) for the production installation
     - `aws_id`: The ID key for the AWS/S3 account bongo static files are hosted on
     - `aws_secret_key`: The secret key for the AWS/S3 account bongo static files are hosted on
+    - `logentries_token`: token for [Logentries](http://logentries.com)
+    - `newrelic_key`: token for [New Relic](http://newrelic.com)
+    - `raven_dsn`: authenticated URL for [Sentry](http://getsentry.com)
 
 ####deployment:
 Deployment is currently handled via Fabric. Because Fabric doesn't and won't support Python 3, you must deploy from Python 2.
