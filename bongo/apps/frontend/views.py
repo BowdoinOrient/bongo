@@ -2,31 +2,32 @@ from django.shortcuts import render
 from bongo.apps.bongo import models
 
 def HomeView(request):
-    pass
+    ctx = {}
+    return render(request, 'pages/home.html', ctx)
 
 def ArticleView(request):
-    pass
+    ctx = {}
+    return render(request, 'pages/article.html', ctx)
 
 def AuthorView(request):
-    pass
+    ctx = {}
+    return render(request, 'pages/author.html', ctx)
 
 def SeriesView(request):
-    pass
+    ctx = {}
+    return render(request, 'pages/series.html', ctx)
 
 def AboutView(request):
-    pass
+    return render(request, 'pages/static/about.html')
 
 def EthicsView(request):
-    pass
+    return render(request, 'pages/static/ethics.html')
 
 def SubscribeView(request):
-    pass
+    return render(request, 'pages/static/subscribe.html')
 
 def AdvertiseView(request):
-    pass
+    return render(request, 'pages/static/advertise.html')
 
 def ContactView(request):
-    pass
-
-def TipView(request):
-    pass
+    return render(request, 'pages/static/contact.html')
