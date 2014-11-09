@@ -198,3 +198,8 @@ CORS_ORIGIN_WHITELIST = (
     'bjacobel.com',
     'bowdoinorient.com',
 )
+
+BOWER_INSTALLED_APPS = (
+    "moment#2.8.1",
+    "zepto#1.1.4",
+)
