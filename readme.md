@@ -5,7 +5,9 @@ Bongo is the third version of the Bowdoin Orient Network Update System. Previous
 ####setup:
 You'll need:
 - Python 2.7 or 3.4
+- NodeJS >= 0.10
 - Postgres ([Postgres.app](http://postgresapp.com) is a good option if you're on OS X).
+
 
 1. Run the following commands in psql or [PG Commander](https://eggerapps.at/pgcommander/) to set up Postgres:
 

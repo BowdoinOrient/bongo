@@ -70,3 +70,19 @@ RAVEN_CONFIG = {
 }
 
 ### END RAVEN #####
+
+### DJANGO-COMPRESSOR SETTINGS ###
+
+COMPRESS_CSS_FILTERS += (
+    "compressor.filters.yuglify.YUglifyCSSFilter",
+)
+
+COMPRESS_JS_FILTERS += (
+    "compressor.filters.yuglify.YUglifyJSFilter",
+)
+
+COMPRESS_YUGLIFY_BINARY = SITE_ROOT + "node_modules/yuglify/bin/yuglify"
+
+COMPRESS_STORAGE = STATICFILES_STORAGE
+
+### END DJANGO-COMPRESSOR ###

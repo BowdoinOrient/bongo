@@ -50,6 +50,9 @@ INSTALLED_APPS = (
     'bongo.apps.api',
     'bongo.apps.frontend',
 
+    # for the frontend
+    'compressor',
+
     # for the API
     'rest_framework',
     'corsheaders',
@@ -96,6 +99,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'djangobower.finders.BowerFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
@@ -203,3 +207,10 @@ BOWER_INSTALLED_APPS = (
     "moment#2.8.1",
     "zepto#1.1.4",
 )
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-sass', 'node_modules/node-sass/bin/node-sass {infile} {outfile}'),
+    ('text/x-scss', 'node_modules/node-sass/bin/node-sass --scss {infile} {outfile}'),
+)
+
+COMPRESS_OFFLINE = True
