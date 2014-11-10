@@ -105,6 +105,10 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
+STATICFILES_DIRS = (
+    os.path.normpath(os.path.join(BASE_DIR, 'apps/frontend/assets')),
+)
+
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
     ('Brian Jacobel', 'bjacobel@bowdoin.edu'),
@@ -223,6 +227,8 @@ BOWER_INSTALLED_APPS = (
 )
 
 BOWER_PATH = os.path.join(SITE_ROOT, 'node_modules/bower/bin/bower')
+
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'static/bower_components')
 
 ### end django-bower ###
 

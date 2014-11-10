@@ -1,4 +1,6 @@
-<ng-include src="'views/components/deck.html'"></ng-include>
+{% extends "base.html" %}
+
+{% include 'components/deck.html' %}
 
 <div class="top-reads">
     <div class="top-article" ng-repeat="article in popular track by $index" ng-click="goto('/article/'+article.id)">
@@ -22,3 +24,6 @@
         <scribd-widget></scribd-widget>
     </div>
 </div>
+
+{% block extrajs %}
+{% endblock %}
