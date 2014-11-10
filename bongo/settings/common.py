@@ -208,9 +208,11 @@ BOWER_INSTALLED_APPS = (
     "zepto#1.1.4",
 )
 
+BOWER_PATH = os.path.join(SITE_ROOT, 'node_modules/bower/bin/bower')
+
 COMPRESS_PRECOMPILERS = (
-    ('text/x-sass', 'node_modules/node-sass/bin/node-sass {infile} {outfile}'),
-    ('text/x-scss', 'node_modules/node-sass/bin/node-sass --scss {infile} {outfile}'),
+    ('text/x-sass', os.path.join(SITE_ROOT, 'node_modules/node-sass/bin/node-sass {infile} {outfile}')),
+    ('text/x-scss', os.path.join(SITE_ROOT, 'node_modules/node-sass/bin/node-sass --scss {infile} {outfile}')),
 )
 
 COMPRESS_OFFLINE = True

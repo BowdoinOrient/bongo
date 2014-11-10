@@ -8,5 +8,9 @@ urlpatterns = patterns('',
     url(r'series/', views.SeriesView, name="series"),
 
     # Static views
-    
+    url(r'about/', views.AboutView, name="about"),
+    url(r'contact/', views.ContactView, name="contact"),
+    url(r'subscribe/', views.SubscribeView, name="subscribe"),
+    url(r'ethics/', views.EthicsView, name="ethics"),
+    url(r'advertise/', views.AdvertiseView, name="advertise"),
 )
