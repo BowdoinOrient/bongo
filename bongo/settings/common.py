@@ -95,6 +95,9 @@ USE_TZ = True
 STATIC_URL ='/static/'
 MEDIA_URL='/media/'
 
+STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'static'))
+MEDIA_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'media'))
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -189,6 +192,9 @@ TEMPLATE_DIRS = (
     os.path.normpath(os.path.join(BASE_DIR, 'apps/frontend/templates')),
 )
 
+
+### django-rest-framework ###
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_SERIALIZER_CLASS': 'bongo.apps.api.pagination.CustomPaginationSerializer',
     'PAGINATE_BY': 20,                 # Default to 20
@@ -197,11 +203,19 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
+### end drf ###
+
+### django-cors-headers ###
+
 CORS_ORIGIN_WHITELIST = (
     'localhost:9000',
     'bjacobel.com',
     'bowdoinorient.com',
 )
+
+### end django-cors-headers ###
+
+### django-bower ###
 
 BOWER_INSTALLED_APPS = (
     "moment#2.8.1",
@@ -210,9 +224,15 @@ BOWER_INSTALLED_APPS = (
 
 BOWER_PATH = os.path.join(SITE_ROOT, 'node_modules/bower/bin/bower')
 
+### end django-bower ###
+
+### django-compressor ###
+
 COMPRESS_PRECOMPILERS = (
     ('text/x-sass', os.path.join(SITE_ROOT, 'node_modules/node-sass/bin/node-sass {infile} {outfile}')),
     ('text/x-scss', os.path.join(SITE_ROOT, 'node_modules/node-sass/bin/node-sass --scss {infile} {outfile}')),
 )
 
 COMPRESS_OFFLINE = True
+
+### end django-compressor ###
