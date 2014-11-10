@@ -13,5 +13,5 @@ pytz
 requests==2.2.1
 boto==2.34.0
 django-bower==5.0.1
--e git+git://github.com/BowdoinOrient/django-storages-py3.git@py3#egg=django-storages-py3
--e git+git://github.com/BowdoinOrient/topia.termextract.git#egg=topia.termextract
+-e git+git://github.com/BowdoinOrient/django-storages-py3.git@83f18f5ccf39b5be230c6fc24d3b0b35c98277db@py3#egg=django-storages-py3
+-e git+git://github.com/BowdoinOrient/topia.termextract.git@2effd5f7274fb962292503d6d16938e68497059e#egg=topia.termextract
