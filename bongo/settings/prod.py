@@ -59,7 +59,7 @@ S3_URL = 'http://s3.amazonaws.com/{}'.format(AWS_STORAGE_BUCKET_NAME)
 STATIC_URL = S3_URL + "/static/"
 MEDIA_URL = S3_URL + "/media/"
 
-BOWER_COMPONENTS_ROOT = STATIC_URL + '/bower_components/'
+BOWER_COMPONENTS_ROOT = "/static/bower_components/"
 
 ########## END AMAZON
 
