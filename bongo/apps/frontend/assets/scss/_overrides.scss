@@ -1,0 +1,45 @@
+/* Things that CSS should do/not do by default
+**************************************/
+
+%bsbb {
+    @include vendor-prefix("box-sizing", "border-box");
+}
+
+* {
+    @extend %bsbb;
+}
+
+%lists {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+ul, ol {
+    @extend %lists;
+}
+
+%noselect {
+    @include vendor-prefix("user-select", "none");
+}
+
+%hand {
+    cursor:pointer;
+}
+
+a {
+    text-decoration:none;
+}
+
+body {
+    padding:0;
+    margin:0;
+}
+
+%valign {
+    position: relative;
+    top: 50%;
+    @include vendor-prefix("transform", "translateY(-50%)");
+}
+
+$maxz: 2147483647;

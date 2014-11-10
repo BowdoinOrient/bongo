@@ -1,0 +1,82 @@
+.basement-menu {
+    position:fixed;
+    display:block;
+    height:100vh;
+    width:150px;
+    right:-150px;
+    top:55px;
+    display:block;
+    background-color: rgba($darkgray,0.85);
+    border-left:1px solid $lightgray;
+    @include vendor-prefix("box-shadow", "inset 10px 0px 20px -5px rgba(50, 50, 50, .85)");
+    @include vendor-prefix("transition", "transform .3s ease");
+    @include vendor-prefix("backface-visibility", "hidden");   // required to hack around weird webkit bug
+
+
+    .sections {
+        width:100%;
+
+        span {
+            width:100%;
+            height:80px;
+            display:block;
+
+            font-family: "MyriadPro";
+            font-style: bold;
+            font-weight: 700;
+            font-size:1.2em;
+            color:white;
+
+            padding:10px;
+
+            text-transform: uppercase;
+
+            border-bottom: 1px solid $lightgray;
+
+            @extend %noselect;
+            @extend %hand;
+
+            &.news {
+                background-color: rgba($news, 0.4);
+                &:hover {
+                    background-color: rgba($news, 0.8);
+                }
+            }
+            &.features {
+                background-color: rgba($features, 0.45);
+                &:hover {
+                    background-color: rgba($features, 0.65);
+                }
+            }
+            &.artsent {
+                background-color: rgba($artsent, 0.45);
+                &:hover {
+                    background-color: rgba($artsent, 0.65);
+                }
+            }
+            &.sports {
+                background-color: rgba($sports, 0.45);
+                &:hover {
+                    background-color: rgba($sports, 0.65);
+                }
+            }
+            &.opinion {
+                background-color: rgba($opinion, 0.45);
+                &:hover {
+                    background-color: rgba($opinion, 0.65);
+                }
+            }
+        }
+    }
+
+    &.active {
+        @include vendor-prefix("transform", "translateX(-150px)");
+    }
+}
+
+.main-content {
+    @include vendor-prefix("transition", "transform .3s ease");
+    &.shift-menu {
+        @include vendor-prefix("transform", "translateX(-150px)");
+    }
+}

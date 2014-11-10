@@ -1,0 +1,44 @@
+@mixin vendor-prefix($name, $argument) {
+    -webkit-#{$name}: #{$argument};
+        -ms-#{$name}: #{$argument};
+       -moz-#{$name}: #{$argument};
+         -o-#{$name}: #{$argument};
+            #{$name}: #{$argument};
+}
+
+@mixin double-prefix($first, $second, $params) {
+    -webkit-#{$first}: -webkit-#{$second} #{$params};
+        -ms-#{$first}:     -ms-#{$second} #{$params};
+       -moz-#{$first}:    -moz-#{$second} #{$params};
+         -o-#{$first}:      -o-#{$second} #{$params};
+            #{$first}:         #{$second} #{$params};    
+}
+
+@mixin arrow($direction, $size, $color) {
+    $transparent: $size solid transparent;
+    $sizeborder: $size solid $color;
+    display: block;
+    height: 0;
+    width: 0;
+
+    @if $direction == "top" {
+        border-left: $transparent;
+        border-right: $transparent;
+        border-bottom: $sizeborder;
+    }
+    @else if $direction == "right" {
+        border-top: $transparent;
+        border-bottom: $transparent;
+        border-left: $sizeborder;
+    }
+    @else if $direction == "bottom" {
+        border-top: $sizeborder;
+        border-right: $transparent;
+        border-left: $transparent;
+    }
+    @else if $direction == "left" {
+        border-top: $transparent;
+        border-right: $sizeborder;
+        border-bottom: $transparent;
+    }
+}

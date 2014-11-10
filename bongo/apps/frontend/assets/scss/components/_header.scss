@@ -1,0 +1,110 @@
+header {
+    border-bottom: 2px solid $lightgray;
+    top:0;
+
+    .logo-wrap {
+        max-width: 475px;
+        margin: 0 auto;
+        padding-top:10px;
+        cursor:pointer;
+
+        h1 {
+            display:none;
+        }
+
+        .logo {
+            width: 100%;
+            @extend %noselect;
+        }
+    }
+
+    nav {
+        display:block;
+        width:100%;
+
+        .sections {
+            height:60px;
+            max-width:645px;
+            margin:0 auto;
+            position:relative;
+
+            span {
+                height:45px;
+                padding-top:5px;
+                margin-top:15px;
+                float:left;
+                display:inline-block;
+
+                font-family: "MyriadPro";
+                font-style: bold;
+                font-weight: 700;
+                font-size:1.53em;
+
+                text-transform: uppercase;
+
+                background-color:transparent;
+                @include vendor-prefix("transition", "background-color .2s ease");
+
+                @extend %noselect;
+                @extend %hand;
+
+                &.news {border-top: 4px solid $news}
+                &.features {border-top: 4px solid $features}
+                &.artsent {border-top: 4px solid $artsent}
+                &.sports {border-top: 4px solid $sports}
+                &.opinion {border-top: 4px solid $opinion}
+
+                &:not(:last-child) {
+                    margin-right:15px;
+                }
+
+                &:hover {
+                    &.news {background-color: rgba($news, 0.05)}
+                    &.features {background-color: rgba($features, 0.05)}
+                    &.artsent {background-color: rgba($artsent, 0.05)}
+                    &.sports {background-color: rgba($sports, 0.05)}
+                    &.opinion {background-color: rgba($opinion, 0.05)}
+                }
+            }
+        }
+
+        .mobile-burger {
+            display:none;
+        }
+    }
+}
+
+@media (max-width:645px) {
+    @import 'header-mini';
+}
+
+.header-wrapper.minByScroll, .header-wrapper.minByWidth {
+    @import 'header-mini';
+
+    &:before {
+        position:static;
+        display:block;
+        height:56px;
+        content:"\00A0";
+    }
+}
+
+.header-wrapper.minByScroll:not(.minByWidth){
+    header {
+        @include vendor-prefix("transform", "translateY(-55px)");
+        @include vendor-prefix("transition", "transform .15s ease");
+
+        &.fall-in{
+            @include vendor-prefix("transform", "translateY(0px)");
+        }
+    }
+
+    &:before {
+        position:static;
+        display:block;
+        height:132px;
+        content:"\00A0";
+    }
+}
+
+
