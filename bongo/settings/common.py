@@ -235,8 +235,7 @@ BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'static/bower_components')
 ### django-compressor ###
 
 COMPRESS_PRECOMPILERS = (
-    ('text/x-sass', os.path.join(SITE_ROOT, 'node_modules/node-sass/bin/node-sass {infile} {outfile}')),
-    ('text/x-scss', os.path.join(SITE_ROOT, 'node_modules/node-sass/bin/node-sass --scss {infile} {outfile}')),
+    ('text/x-scss', os.path.join(SITE_ROOT, 'node_modules/node-sass/bin/node-sass --scss --stdout {infile}')),
 )
 
 COMPRESS_OFFLINE = True
