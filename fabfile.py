@@ -55,19 +55,6 @@ def deploy(branch='develop'):
         with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo3'):
             run('pip -q install -r bongo/reqs/prod.txt')
 
-    payload = {
-        "deployment[application_id]": 3917299,
-        "deployment[revision]": local("git rev-parse HEAD", capture=True),
-        "deployment[description]": local("git log --pretty=format:'%s' -n 1", capture=True),
-        "deployment[user]": local("whoami", capture=True)+"@"+local("hostname", capture=True),
-    }
-
-    r = requests.post(
-        "https://api.newrelic.com/deployments.xml",
-        params=payload,
-        headers={"x-api-key": open(normpath(join(BASE_DIR, 'settings/secrets/newrelic_key'))).read().strip()}
-    )
-
 ############ END DEPLOY
 
 
