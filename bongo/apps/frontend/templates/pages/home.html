@@ -1,29 +1,54 @@
 {% extends "base.html" %}
 
-{% include 'components/deck.html' %}
+{% block content %}
 
-<div class="top-reads">
-    <div class="top-article" ng-repeat="article in popular track by $index" ng-click="goto('/article/'+article.id)">
-        <div class="top-badge {{article.section.classname}}">
-            <span class="index">{{$index + 1}}</span>
+    <div class="deck">
+        <div class="story lead"></div>
+        <div class="story second" id="n1"></div>
+        <div class="story second" id="n2"></div>
+        <div class="story thumb" id="n1"></div>
+        <div class="story anchor"></div>
+        <div class="story thumb" id="n2"></div>
+    </div>
+
+    <div class="top-reads">
+        <div class="top-article" ng-repeat="article in popular track by $index" ng-click="goto('/article/'+article.id)">
+            <div class="top-badge {{article.section.classname}}">
+                {% for article in toplist %}
+                    <span class="index">{{forloop.counter}}</span>
+                {% endfor %}
+            </div>
+            <h3 class="top-title">{{article.title}}</h3>
         </div>
-        <h3 class="top-title">{{article.title}}</h3>
     </div>
-</div>
 
-<div class="homepage-content">
-    <div class="left-col">
-        <section ng-repeat="section in sections">
-            <h2>{{section.section}}</h2>
-            <!-- <h3>{{section.posts}}</h3> -->
-        </section>
+    <div class="homepage-content">
+        <div class="left-col">
+            <section ng-repeat="section in sections">
+                <h2>{{section.section}}</h2>
+                <h3>{{section.posts}}</h3>
+            </section>
+        </div>
+        <div class="right-col">
+            {# twitter #}
+            <div><a class="twitter-timeline" href="https://twitter.com/bowdoinorient" data-widget-id="265860324312354816">Tweets by @bowdoinorient</a></div>
+
+            {# disqus #}
+            <a href="http://scribd.com/doc/{{thisIssue.scribd}}" data-issue="{{ thisIssue.scribd  }}"><img src="{{scribdImage}}"/></a>
+
+            {# scribd #}
+            <div class="dsq-widget">
+                <p class="dsq-widget-title">Recent Comments</p>
+                <div class="comment" ng-repeat="comment in disqusComments track by $index">
+                    <p class="name-date">{{comment.author.name}} — {{comment.createdAt}}</p>
+                    <p>{{comment.raw_message | truncatechars:200}}</p>
+                    <p class="articleLink" ng-click="goto(linkclean(comment.thread_data.link))">{{comment.thread_data.title}}</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="right-col">
-        <twitter-widget></twitter-widget>
-        <disqus-widget></disqus-widget>
-        <scribd-widget></scribd-widget>
-    </div>
-</div>
+
+{% endblock %}
 
 {% block extrajs %}
 {% endblock %}

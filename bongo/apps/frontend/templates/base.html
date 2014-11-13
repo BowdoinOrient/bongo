@@ -16,20 +16,43 @@
         {% endcompress %}
     </head>
     <body>
-        <div>
-            <div class="header-wrapper" scrollmin ng-class="{minByScroll : minByScroll, minByWidth : minByWidth}">
-                <header ng-include="'views/components/header.html'" ng-class="{'fall-in' : fallIn}"></header>
+        <div class="header-wrapper">
+            <header>
+                <div class="logo-wrap">
+                    <h1>The Bowdoin Orient</h1>
+                    <img class="logo" alt="The Bowdoin Orient" src="{% static 'img/orient.min.svg' %}" ng-click="goto('/')">
+                </div>
+                <nav>
+                    <div class="sections">
+                        <span class="news">News</span>
+                        <span class="features">Features</span>
+                        <span class="artsent">Arts and Entertainment</span>
+                        <span class="sports">Sports</span>
+                        <span class="opinion">Opinion</span>
+                    </div>
+                    <div class="mobile-burger" ng-click="toggleMenu()">
+                        <span class="burger-lines" ng-class="{active : showMenu}"></span>
+                    </div>
+                </nav>
+            </header>
+        </div>
+
+        <div class="basement-menu">
+            <div class="sections">
+                <span class="news">News</span>
+                <span class="features">Features</span>
+                <span class="artsent">Arts and Entertainment</span>
+                <span class="sports">Sports</span>
+                <span class="opinion">Opinion</span>
             </div>
+        </div>
 
-            <div class="basement-menu" ng-include="'views/components/basement-menu.html'" ng-class="{active: showMenu && (minByScroll || minByWidth)}"></div>
+        <!--[if lte IE 9]>
+            <p class="browsehappy">Your browser is out of date and no longer supported. Please <strong><a href="http://browsehappy.com/">upgrade your browser</a></strong> to use bowdoinorient.com.</p>
+        <![endif]-->
 
-            <!--[if lte IE 9]>
-                <p class="browsehappy">Your browser is out of date and no longer supported. Please <strong><a href="http://browsehappy.com/">upgrade your browser</a></strong> to use bowdoinorient.com.</p>
-            <![endif]-->
-
-            <div ng-view class="main-content" ng-class="{'shift-menu': showMenu && (minByScroll || minByWidth)}">
-                {% block content %}{% endblock %}
-            </div>
+        <div ng-view class="main-content" ng-class="{'shift-menu': showMenu && (minByScroll || minByWidth)}">
+            {% block content %}{% endblock %}
         </div>
 
         {% compress js %}
