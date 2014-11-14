@@ -5,7 +5,6 @@ from fabric.colors import red, green, blue
 from bongo.settings.common import BASE_DIR
 from os.path import join, normpath
 import fabtools
-import requests
 import time
 
 def shellquote(s):
@@ -57,8 +56,8 @@ def deploy(branch=None):
 
         with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo3'):
             run('pip -q install -r bongo/reqs/prod.txt')
-            run('%(run)s collectstatic --noinput' & env)
-            run('%(run)s compress' & env)
+            run('%(run)s collectstatic --noinput' % env)
+            run('%(run)s compress' % env)
 
 ############ END DEPLOY
 
