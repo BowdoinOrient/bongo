@@ -55,9 +55,10 @@ def deploy(branch=None):
         fabtools.require.git.working_copy("git@github.com:bowdoinorient/bongo.git", branch=branch)
 
         with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo3'):
-            run('pip -q install -r bongo/reqs/prod.txt')
-            run('%(run)s collectstatic --noinput' % env)
-            run('%(run)s compress' % env)
+            with cd("/home/orient/bongo"):
+                run('pip -q install -r reqs/prod.txt')
+                run('%(run)s collectstatic --noinput' % env)
+                run('%(run)s compress' % env)
 
 ############ END DEPLOY
 

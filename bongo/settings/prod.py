@@ -27,7 +27,6 @@ SECRET_KEY = environ.get('{}_SECRET_KEY'.format(SITE_NAME.upper()), '')
 # See: http://django-storages.readthedocs.org/en/latest/index.html
 INSTALLED_APPS += (
     'raven.contrib.django.raven_compat',
-    'collectfast',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
@@ -42,14 +41,8 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
         'LOCATION': '127.0.0.1:11211',
-    },
-    'collectfast': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
-        'LOCATION': '127.0.0.1:11211',
     }
 }
-
-COLLECTFAST_CACHE = 'collectfast'
 ########## END CACHE CONFIGURATION
 
 
