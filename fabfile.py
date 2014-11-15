@@ -57,8 +57,10 @@ def deploy(branch=None):
         with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo3'):
             with cd("/home/orient/bongo"):
                 run('pip -q install -r reqs/prod.txt')
-                run('%(run)s collectstatic --noinput' % env)
-                run('%(run)s compress' % env)
+
+                with prefix(prefix_string):
+                    run('%(run)s collectstatic --noinput' % env)
+                    run('%(run)s compress' % env)
 
 ############ END DEPLOY
 
