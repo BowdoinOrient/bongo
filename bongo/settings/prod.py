@@ -73,14 +73,12 @@ RAVEN_CONFIG = {
 ### DJANGO-COMPRESSOR SETTINGS ###
 
 COMPRESS_CSS_FILTERS = (
-    "compressor.filters.yuglify.YUglifyCSSFilter",
+    "compressor.filters.cssmin.CSSMinFilter",
 )
 
 COMPRESS_JS_FILTERS = (
-    "compressor.filters.yuglify.YUglifyJSFilter",
+    "compressor.filters.jsmin.JSMinFilter",  # this is actually the default but :shrug:
 )
-
-COMPRESS_YUGLIFY_BINARY = os.path.join(SITE_ROOT, 'node_modules/yuglify/bin/yuglify')
 
 COMPRESS_STORAGE = STATICFILES_STORAGE
 
