@@ -59,7 +59,7 @@ def deploy(branch=None):
                 run('pip -q install -r reqs/prod.txt')
 
                 with prefix(prefix_string):
-                    run('%(run)s collectstatic --noinput' % env)
+                    run('%(run)s s3collectstatic --noinput' % env)
                     run('%(run)s compress' % env)
 
 ############ END DEPLOY
