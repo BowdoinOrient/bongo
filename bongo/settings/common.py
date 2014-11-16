@@ -109,6 +109,8 @@ STATICFILES_DIRS = (
     os.path.normpath(os.path.join(BASE_DIR, 'apps/frontend/assets')),
 )
 
+print STATICFILES_DIRS
+
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
     ('Brian Jacobel', 'bjacobel@bowdoin.edu'),
@@ -238,6 +240,6 @@ COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
 
-COMPRESS_OFFLINE = True
+COMPRESS_OFFLINE = False
 
 ### end django-compressor ###
