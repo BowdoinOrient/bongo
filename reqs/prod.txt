@@ -1,7 +1,8 @@
 -r common.txt
-git+git://github.com/Supervisor/supervisor.git@64d32dfe321edae7b059aaec7889f146d4fc4c51#egg=supervisor
 gunicorn==19.1.1
-git+git://github.com/lericson/pylibmc.git@c6da0ed9c744eb40c0878f1215a22f59ce35dc54#egg=pylibmc
 raven==5.0.0
 logentries==0.2.1
 newrelic==2.36.0.30
+git+git://github.com/Supervisor/supervisor.git@64d32dfe321edae7b059aaec7889f146d4fc4c51#egg=supervisor
+git+git://github.com/lericson/pylibmc.git@c6da0ed9c744eb40c0878f1215a22f59ce35dc54#egg=pylibmc
+git+git://github.com/BowdoinOrient/libsass-python.git@2359c199998830f8319f6bf930fb377b65c65b32#egg=libsass
