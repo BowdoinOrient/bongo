@@ -188,6 +188,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
+    'django.template.loaders.app_directories.load_template_source',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
