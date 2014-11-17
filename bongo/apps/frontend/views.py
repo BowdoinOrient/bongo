@@ -1,8 +1,32 @@
 from django.shortcuts import render
 from bongo.apps.bongo import models
+from random import choice
 
 def HomeView(request):
-    ctx = {}
+
+    recent = models.Post.objects.order_by("-published")[:100]
+
+    sections = models.Section.objects.all()
+
+    section_ids = {
+        "news": 1,
+        "opinion": 2,
+        "features": 3,
+        "artsent": 4,
+        "sports": 5
+    }
+
+    ctx = {
+        "news": choice(models.Post.objects.filter(section__exact=section_ids['news'])),
+        "features": choice(models.Post.objects.filter(section__exact=section_ids['features'])),
+        "artsent": choice(models.Post.objects.filter(section__exact=section_ids['artsent'])),
+        "sports": choice(models.Post.objects.filter(section__exact=section_ids['sports'])),
+        "op1": choice(models.Post.objects.filter(section__exact=section_ids['opinion'])),
+        "op2": choice(models.Post.objects.filter(section__exact=section_ids['opinion'])),
+        "toplist": sorted(recent, key=lambda x: -1 * x.popularity())[:10],
+        "sections": sections
+    }
+
     return render(request, 'pages/home.html', ctx)
 
 def ArticleView(request):

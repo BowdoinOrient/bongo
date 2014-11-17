@@ -320,25 +320,26 @@ class Post (models.Model):
         if cached:
             return cached
         else:
-            popularity = self.views_global - ((make_aware(datetime.now(), get_current_timezone()) - make_aware(self.published, get_current_timezone())).total_seconds() / 10**4.5)
+            current_withtz = make_aware(datetime.now(), get_current_timezone())
+            popularity = self.views_global - ((current_withtz - self.published).total_seconds() / 10**4.5)
 
-            url = "http://bowdoinorient.com/article/{}".format(self.pk)
+            # url = "http://bowdoinorient.com/article/{}".format(self.pk)
 
-            # get twitter shares
-            try:
-                res = requests.get("http://urls.api.twitter.com/1/urls/count.json", params={"url":url})
-                if res.status_code == 200:
-                    popularity = popularity + res.json()['count'] * 7.5
-            except Exception as e:
-                print(e)
+            # # get twitter shares
+            # try:
+            #     res = requests.get("http://urls.api.twitter.com/1/urls/count.json", params={"url":url})
+            #     if res.status_code == 200:
+            #         popularity = popularity + res.json()['count'] * 7.5
+            # except Exception as e:
+            #     print(e)
 
-            # get facebook interactions
-            try:
-                res = requests.post("https://api.facebook.com/restserver.php", data=json.dumps({"method":"links.getStats", "format":"json", "urls":url}), headers={"content-type":"application/json"})
-                if res.status_code == 200:
-                    popularity = popularity + res.json()[0]['total_count'] * 5
-            except Exception as e:
-                print(e)
+            # # get facebook interactions
+            # try:
+            #     res = requests.post("https://api.facebook.com/restserver.php", data=json.dumps({"method":"links.getStats", "format":"json", "urls":url}), headers={"content-type":"application/json"})
+            #     if res.status_code == 200:
+            #         popularity = popularity + res.json()[0]['total_count'] * 5
+            # except Exception as e:
+            #     print(e)
 
             cache.set(cache_key, popularity, 7200)
 
