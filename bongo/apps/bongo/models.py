@@ -321,7 +321,8 @@ class Post (models.Model):
             return cached
         else:
             current_withtz = make_aware(datetime.now(), get_current_timezone())
-            popularity = self.views_global - ((current_withtz - self.published).total_seconds() / 10**4.5)
+            published_withtz = make_aware(self.published, get_current_timezone())
+            popularity = self.views_global - ((current_withtz - published_withtz).total_seconds() / 10**4.5)
 
             # url = "http://bowdoinorient.com/article/{}".format(self.pk)
 
