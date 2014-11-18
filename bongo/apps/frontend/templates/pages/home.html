@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -53,4 +54,5 @@
 {% endblock %}
 
 {% block extrajs %}
+    <script type="text/javascript" src="{% static 'js/twitter.js' %}" async></script>
 {% endblock %}
