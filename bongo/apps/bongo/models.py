@@ -9,8 +9,8 @@ from itertools import chain
 from bongo.apps.bongo.helpers import tagify
 import operator
 import nltk.data
-import requests
-import json
+# import requests
+# import json
 
 
 """ Series and Issues are helpful for grouping and archiving
@@ -321,7 +321,7 @@ class Post (models.Model):
             return cached
         else:
             current_withtz = make_aware(datetime.now(), get_current_timezone())
-            published_withtz = make_aware(self.published, get_current_timezone())
+            published_withtz = self.published
             popularity = self.views_global - ((current_withtz - published_withtz).total_seconds() / 10**4.5)
 
             # url = "http://bowdoinorient.com/article/{}".format(self.pk)
