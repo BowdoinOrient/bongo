@@ -20,7 +20,7 @@
             <header>
                 <div class="logo-wrap">
                     <h1>The Bowdoin Orient</h1>
-                    <img class="logo" alt="The Bowdoin Orient" src="{% static 'img/orient.min.svg' %}" ng-click="goto('/')">
+                    <a href="/"><img class="logo" alt="The Bowdoin Orient" src="{% static 'img/orient.min.svg' %}"></a>
                 </div>
                 <nav>
                     <div class="sections">
@@ -62,8 +62,7 @@
 
             <script type="text/javascript" src="{% static 'moment/moment.js' %}"></script>
             <script type="text/javascript" src="{% static 'zepto/zepto.js' %}"></script>
-            <script type="text/javascript" src="{% static 'js/watch.js' %}"></script>
-            {# <script type="text/javascript" src="/static/js/orient.js"> #}
+            <script type="text/javascript" src="{% static 'js/nav.js' %}"></script>
             {% block extrajs %}
             {% endblock %}
         {% endcompress %}

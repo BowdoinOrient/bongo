@@ -6,7 +6,6 @@ header {
         max-width: 475px;
         margin: 0 auto;
         padding-top:10px;
-        cursor:pointer;
 
         h1 {
             display:none;
@@ -46,7 +45,6 @@ header {
                 @include vendor-prefix("transition", "background-color .2s ease");
 
                 @extend %noselect;
-                @extend %hand;
 
                 &.news {border-top: 4px solid $news}
                 &.features {border-top: 4px solid $features}
@@ -78,7 +76,7 @@ header {
     @import 'header-mini';
 }
 
-.header-wrapper.minByScroll, .header-wrapper.minByWidth {
+.header-wrapper.min-by-scroll, .header-wrapper.min-by-width {
     @import 'header-mini';
 
     &:before {
@@ -89,12 +87,12 @@ header {
     }
 }
 
-.header-wrapper.minByScroll:not(.minByWidth){
+.header-wrapper.min-by-scroll:not(.min-by-width){
     header {
-        @include vendor-prefix("transform", "translateY(-55px)");
+        @include vendor-prefix("transform", "translateY(-56px)");
         @include vendor-prefix("transition", "transform .15s ease");
 
-        &.fall-in{
+        &.fall-in {
             @include vendor-prefix("transform", "translateY(0px)");
         }
     }

@@ -11,11 +11,16 @@ header {
         display:inline-block;
         padding:0;
 
-        .logo {
+        a {
             height:inherit;
-            padding:10px 0 10px 0;
             width:auto;
-            margin-left:10px;
+
+            .logo {
+                height:inherit;
+                padding:10px 0 10px 0;
+                width:auto;
+                margin-left:10px;
+            }
         }
     }
 
