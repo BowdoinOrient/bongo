@@ -27,7 +27,7 @@
         <div class="left-col">
             {% for section in sections %}
                 <section>
-                    <h2>{{section.section}}</h2>
+                    <h2>{{section.get_section_display}}</h2>
                     <h3>{{section.posts}}</h3>
                 </section>
             {% endfor %}
