@@ -238,6 +238,6 @@ COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
 
-COMPRESS_OFFLINE = False
+COMPRESS_OFFLINE = True
 
 ### end django-compressor ###
