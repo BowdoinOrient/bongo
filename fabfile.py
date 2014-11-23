@@ -196,4 +196,4 @@ def managepy(command):
 @task
 def command():
     """print the prefix string needed to run commands manually over SSH"""
-    local("echo '{}'".format(prefix_string))
+    local("echo '{} &&' | pbcopy".format(prefix_string))
