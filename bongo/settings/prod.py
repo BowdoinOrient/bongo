@@ -57,6 +57,9 @@ AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY")
 AWS_PRELOAD_METADATA = True
 S3_URL = 'https://{}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
 
+STATIC_ROOT = "/static"
+MEDIA_ROOT = "/media/"
+
 STATIC_URL = S3_URL + "/static/"
 MEDIA_URL = S3_URL + "/media/"
 
