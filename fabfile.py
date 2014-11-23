@@ -43,13 +43,12 @@ env.hosts = ['citadel.bjacobel.com']
 
 @task
 def deploy(branch=None):
+    """Get the latest code from git, and install reqs from reqs/prod.txt"""
 
     if branch is None:
         branch = local("git rev-parse --abbrev-ref HEAD")
 
     local("git push origin " + branch)
-
-    """Get the latest code from git, and install reqs from reqs/prod.txt"""
 
     with cd("/home/orient"):
         fabtools.require.git.working_copy("git@github.com:bowdoinorient/bongo.git", branch=branch)
@@ -193,3 +192,8 @@ def managepy(command):
         with fabtools.python.virtualenv('/home/orient/.virtualenvs/bongo'):
             with prefix(prefix_string):
                 run(env.run +" "+ command)
+
+@task
+def command():
+    """print the prefix string needed to run commands manually over SSH"""
+    local("echo '{}'".format(prefix_string))
