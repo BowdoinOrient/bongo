@@ -4,12 +4,12 @@
 {% block content %}
 
     <div class="deck">
-        <div class="story lead">{{news.title}}</div>
-        <div class="story second" id="n1">{{features.title}}</div>
-        <div class="story second" id="n2">{{artsent.title}}</div>
-        <div class="story thumb" id="n1">{{op1.title}}</div>
-        <div class="story anchor">{{sports.title}}</div>
-        <div class="story thumb" id="n2">{{op2.title}}</div>
+        <div class="story lead"></div>
+        <div class="story second" id="n1"></div>
+        <div class="story second" id="n2"></div>
+        <div class="story thumb" id="n1"></div>
+        <div class="story anchor"></div>
+        <div class="story thumb" id="n2"></div>
     </div>
 
     <div class="top-reads">
@@ -37,7 +37,7 @@
             <div><a class="twitter-timeline" href="https://twitter.com/bowdoinorient" data-widget-id="265860324312354816">Tweets by @bowdoinorient</a></div>
 
             {# disqus #}
-            <a href="http://scribd.com/doc/{{thisIssue.scribd}}" data-issue="{{ thisIssue.scribd  }}"><img src="{{scribdImage}}"/></a>
+            <a href="http://scribd.com/doc/{{currentIssue.scribd}}"><img src="{{currentIssue.scribd_image}}"/></a>
 
             {# scribd #}
             <div class="dsq-widget">

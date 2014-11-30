@@ -18,6 +18,8 @@ envr = {
     "AWS_SECRET_ACCESS_KEY" : shellquote(open(normpath(join(BASE_DIR, 'settings/secrets/aws_secret_key'))).read().strip()),
     "BONGO_RAVEN_DSN" : shellquote(open(normpath(join(BASE_DIR, 'settings/secrets/raven_dsn'))).read().strip()),
     "BONGO_LOGENTRIES_TOKEN" : shellquote(open(normpath(join(BASE_DIR, 'settings/secrets/logentries_token'))).read().strip()),
+    "DISQUS_API_KEY" : shellquote(open(normpath(join(BASE_DIR, 'settings/secrets/disqus_api_key'))).read().strip()),
+    "SCRIBD_API_KEY" : shellquote(open(normpath(join(BASE_DIR, 'settings/secrets/scribd_api_key'))).read().strip()),
 }
 
 prefix_string = ""

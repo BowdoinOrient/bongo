@@ -5,12 +5,12 @@ from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
 from django.utils.text import slugify
 from django.core.cache import cache
+from django.conf import settings
 from itertools import chain
 from bongo.apps.bongo.helpers import tagify
 import operator
 import nltk.data
-# import requests
-# import json
+import requests
 
 
 """ Series and Issues are helpful for grouping and archiving
@@ -43,8 +43,26 @@ class Issue (models.Model):
     volume = models.ForeignKey(Volume)
     scribd = models.IntegerField(null=True,blank=True)
 
+    # link to a 300x385 thumbnail of the cover
+    scribd_image = models.URLField(null=True,blank=True,editable=False)
+
     def __unicode__(self):
         return str(self.issue_number)
+
+    def save(self, *args, **kwargs):
+        if self.scribd and not self.scribd_image:
+            payload = {
+                "method": "thumbnail.get",
+                "api_key": settings.SCRIBD_API_KEY,
+                "doc_id": self.scribd,
+                "format": "json",
+                "width": 300,
+                "height": 385
+            }
+            res = requests.get("http://api.scribd.com/api", params = payload)
+            if res.status_code == 200:
+                self.scribd_image = res.json()['rsp']['thumbnail_url']
+        super(Issue, self).save(*args, **kwargs)
 
 
 class Section (models.Model):
