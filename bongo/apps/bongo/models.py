@@ -11,6 +11,9 @@ from bongo.apps.bongo.helpers import tagify
 import operator
 import nltk.data
 import requests
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 """ Series and Issues are helpful for grouping and archiving
@@ -62,9 +65,12 @@ class Issue (models.Model):
                 "format": "json",
             }
             res = requests.get("http://api.scribd.com/api", params = payload)
-            print res.url
             if res.status_code == 200:
-                self.scribd_image = res.json()['rsp']['thumbnail_url']
+                try:
+                    self.scribd_image = res.json()['rsp']['thumbnail_url']
+                except:
+                    logger.warning("bad scribd ID ({}) supplied when saving vol. {} issue {}, no thumbnail found".format(self.scribd, self.volume.volume_number, self.issue_number))
+
         super(Issue, self).save(*args, **kwargs)
         self.old_scribd = self.scribd
 

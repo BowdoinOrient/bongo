@@ -135,6 +135,11 @@ LOGGING = {
         }
     },
     'loggers': {
+        'bongo': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'INFO',
+        },
         'django.request': {
             'handlers': ['mail_admins', 'console'],
             'level': 'ERROR',

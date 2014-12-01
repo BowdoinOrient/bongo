@@ -280,18 +280,36 @@ series, volumes, issues, sections, tags
 
 class SeriesTestCase(TestCase):
     def test_m2m(self):
+        # @TODO
         pass
 
 class VolumeTestCase(TestCase):
     def test_foreign_key(self):
+        # @TODO
         pass
 
 class IssueTestCase(TestCase):
     def test_foreign_key(self):
+        # @TODO
         pass
+
+    def test_custom_save(self):
+        issue = IssueFactory.build()
+        volume = VolumeFactory.build(); volume.save()
+        issue.volume = volume
+        self.assertEqual(issue.scribd, None)
+        self.assertEqual(issue.scribd_image, None)
+        issue.scribd = 99999999
+        issue.save()
+        self.assertEqual(issue.scribd_image, None)
+        issue.scribd = 201901393
+        issue.save()
+        self.assertEqual(issue.scribd_image[:8], "https://")
+
 
 class SectionTestCase(TestCase):
     def test_foreign_key(self):
+        # @TODO
         pass
 
     def test_shortname(self):
@@ -301,7 +319,9 @@ class SectionTestCase(TestCase):
 
 class TagTestCase(TestCase):
     def test_foreign_key(self):
+        # @TODO
         pass
 
     def test_autogen(self):
+        # @TODO
         pass
