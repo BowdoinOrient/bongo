@@ -58,11 +58,7 @@
             {# disqus #}
             <div class="dsq-widget">
                 <p class="dsq-widget-title">Recent Comments</p>
-                <div class="comment" ng-repeat="comment in disqusComments track by $index">
-                    <p class="name-date">{{comment.author.name}} — {{comment.createdAt}}</p>
-                    <p>{{comment.raw_message | truncatechars:200}}</p>
-                    <p class="articleLink" ng-click="goto(linkclean(comment.thread_data.link))">{{comment.thread_data.title}}</p>
-                </div>
+                <script type="text/javascript" src="http://disqus.com/forums/bowdoinorient/recent_comments_widget.js?num_items=8&hide_avatars=1&avatar_size=24&excerpt_length=140"></script>
             </div>
         </div>
     </div>

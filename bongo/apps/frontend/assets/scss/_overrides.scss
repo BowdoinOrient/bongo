@@ -30,10 +30,9 @@ ul, ol {
 a {
     text-decoration:none;
     color:black;
-}
-
-a:hover {
-    text-decoration:underline;
+    &:hover {
+        text-decoration:underline;
+    }
 }
 
 body {
@@ -45,6 +44,13 @@ body {
     position: relative;
     top: 50%;
     @include vendor-prefix("transform", "translateY(-50%)");
+}
+
+%hyphenate {
+    @include vendor-prefix("word-break", "break-all");
+    word-break: break-word;
+    word-wrap:normal;
+    @include vendor-prefix("hyphens", "auto");
 }
 
 $maxz: 2147483647;

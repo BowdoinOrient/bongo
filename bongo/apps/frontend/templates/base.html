@@ -2,7 +2,7 @@
 {% load static %}
 
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
     <head>
         <meta charset="utf-8">
         <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}"/>
@@ -67,5 +67,7 @@
             {% block extrajs %}
             {% endblock %}
         {% endcompress %}
+        {% block uncompressable_js %}
+        {% endblock %}
     </body>
 </html>

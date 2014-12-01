@@ -17,12 +17,25 @@
         }
     }
 
-    .disqus-comment {
-        font-family:"MyriadPro";
+    .dsq-widget-item {
+        font-family:"MinionPro";
         font-size:1.2em;
+        line-height:1.2em;
+        font-weight:bold;
 
-        word-break:break-all;
-        word-wrap:normal;
-        hyphens:auto;
+        @extend %hyphenate;
+
+        .dsq-widget-comment {
+            font-weight:normal;
+            color:black;
+        }
+
+        .dsq-widget-meta {
+            margin-top:7px;
+            a {
+                color:darkblue;
+                font-weight:normal;
+            }
+        }
     }
 }
