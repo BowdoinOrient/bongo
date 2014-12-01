@@ -31,8 +31,8 @@
                         <span class="sports">Sports</span>
                         <span class="opinion">Opinion</span>
                     </div>
-                    <div class="mobile-burger" ng-click="toggleMenu()">
-                        <span class="burger-lines" ng-class="{active : showMenu}"></span>
+                    <div class="mobile-burger">
+                        <span class="burger-lines"></span>
                     </div>
                 </nav>
             </header>
@@ -52,7 +52,7 @@
             <p class="browsehappy">Your browser is out of date and no longer supported. Please <strong><a href="http://browsehappy.com/">upgrade your browser</a></strong> to use bowdoinorient.com.</p>
         <![endif]-->
 
-        <div ng-view class="main-content" ng-class="{'shift-menu': showMenu && (minByScroll || minByWidth)}">
+        <div class="main-content">
             {% block content %}{% endblock %}
         </div>
 
@@ -64,10 +64,8 @@
             <script type="text/javascript" src="{% static 'moment/moment.js' %}"></script>
             <script type="text/javascript" src="{% static 'zepto/zepto.js' %}"></script>
             <script type="text/javascript" src="{% static 'js/nav.js' %}"></script>
-            {% block extrajs %}
-            {% endblock %}
         {% endcompress %}
-        {% block uncompressable_js %}
+        {% block nocompress %}
         {% endblock %}
     </body>
 </html>

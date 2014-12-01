@@ -19,13 +19,17 @@
     }
     a {
         .issue-thumb {
+            width:50%;
             max-width:111px;
-            height:auto;
+            height:142px;
             float:left;
+            background-repeat:no-repeat;
+            background-size:cover;
+            background-position:center;
         }
         .issue-details {
             max-width:154px;
-            width:100%;
+            width:50%;
             font-family:"MyriadPro";
             font-size:1.2em;
             float:right;

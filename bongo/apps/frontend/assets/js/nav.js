@@ -3,7 +3,9 @@
 // - displaying the mini header on scroll
 // - displaying the sidebar on scroll
 // - displaying the sidebar on small viewports
+// - displaying the basement menu
 
+// Handles minimizing the header on scroll and viewport shrink
 Zepto(function($){
     var $hw = $(".header-wrapper");
     var $header = $("header");
@@ -36,3 +38,20 @@ Zepto(function($){
         });
     });
 });
+
+// Handles the basement menu
+Zepto(function($){
+    var $burger = $("nav");
+    var $burgerlines = $(".burger-lines");
+    var $menu = $(".basement-menu");
+    var $content = $(".main-content");
+
+    $burger.on("click", function(){
+        if(window.innerWidth <= 645 || window.pageYOffset >= 145){
+            $menu.toggleClass("active");
+            $burgerlines.toggleClass("active");
+            $content.toggleClass("shift-menu");
+        }
+    });
+});
+

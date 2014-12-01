@@ -45,7 +45,7 @@
                 <div class="current-issue">
                     <p class="current-issue-title">In Print</p>
                     <a href="https://scribd.com/doc/{{current_issue.scribd}}">
-                        <img class="issue-thumb" src="{{current_issue.scribd_image}}"/>
+                        <div class="issue-thumb" style="background-image:url('{{current_issue.scribd_image}}')"></div>
                         <ul class="issue-details">
                             <li>Volume {{current_issue.volume.volume_number}}</li>
                             <li>Number {{current_issue.issue_number}}</li>
@@ -65,6 +65,6 @@
 
 {% endblock %}
 
-{% block extrajs %}
+{% block nocompress %}
     <script type="text/javascript" src="{% static 'js/twitter.js' %}" async></script>
 {% endblock %}
