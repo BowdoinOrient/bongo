@@ -43,26 +43,30 @@ class Issue (models.Model):
     volume = models.ForeignKey(Volume)
     scribd = models.IntegerField(null=True,blank=True)
 
-    # link to a 300x385 thumbnail of the cover
+    # link to a 111x142 thumbnail of the cover
     scribd_image = models.URLField(null=True,blank=True,editable=False)
 
     def __unicode__(self):
         return str(self.issue_number)
 
+    def __init__(self, *args, **kwargs):
+        super(Issue, self).__init__(*args, **kwargs)
+        self.old_scribd = self.scribd
+
     def save(self, *args, **kwargs):
-        if self.scribd and not self.scribd_image:
+        if self.scribd and self.old_scribd != self.scribd:
             payload = {
                 "method": "thumbnail.get",
                 "api_key": settings.SCRIBD_API_KEY,
                 "doc_id": self.scribd,
                 "format": "json",
-                "width": 300,
-                "height": 385
             }
             res = requests.get("http://api.scribd.com/api", params = payload)
+            print res.url
             if res.status_code == 200:
                 self.scribd_image = res.json()['rsp']['thumbnail_url']
         super(Issue, self).save(*args, **kwargs)
+        self.old_scribd = self.scribd
 
 
 class Section (models.Model):

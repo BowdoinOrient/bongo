@@ -1,0 +1,40 @@
+.current-issue {
+    width:100%;
+    display:block;
+    border-left: 2px solid $lightergray;
+    padding:0 15px;
+    margin:10px 0;
+    min-height:201px;
+
+    .current-issue-title {
+        font-family:"MinionPro";
+        font-size:1.4em;
+        text-transform: uppercase;
+        padding-bottom:5px;
+        border-bottom: 2px solid $lightergray;
+
+        &:first-letter {
+            font-size:1.45em;
+        }
+    }
+    a {
+        .issue-thumb {
+            max-width:111px;
+            height:auto;
+            float:left;
+        }
+        .issue-details {
+            max-width:154px;
+            width:100%;
+            font-family:"MyriadPro";
+            font-size:1.2em;
+            float:right;
+            padding-left:15px;
+        }
+        &:hover {
+            .issue-details {
+                text-decoration:underline;
+            }
+        }
+    }
+}

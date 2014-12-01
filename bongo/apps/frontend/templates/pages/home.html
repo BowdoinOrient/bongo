@@ -14,12 +14,14 @@
 
     <div class="top-reads">
         {% for article in toplist %}
-            <div class="top-article">
-                <div class="top-badge {{article.section.classname}}">
-                    <span class="index">{{forloop.counter}}</span>
+            <a href="/article/{{article.pk}}">
+                <div class="top-article">
+                    <div class="top-badge {{article.section.classname}}">
+                        <span class="index">{{forloop.counter}}</span>
+                    </div>
+                    <p class="top-title">{{article.title}}</p>
                 </div>
-                <a class="top-title" href="/article/{{article.pk}}">{{article.title}}</a>
-            </div>
+            </a>
         {% endfor %}
     </div>
 
@@ -34,12 +36,26 @@
         </div>
         <div class="right-col">
             {# twitter #}
-            <div><a class="twitter-timeline" href="https://twitter.com/bowdoinorient" data-widget-id="265860324312354816">Tweets by @bowdoinorient</a></div>
-
-            {# disqus #}
-            <a href="http://scribd.com/doc/{{currentIssue.scribd}}"><img src="{{currentIssue.scribd_image}}"/></a>
+            <div>
+                <a class="twitter-timeline" href="https://twitter.com/bowdoinorient" data-widget-id="265860324312354816">Tweets by @bowdoinorient</a>
+            </div>
 
             {# scribd #}
+            {% if current_issue.scribd_image %}
+                <div class="current-issue">
+                    <p class="current-issue-title">In Print</p>
+                    <a href="https://scribd.com/doc/{{current_issue.scribd}}">
+                        <img class="issue-thumb" src="{{current_issue.scribd_image}}"/>
+                        <ul class="issue-details">
+                            <li>Volume {{current_issue.volume.volume_number}}</li>
+                            <li>Number {{current_issue.issue_number}}</li>
+                            <li>{{current_issue.issue_date}}</li>
+                        </ul>
+                    </a>
+                </div>
+            {% endif %}
+
+            {# disqus #}
             <div class="dsq-widget">
                 <p class="dsq-widget-title">Recent Comments</p>
                 <div class="comment" ng-repeat="comment in disqusComments track by $index">

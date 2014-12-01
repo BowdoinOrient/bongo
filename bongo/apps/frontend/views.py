@@ -21,7 +21,8 @@ def HomeView(request):
         "artsent": models.Post.objects.filter(section__exact=4).order_by("-published")[:10],
         "sports": models.Post.objects.filter(section__exact=5).order_by("-published")[:10],
         "toplist": sorted(recent, key=lambda x: -1 * x.popularity())[:10],
-        "currentIssue": models.Issue.objects.order_by("-issue_date")[:1],
+        # this can theoretically raise DoesNotExist but I'm not going to catch: it because if that happens it's a bfd and indicative of some other problem
+        "current_issue": models.Issue.objects.order_by("-issue_date")[:1].get(),
         "sections": sections
     }
 
