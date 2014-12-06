@@ -17,7 +17,8 @@ env:
     - BONGO_RAVEN_DSN="http://dd2c825ff9b1417d88a99573903ebf80:91631495b10b45f8a1cdbc492088da6a@localhost:9000/1"
     - secure: "fQbky6XqlOcEtd97/GNvOca7VK4n2cyV7USf+2Bt+aFC3LyZRyPSSYjjdxUBjeRheGhdov/sjxcpwWIEJ6lF/JxOjyv4ekEQBlLHk1q34pQxPmaYcJ6DOIm/U6Vv/IRyOtBizc3TqutLOzpLlfxdDr0SbGyM+EJbNBdb1tUrLNo="
     - secure: "rrGk1BvBIx5TZhHxrG/d8ClMcESzj0Y/puRiK0xZHFufdazaHiN5z9LLwrz+hM1K5FGQBYpgpCEwUekRtHNPpVTJX4bzgdjeH/SrQmxwJWCIZeHLuqwtMpG03BxkcJxgtReXgSH5Ibfqc5AmRvyTapIGQLBDaYZp5ghzFfZGQNo="
-    - secure: "NsXk96mqwMRhHV4Vdn1Kxhc+agj75zzq9GqGcBA/yoB2vC72jVx5RizMHOE4g92AV3syGCszXq1C56NB3Xz8RMSNMrLOkcUh9HTeovG8zcVqcKotLMHhn/1Jt07PIqSAn4COwj51mhM97FInLTtMKJ+2jvb0lJeaNKUI82C1S1Q="
+    - secure: "GnHGbcPj2rxWpH6/8yRcoEOA7XckztgyHGFEo4IE4QEraDye7r/7ANCwlKgL2S1IOUjyFdk/BVA16PUXaF7wTQmgO2p24ZEis12lCTnUA9WdZv214/zzuNEvlaHcpBy7Ne8bGMZsZ2ZOrGEeTzkUXNh10+3IgHeFs5fthCjG7SI="
+    - secure: "HpEzCKwwkl59GkqqcP7lkdgVgokPvBgQCBwiI7nf4N2aeQvkkXZAB3KbElhSgI1TV5E/Xgm9tgWteJgNPFYg0JTsSzSD0sl27b3X1xArCm1Z4dUtS7GeV4NYHcTjalSwhuleXtwEwcVMQPJdrCyKAMvxaKiC3fp28TUnfIdW890="
 before_script:
   - psql -c 'create database bongo_test;' -U postgres
   - python manage.py syncdb --noinput

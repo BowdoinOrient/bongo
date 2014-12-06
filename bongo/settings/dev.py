@@ -60,6 +60,7 @@ AWS_SECRET_ACCESS_KEY = open(normpath(join(BASE_DIR, 'settings/secrets/aws_secre
 
 DISQUS_API_KEY = open(normpath(join(BASE_DIR, 'settings/secrets/disqus_api_key'))).read().strip()
 SCRIBD_API_KEY = open(normpath(join(BASE_DIR, 'settings/secrets/scribd_api_key'))).read().strip()
+SCRIBD_API_SECRET = open(normpath(join(BASE_DIR, 'settings/secrets/scribd_api_secret'))).read().strip()
 
 STATIC_URL ='/static/'
 MEDIA_URL='/media/'

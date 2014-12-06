@@ -8,10 +8,13 @@ from django.core.cache import cache
 from django.conf import settings
 from itertools import chain
 from bongo.apps.bongo.helpers import tagify
+from hashlib import md5
 import operator
 import nltk.data
 import requests
 import logging
+import json
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -60,10 +63,14 @@ class Issue (models.Model):
         if self.scribd and self.old_scribd != self.scribd:
             payload = {
                 "method": "thumbnail.get",
-                "api_key": settings.SCRIBD_API_KEY,
                 "doc_id": self.scribd,
                 "format": "json",
+                "api_key": settings.SCRIBD_API_KEY
             }
+
+            api_sig = md5(settings.SCRIBD_API_SECRET + re.sub('"|{|}', '', json.dumps(payload, separators=('',''), sort_keys=True))).hexdigest()
+            payload['api_sig'] = api_sig
+
             res = requests.get("http://api.scribd.com/api", params = payload)
             if res.status_code == 200:
                 try:
