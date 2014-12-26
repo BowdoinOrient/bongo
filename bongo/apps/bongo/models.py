@@ -68,7 +68,7 @@ class Issue (models.Model):
                 "api_key": settings.SCRIBD_API_KEY
             }
 
-            api_sig = md5(settings.SCRIBD_API_SECRET + re.sub('"|{|}', '', json.dumps(payload, separators=('',''), sort_keys=True))).hexdigest()
+            api_sig = md5((settings.SCRIBD_API_SECRET + re.sub('"|{|}', '', json.dumps(payload, separators=('',''), sort_keys=True))).encode('utf-8')).hexdigest()
             payload['api_sig'] = api_sig
 
             res = requests.get("http://api.scribd.com/api", params = payload)
