@@ -336,9 +336,7 @@ class Post (models.Model):
 
     def excerpt(self):
         if self.primary_type == "text":
-            return self.text.objects.all()[0].body[:200]
-        else:
-            return None
+            return self.text.all()[0].body[:200]
 
     def creators(self):
         crtrs = ()
