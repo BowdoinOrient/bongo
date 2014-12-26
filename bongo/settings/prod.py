@@ -54,10 +54,11 @@ STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 AWS_STORAGE_BUCKET_NAME = "bowdoinorient-bongo"
 AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY")
-S3_URL = 'http://s3.amazonaws.com/{}'.format(AWS_STORAGE_BUCKET_NAME)
+AWS_PRELOAD_METADATA = True
+S3_URL = 'https://{}.s3.amazonaws.com/'.format(AWS_STORAGE_BUCKET_NAME)
 
-STATIC_URL = S3_URL + "/static/"
-MEDIA_URL = S3_URL + "/media/"
+STATIC_URL = S3_URL
+MEDIA_URL = S3_URL
 
 ########## END AMAZON
 
@@ -68,3 +69,21 @@ RAVEN_CONFIG = {
 }
 
 ### END RAVEN #####
+
+### DJANGO-COMPRESSOR SETTINGS ###
+
+COMPRESS_CSS_FILTERS = (
+    "compressor.filters.cssmin.CSSMinFilter",
+)
+
+COMPRESS_JS_FILTERS = (
+    "compressor.filters.jsmin.JSMinFilter",  # this is actually the default but :shrug:
+)
+
+COMPRESS_STORAGE = STATICFILES_STORAGE
+
+### END DJANGO-COMPRESSOR ###
+
+DISQUS_API_KEY = environ.get('DISQUS_API_KEY', '')
+SCRIBD_API_KEY = environ.get('SCRIBD_API_KEY', '')
+SCRIBD_API_SECRET = environ.get('SCRIBD_API_SECRET', '')

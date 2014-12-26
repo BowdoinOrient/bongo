@@ -1,0 +1,38 @@
+.main-content {
+    width:100%;
+    max-width:1024px;
+    margin:auto;
+}
+
+// Will trigger on tablet and lower
+@media (max-width: 1024px) {
+    .hide-mobile {
+        display:none !important;
+        width:0; height:0;
+    }
+    .mobile-only {
+
+    }
+}
+
+// Will trigger only on tablet
+@media (max-width: 1024px) and (min-width: 481px) {
+    .hide-tablet {
+        display:none !important;
+        width:0; height:0;
+    }
+    .tablet-only {
+
+    }
+}
+
+// Will trigger only on smartphone
+@media (max-width: 480px) {
+    .hide-phone {
+        display:none !important;
+        width:0; height:0;     
+    }
+    .phone-only {
+        display:block !important;
+    }
+}

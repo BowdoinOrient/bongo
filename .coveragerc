@@ -5,7 +5,8 @@ omit =
     bongo/apps/bongo/migrations/*,
     bongo/apps/bongo/management/*,
     bongo/settings/*,
-    *__init__**
+    *__init__*,
+    *.html
 
 [report]
 exclude_lines =

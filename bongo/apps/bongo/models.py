@@ -5,12 +5,18 @@ from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
 from django.utils.text import slugify
 from django.core.cache import cache
+from django.conf import settings
 from itertools import chain
 from bongo.apps.bongo.helpers import tagify
+from hashlib import md5
 import operator
 import nltk.data
 import requests
+import logging
 import json
+import re
+
+logger = logging.getLogger(__name__)
 
 
 """ Series and Issues are helpful for grouping and archiving
@@ -43,8 +49,37 @@ class Issue (models.Model):
     volume = models.ForeignKey(Volume)
     scribd = models.IntegerField(null=True,blank=True)
 
+    # link to a 111x142 thumbnail of the cover
+    scribd_image = models.URLField(null=True,blank=True,editable=False)
+
     def __unicode__(self):
         return str(self.issue_number)
+
+    def __init__(self, *args, **kwargs):
+        super(Issue, self).__init__(*args, **kwargs)
+        self.old_scribd = self.scribd
+
+    def save(self, *args, **kwargs):
+        if self.scribd and self.old_scribd != self.scribd:
+            payload = {
+                "method": "thumbnail.get",
+                "doc_id": self.scribd,
+                "format": "json",
+                "api_key": settings.SCRIBD_API_KEY
+            }
+
+            api_sig = md5((settings.SCRIBD_API_SECRET + re.sub('"|{|}', '', json.dumps(payload, separators=('',''), sort_keys=True))).encode('utf-8')).hexdigest()
+            payload['api_sig'] = api_sig
+
+            res = requests.get("http://api.scribd.com/api", params = payload)
+            if res.status_code == 200:
+                try:
+                    self.scribd_image = res.json()['rsp']['thumbnail_url']
+                except:
+                    logger.warning("bad scribd ID ({}) supplied when saving vol. {} issue {}, no thumbnail found".format(self.scribd, self.volume.volume_number, self.issue_number))
+
+        super(Issue, self).save(*args, **kwargs)
+        self.old_scribd = self.scribd
 
 
 class Section (models.Model):
@@ -320,25 +355,27 @@ class Post (models.Model):
         if cached:
             return cached
         else:
-            popularity = self.views_global - ((make_aware(datetime.now(), get_current_timezone()) - make_aware(self.published, get_current_timezone())).total_seconds() / 10**4.5)
+            current_withtz = make_aware(datetime.now(), get_current_timezone())
+            published_withtz = self.published
+            popularity = self.views_global - ((current_withtz - published_withtz).total_seconds() / 10**4.5)
 
-            url = "http://bowdoinorient.com/article/{}".format(self.pk)
+            # url = "http://bowdoinorient.com/article/{}".format(self.pk)
 
-            # get twitter shares
-            try:
-                res = requests.get("http://urls.api.twitter.com/1/urls/count.json", params={"url":url})
-                if res.status_code == 200:
-                    popularity = popularity + res.json()['count'] * 7.5
-            except Exception as e:
-                print(e)
+            # # get twitter shares
+            # try:
+            #     res = requests.get("http://urls.api.twitter.com/1/urls/count.json", params={"url":url})
+            #     if res.status_code == 200:
+            #         popularity = popularity + res.json()['count'] * 7.5
+            # except Exception as e:
+            #     print(e)
 
-            # get facebook interactions
-            try:
-                res = requests.post("https://api.facebook.com/restserver.php", data=json.dumps({"method":"links.getStats", "format":"json", "urls":url}), headers={"content-type":"application/json"})
-                if res.status_code == 200:
-                    popularity = popularity + res.json()[0]['total_count'] * 5
-            except Exception as e:
-                print(e)
+            # # get facebook interactions
+            # try:
+            #     res = requests.post("https://api.facebook.com/restserver.php", data=json.dumps({"method":"links.getStats", "format":"json", "urls":url}), headers={"content-type":"application/json"})
+            #     if res.status_code == 200:
+            #         popularity = popularity + res.json()[0]['total_count'] * 5
+            # except Exception as e:
+            #     print(e)
 
             cache.set(cache_key, popularity, 7200)
 

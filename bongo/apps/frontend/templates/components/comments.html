@@ -1,0 +1,25 @@
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'bowdoinorient'; // required: replace example with your forum shortname
+    var disqus_title = '<?=addslashes($article->title)?>';
+    // disqus_identifier isn't necessary, because it can use the URL. it's preferable, though, because of different URL schemes.
+    // problem is, we used a different scheme (date&section&priority, e.g. 2012-05-04&2&1) on the old site.
+    // on newer articles (>7308), we just use the new unique article id.
+    <? if($article->id <= 7308): ?>
+        var disqus_identifier = '<?=$article->date."?".$article->section_id."?".$article->priority?>';
+    <? else: ?>
+        var disqus_identifier = '<?=$article->id?>';
+    <? endif; ?>
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>
+    Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+</noscript>
+<a href="http://disqus.com" class="dsq-brlink">
+    comments powered by <span class="logo-disqus">Disqus</span>
+</a>

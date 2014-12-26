@@ -2,6 +2,8 @@ import factory
 from faker import Faker
 from bongo.apps.bongo import models
 from django.contrib.auth.models import User
+from django.utils.timezone import get_current_timezone
+from django.utils.timezone import make_aware
 from random import choice
 from string import ascii_lowercase as lowercase, digits
 from datetime import date, timedelta, datetime
@@ -124,7 +126,7 @@ class PostFactory(factory.Factory):
     class Meta:
         model = models.Post
 
-    published = datetime(1871, 1, 1) + timedelta(52560)
+    published = make_aware(datetime(1871, 1, 1) + timedelta(52560), get_current_timezone())
     is_published = choice([False, True])
     title = factory.LazyAttribute(lambda x: u''.join(choice(lowercase+" ") for i in range(20)))
     opinion = choice([False, True])

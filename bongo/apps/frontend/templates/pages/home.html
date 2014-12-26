@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <div class="deck">
+        <div class="story lead"></div>
+        <div class="story second" id="n1"></div>
+        <div class="story second" id="n2"></div>
+        <div class="story thumb" id="n1"></div>
+        <div class="story anchor"></div>
+        <div class="story thumb" id="n2"></div>
+    </div>
+
+    <div class="top-reads">
+        {% for article in toplist %}
+            <a href="/article/{{article.pk}}">
+                <div class="top-article">
+                    <div class="top-badge {{article.section.classname}}">
+                        <span class="index">{{forloop.counter}}</span>
+                    </div>
+                    <p class="top-title">{{article.title}}</p>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+
+    <div class="homepage-content">
+        <div class="left-col">
+            {% for section in sections %}
+                <section>
+                    <h2>{{section.get_section_display}}</h2>
+                    <h3>{{section.posts}}</h3>
+                </section>
+            {% endfor %}
+        </div>
+        <div class="right-col">
+            {# twitter #}
+            <div>
+                <a class="twitter-timeline" href="https://twitter.com/bowdoinorient" data-widget-id="265860324312354816">Tweets by @bowdoinorient</a>
+            </div>
+
+            {# scribd #}
+            {% if current_issue.scribd_image %}
+                <div class="current-issue">
+                    <p class="current-issue-title">In Print</p>
+                    <a href="https://scribd.com/doc/{{current_issue.scribd}}">
+                        <div class="issue-thumb" style="background-image:url('{{current_issue.scribd_image}}')"></div>
+                        <ul class="issue-details">
+                            <li>Volume {{current_issue.volume.volume_number}}</li>
+                            <li>Number {{current_issue.issue_number}}</li>
+                            <li>{{current_issue.issue_date}}</li>
+                        </ul>
+                    </a>
+                </div>
+            {% endif %}
+
+            {# disqus #}
+            <div class="dsq-widget">
+                <p class="dsq-widget-title">Recent Comments</p>
+                <script type="text/javascript" src="http://disqus.com/forums/bowdoinorient/recent_comments_widget.js?num_items=8&hide_avatars=1&avatar_size=24&excerpt_length=140"></script>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block nocompress %}
+    <script type="text/javascript" src="{% static 'js/twitter.js' %}" async></script>
+{% endblock %}

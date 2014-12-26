@@ -1,7 +1,9 @@
 -r common.txt
 fabric==1.8.3
 fabtools==0.19.0
+libsass==0.6.1
+django-libsass==0.2
 factory_boy
--e git+git://github.com/BowdoinOrient/django-nose.git#egg=django-nose
 ipdbplugin
 fake-factory
+git+git://github.com/BowdoinOrient/django-nose.git@b19a5821ae3d0d3a5f104c53e06e5ab6e8199ab4#egg=django-nose

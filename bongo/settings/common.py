@@ -35,6 +35,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djangobower',
 
     # Suit has to come before contrib.admin
     'suit',
@@ -47,6 +48,10 @@ INSTALLED_APPS = (
     'bongo.apps.bongo',
     'bongo.apps.archive',
     'bongo.apps.api',
+    'bongo.apps.frontend',
+
+    # for the frontend
+    'compressor',
 
     # for the API
     'rest_framework',
@@ -87,19 +92,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
-STATIC_URL ='/static/'
-MEDIA_URL='/media/'
-
-DJANGO_ROOT = os.path.normpath(BASE_DIR)
+STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'static'))
+MEDIA_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'media'))
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'djangobower.finders.BowerFinder',
+    'compressor.finders.CompressorFinder',
+)
+
+STATICFILES_DIRS = (
+    os.path.normpath(os.path.join(BASE_DIR, 'apps/frontend/assets')),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ('Brian Jacobel', 'bjacobel@bowdoin.edu'),
+    ('Brian Jacobel', 'bjacobel@gmail.com'),
     ('Andrew Daniels', 'adaniels@bowdoin.edu'),
 )
 
@@ -126,6 +135,11 @@ LOGGING = {
         }
     },
     'loggers': {
+        'bongo': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'INFO',
+        },
         'django.request': {
             'handlers': ['mail_admins', 'console'],
             'level': 'ERROR',
@@ -181,7 +195,11 @@ TEMPLATE_LOADERS = (
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
 TEMPLATE_DIRS = (
     os.path.normpath(os.path.join(BASE_DIR, 'templates')),
+    os.path.normpath(os.path.join(BASE_DIR, 'apps/frontend/templates')),
 )
+
+
+### django-rest-framework ###
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_SERIALIZER_CLASS': 'bongo.apps.api.pagination.CustomPaginationSerializer',
@@ -191,8 +209,37 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
+### end drf ###
+
+### django-cors-headers ###
+
 CORS_ORIGIN_WHITELIST = (
     'localhost:9000',
     'bjacobel.com',
     'bowdoinorient.com',
 )
+
+### end django-cors-headers ###
+
+### django-bower ###
+
+BOWER_INSTALLED_APPS = (
+    "moment#2.8.1",
+    "zepto#1.1.4",
+)
+
+BOWER_PATH = os.path.join(SITE_ROOT, 'node_modules/bower/bin/bower')
+
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'static/bower_components')
+
+### end django-bower ###
+
+### django-compressor ###
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+)
+
+COMPRESS_OFFLINE = True
+
+### end django-compressor ###

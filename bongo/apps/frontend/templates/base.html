@@ -1,0 +1,71 @@
+{% load compress %}
+{% load static %}
+
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}"/>
+        <base href="/">
+        {% block title %}
+            <title>The Bowdoin Orient</title>
+        {% endblock %}
+        <meta name="description" content="News and commentary from the Bowdoin Orient, the nation's oldest continuously-run college weekly.">
+        <meta name="viewport" content="width=device-width">
+        {% compress css %}
+            <link type="text/x-scss" rel="stylesheet" href="{% static 'scss/main.scss' %}">
+        {% endcompress %}
+    </head>
+    <body>
+        <div class="header-wrapper">
+            <header>
+                <div class="logo-wrap">
+                    <h1>The Bowdoin Orient</h1>
+                    <a href="/"><img class="logo" alt="The Bowdoin Orient" src="{% static 'img/orient.min.svg' %}"></a>
+                </div>
+                <nav>
+                    <div class="sections">
+                        <span class="news">News</span>
+                        <span class="features">Features</span>
+                        <span class="artsent">Arts and Entertainment</span>
+                        <span class="sports">Sports</span>
+                        <span class="opinion">Opinion</span>
+                    </div>
+                    <div class="mobile-burger">
+                        <span class="burger-lines"></span>
+                    </div>
+                </nav>
+            </header>
+        </div>
+
+        <div class="basement-menu">
+            <div class="sections">
+                <span class="news">News</span>
+                <span class="features">Features</span>
+                <span class="artsent">Arts and Entertainment</span>
+                <span class="sports">Sports</span>
+                <span class="opinion">Opinion</span>
+            </div>
+        </div>
+
+        <!--[if lte IE 9]>
+            <p class="browsehappy">Your browser is out of date and no longer supported. Please <strong><a href="http://browsehappy.com/">upgrade your browser</a></strong> to use bowdoinorient.com.</p>
+        <![endif]-->
+
+        <div class="main-content">
+            {% block content %}{% endblock %}
+        </div>
+
+        {% compress js %}
+            <!--[if lt IE 9]>
+                {# IE-only js files (shims, polyfills) go here #}
+            <![endif]-->
+
+            <script type="text/javascript" src="{% static 'moment/moment.js' %}"></script>
+            <script type="text/javascript" src="{% static 'zepto/zepto.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/nav.js' %}"></script>
+        {% endcompress %}
+        {% block nocompress %}
+        {% endblock %}
+    </body>
+</html>

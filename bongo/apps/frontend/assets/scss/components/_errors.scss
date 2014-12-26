@@ -1,0 +1,13 @@
+.browsehappy {
+    padding: 5px;
+    border: 3px dashed $warning;
+    color: $black;
+    font-family:"MyriadPro";
+    text-align:center;
+    font-size:1.2em;
+
+    a {
+        color:$warning;
+        text-decoration:underline;
+    }
+}

@@ -6,6 +6,7 @@ bongo/settings/secrets/*
 
 # No static files
 bongo/static/*
+~bongo/static/bower_components
 
 # No media
 bongo/media/*
@@ -15,4 +16,10 @@ bongo/media/*
 
 # coveralls
 .coverage
+
+/.tmp
+
+/.sass-cache
+
+*.log
 
