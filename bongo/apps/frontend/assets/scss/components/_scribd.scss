@@ -7,14 +7,14 @@
     min-height:201px;
 
     .current-issue-title {
-        font-family:"MinionPro";
-        font-size:1.4em;
+        font-family:"MyriadPro";
+        font-size:1.3em;
         text-transform: uppercase;
         padding-bottom:5px;
         border-bottom: 2px solid $lightergray;
 
         &:first-letter {
-            font-size:1.45em;
+            font-size:1.35em;
         }
     }
     a {

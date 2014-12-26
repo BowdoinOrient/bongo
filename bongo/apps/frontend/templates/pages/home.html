@@ -43,7 +43,7 @@
             {# scribd #}
             {% if current_issue.scribd_image %}
                 <div class="current-issue">
-                    <p class="current-issue-title">In Print</p>
+                    <h2 class="current-issue-title">In Print</h2>
                     <a href="https://scribd.com/doc/{{current_issue.scribd}}">
                         <div class="issue-thumb" style="background-image:url('{{current_issue.scribd_image}}')"></div>
                         <ul class="issue-details">
@@ -57,7 +57,7 @@
 
             {# disqus #}
             <div class="dsq-widget">
-                <p class="dsq-widget-title">Recent Comments</p>
+                <h2 class="dsq-widget-title">Recent Comments</h2>
                 <script type="text/javascript" src="http://disqus.com/forums/bowdoinorient/recent_comments_widget.js?num_items=8&hide_avatars=1&avatar_size=24&excerpt_length=140"></script>
             </div>
         </div>
