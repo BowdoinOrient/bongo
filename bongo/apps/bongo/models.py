@@ -31,6 +31,7 @@ class Series (models.Model):  # series is the singular, which may confuse django
         verbose_name_plural = "Series"
 
     name = models.CharField(max_length=100)
+    imported = models.BooleanField(default=False, editable=False)
 
     def __unicode__(self):
         return self.name
@@ -40,6 +41,7 @@ class Volume (models.Model):
     volume_number = models.IntegerField()
     volume_year_start = models.IntegerField()
     volume_year_end = models.IntegerField()
+    imported = models.BooleanField(default=False, editable=False)
 
     def __unicode__(self):
         return str(self.volume_number)
@@ -50,6 +52,7 @@ class Issue (models.Model):
     issue_number = models.IntegerField()
     volume = models.ForeignKey(Volume)
     scribd = models.IntegerField(null=True,blank=True)
+    imported = models.BooleanField(default=False, editable=False)
 
     # link to a 111x142 thumbnail of the cover
     scribd_image = models.URLField(null=True,blank=True,editable=False)
@@ -94,6 +97,7 @@ class Section (models.Model):
     )
     section = models.CharField(max_length=8, choices=sections, default="News")
     priority = models.IntegerField()
+    imported = models.BooleanField(default=False, editable=False)
 
     def __unicode__(self):
         return self.section
@@ -111,6 +115,7 @@ the Post's tags be the collection of all the content within's tags
 """
 class Tag (models.Model):
     tag = models.CharField(max_length=25)
+    imported = models.BooleanField(default=False, editable=False)
 
     def __unicode__(self):
         return self.tag
@@ -118,6 +123,7 @@ class Tag (models.Model):
 
 class Job(models.Model):
     title = models.CharField(max_length=40)
+    imported = models.BooleanField(default=False, editable=False)
 
     # returns a list of everyone with this job
     def workers(self):
@@ -146,14 +152,11 @@ class Job(models.Model):
 class Creator(models.Model):
     # possibility this author is also a bongo user
     user = models.ForeignKey(User, null=True, blank=True)
-
     name = models.CharField(max_length=100)
-
     job = models.ForeignKey(Job, null=True)
-
     twitter = models.CharField(max_length=15, null=True, blank=True)
-
     profpic = models.ImageField(null=True, blank=True, upload_to="headshots")
+    imported = models.BooleanField(default=False, editable=False)
 
     # for photos that previously ran with a photographer_id of 1 and a "courtesy of" caption
     courtesyof = models.BooleanField(default=False)
@@ -184,6 +187,7 @@ class Text (models.Model):
     excerpt = models.TextField(editable=False, null=True)
     creators = models.ManyToManyField(Creator)
     caption = models.TextField(null=True, blank=True)
+    imported = models.BooleanField(default=False, editable=False)
 
     def __unicode__(self):
         return self.excerpt
@@ -206,6 +210,7 @@ class Video(models.Model):
     uid = models.CharField(max_length=20, verbose_name="Video identifier - typically a string of letters or numbers after the last slash in the URL")
     creators = models.ManyToManyField(Creator)
     caption = models.TextField(null=True, blank=True)
+    imported = models.BooleanField(default=False, editable=False)
 
     def url(self):
         return "http://{host}.com/{uid}".format(host=self.host.lower(), uid=self.uid)
@@ -218,6 +223,7 @@ class PDF (models.Model):
     staticfile = models.FileField(upload_to="pdfs")
     creators = models.ManyToManyField(Creator)
     caption = models.TextField(null=True, blank=True)
+    imported = models.BooleanField(default=False, editable=False)
 
     def __unicode__(self):
         return self.caption[:60]
@@ -227,6 +233,7 @@ class Photo (models.Model):
     staticfile = models.ImageField(upload_to="photos")
     creators = models.ManyToManyField(Creator)
     caption = models.TextField(null=True, blank=True)
+    imported = models.BooleanField(default=False, editable=False)
 
     """ get_or_create a thumbnail of the specified width and height """
     def thumbnail(self, width, height):
@@ -244,6 +251,7 @@ class HTML (models.Model):
     content = models.TextField()
     creators = models.ManyToManyField(Creator)
     caption = models.TextField(null=True, blank=True)
+    imported = models.BooleanField(default=False, editable=False)
 
     def __unicode__(self):
         return self.caption[:60]
@@ -254,6 +262,7 @@ class Pullquote (models.Model):
     attribution = models.TextField(null=True, blank=True)
     creators = models.ManyToManyField(Creator)
     caption = models.TextField(null=True, blank=True)
+    imported = models.BooleanField(default=False, editable=False)
 
     def __unicode__(self):
         return self.quote
@@ -301,6 +310,8 @@ class Post (models.Model):
     photo = models.ManyToManyField(Photo, null=True, blank=True)
     html = models.ManyToManyField(HTML, null=True, blank=True)
     pullquote = models.ManyToManyField(Pullquote, null=True, blank=True)
+
+    imported = models.BooleanField(default=False, editable=False)
 
     types = (
         ("text", "Article"),
@@ -421,10 +432,9 @@ class Post (models.Model):
 class Alert (models.Model):
     run_from = models.DateTimeField()
     run_through = models.DateTimeField()
-
     message = models.TextField()
-
     urgent = models.BooleanField(default=False)
+    imported = models.BooleanField(default=False, editable=False)
 
     def __unicode__(self):
         return self.message
@@ -432,6 +442,7 @@ class Alert (models.Model):
 
 class Advertiser (models.Model):
     name = models.CharField(max_length=100)
+    imported = models.BooleanField(default=False, editable=False)
 
     def __unicode__(self):
         return self.name
@@ -442,13 +453,12 @@ class Ad (models.Model):
     run_through = models.DateField()
 
     owner = models.ForeignKey(Advertiser)
-
     url = models.URLField(null=True, blank=True)
-
     adfile = models.ImageField(upload_to="ads")
+    imported = models.BooleanField(default=False, editable=False)
 
     def __unicode__(self):
-        return self.owner + ": {} through {}".format(run_from.strftime("%x"), run_through.strftime("%x"))
+        return self.owner + ": {} through {}".format(self.run_from.strftime("%x"), self.run_through.strftime("%x"))
 
 class Tip (models.Model):
     content = models.TextField()
@@ -456,6 +466,7 @@ class Tip (models.Model):
     submitted_at = models.DateTimeField()
     submitted_from = models.GenericIPAddressField(null=True, blank=False)
     useragent = models.TextField(null=True, blank=False)
+    imported = models.BooleanField(default=False, editable=False)
 
     def __unicode__(self):
         return self.content[:60]
@@ -466,7 +477,7 @@ class Tip (models.Model):
 
 """ For our Plancast replacement """
 class Event (models.Model):
-    pass
+    imported = models.BooleanField(default=False, editable=False)
 
 
 
@@ -474,7 +485,7 @@ class Event (models.Model):
 
 """ For our Buffer replacement """
 class ScheduledPost(models.Model):
-    pass
+    imported = models.BooleanField(default=False, editable=False)
 
 
 
