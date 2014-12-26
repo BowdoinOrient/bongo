@@ -30,7 +30,23 @@
             {% for section in sections %}
                 <section>
                     <h2>{{section.get_section_display}}</h2>
-                    <h3>{{section.posts}}</h3>
+                    {% for post in section.posts %}
+                        <div class="section-post">
+                            <a href="/article/{{post.slug}}">
+                                <h3 class="post-title">{{post.title}}</h3>
+                                <span class="post-excerpt">{{post.excerpt}}</span>
+                                {% comment %}
+
+                                "Using python's datetime.strftime date format symbols would be too easy, let's use PHP's instead"
+                                    -- some fucking django developer
+
+                                https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#date
+
+                                {% endcomment %}
+                                <span class="post-date">{{post.published | date:"l, F j"}}</p>
+                            </a>
+                        </div>
+                    {% endfor %}
                 </section>
             {% endfor %}
         </div>

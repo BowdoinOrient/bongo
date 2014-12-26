@@ -7,6 +7,10 @@ def HomeView(request):
 
     sections = models.Section.objects.all()
 
+    # extend the sections objects with top posts for each
+    for section in sections:
+        section.posts = models.Post.objects.filter(section__exact=section.pk).order_by("-published")[:5]
+
     # section ids:
     # news:         1
     # opinion:      2
