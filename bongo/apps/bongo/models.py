@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
-from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
 from django.utils.text import slugify
 from django.core.cache import cache
@@ -15,6 +14,9 @@ import requests
 import logging
 import json
 import re
+import pytz
+
+tz = pytz.timezone('America/New_York')
 
 logger = logging.getLogger(__name__)
 
@@ -321,6 +323,12 @@ class Post (models.Model):
             self.pullquote.all()
         )
 
+    def excerpt(self):
+        if self.primary_type == "text":
+            return self.text.objects.all()[0].body[:200]
+        else:
+            return None
+
     def creators(self):
         crtrs = ()
         for cont in self.content():
@@ -355,7 +363,7 @@ class Post (models.Model):
         if cached:
             return cached
         else:
-            current_withtz = make_aware(datetime.now(), get_current_timezone())
+            current_withtz = make_aware(datetime.now(), tz)
             published_withtz = self.published
             popularity = self.views_global - ((current_withtz - published_withtz).total_seconds() / 10**4.5)
 
@@ -391,8 +399,8 @@ class Post (models.Model):
         # but during import, we want to use old dates and don't want to overwrite them
         if auto_dates:
             if not self.created:
-                self.created = make_aware(datetime.now(), get_current_timezone())
-            self.updated = make_aware(datetime.now(), get_current_timezone())
+                self.created = make_aware(datetime.now(), tz)
+            self.updated = make_aware(datetime.now(), tz)
 
         super(Post, self).save(*args, **kwargs)
 

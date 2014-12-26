@@ -4,18 +4,18 @@ from bongo.apps.archive import models as archive_models
 from bongo.apps.bongo import models as bongo_models
 from django.core.management.base import BaseCommand
 from django.core.files.storage import default_storage as storage
-from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
 from datetime import datetime
 from optparse import make_option
+import pytz
 import requests
 import resource
 
 from django.test import override_settings
 
-tz = get_current_timezone()
+tz = pytz.timezone('America/New_York')
 
 def memcheck():
     return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000000.0
@@ -104,8 +104,8 @@ def import_tips():
             pk=old_tip.id,
             content=old_tip.tip,
             submitted_at=make_aware(datetimeify(old_tip.submitted), tz),
-            submitted_from = old_tip.user_ip,
-            useragent = old_tip.user_agent
+            submitted_from=old_tip.user_ip,
+            useragent=old_tip.user_agent
         )
 
 
