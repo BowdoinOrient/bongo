@@ -8,7 +8,7 @@ from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
-from datetime import date, datetime
+from datetime import datetime
 from optparse import make_option
 import requests
 import resource
@@ -236,10 +236,13 @@ def import_attachment():
             post = bongo_models.Post.objects.get(pk__exact=old_attachment.article_id)
             if old_attachment.type == "html":
                 post.html.add(atchmt)
+                post.primary_type = "html"
             elif old_attachment.type == "vimeo":
                 post.video.add(atchmt)
+                post.primary_type = "video"
             elif old_attachment.type == "youtube":
                 post.video.add(atchmt)
+                post.primary_type = "video"
             elif old_attachment.type == "pullquote":
                 post.pullquote.add(atchmt)
             post.save()
@@ -315,6 +318,8 @@ def import_content():
 
             post.text.add(text)
 
+            post.primary_type = "text"
+
         for old_author in old_authors:
             post.creators.add(bongo_models.Creator.objects.get(pk__exact=old_author.id))
 
@@ -377,6 +382,7 @@ def import_photo():
 
         try:
             post_owner = bongo_models.Post.objects.get(pk__exact=old_photo.article_id)
+            post_owner.primary_type = "photo"
             post_owner.photo.add(photo)
             post_owner.save()
         except:
