@@ -362,10 +362,6 @@ def import_content():
             post.created = old_article.date_created
             post.updated = old_article.date_updated
 
-        post.series.add(
-            bongo_models.Series.objects.get(
-                pk__exact = old_article.series))
-
         if old_articlebody:
 
             (text, created) = bongo_models.Text.objects.get_or_create(
@@ -377,6 +373,16 @@ def import_content():
             post.text.add(text)
 
             post.primary_type = "text"
+
+        if old_article.series != 0:
+            post.series.add(
+                bongo_models.Series.objects.get(
+                    pk__exact = old_article.series
+                )
+            )
+
+            if post.series.all()[0].name == "Snapshot":
+                post.primary_type = "photo"
 
         for old_author in old_authors:
             post.creators.add(bongo_models.Creator.objects.get(pk__exact = old_author.id))
@@ -467,7 +473,6 @@ def import_photo():
             post_owner = bongo_models.Post.objects.get(
                 pk__exact = old_photo.article_id
             )
-            post_owner.primary_type = "photo"
             post_owner.photo.add(photo)
             post_owner.save()
         except:

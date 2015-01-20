@@ -335,8 +335,20 @@ class Post (models.Model):
         )
 
     def excerpt(self):
-        if self.primary_type == "text":
-            return self.text.all()[0].body[:200]
+        try:
+            if self.primary_type == "photo":
+                return self.photo.all()[0].caption
+            elif self.primary_type == "video":
+                return self.video.all()[0].caption
+            elif self.primary_type == "html":
+                return self.HTML.all()[0].caption
+            elif self.primary_type == "photo":
+                return self.photo.all()[0].caption
+            elif self.primary_type == "text":
+                return self.text.all()[0].excerpt
+        except:
+            logger.error("Could not get an excerpt for article {}".format(self.pk))
+            return ""
 
     def creators(self):
         crtrs = ()
