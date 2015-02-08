@@ -1,5 +1,6 @@
 # Folder of secret keys and passwords
 bongo/settings/secrets/*
+ansible/env_vars/secure.yml
 
 # Pycocide
 *.pyc

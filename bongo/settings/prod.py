@@ -5,9 +5,9 @@ from bongo.settings.common import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': SITE_NAME,
-        'USER': SITE_NAME,
-        'PASSWORD': environ.get("{}_POSTGRES_PASS".format(SITE_NAME.upper())),
+        'NAME': environ.get("DATABASE_NAME", ""),
+        'USER': environ.get("DATABASE_USER", ""),
+        'PASSWORD': environ.get("DATABASE_PASSWORD", ""),
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
@@ -22,7 +22,7 @@ DATABASES = {
 }
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = environ.get('{}_SECRET_KEY'.format(SITE_NAME.upper()), '')
+SECRET_KEY = environ.get('DJANGO_SECRET_KEY', '')
 
 # See: http://django-storages.readthedocs.org/en/latest/index.html
 INSTALLED_APPS += (
@@ -52,8 +52,8 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 AWS_STORAGE_BUCKET_NAME = "bowdoinorient-bongo"
-AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
 AWS_PRELOAD_METADATA = True
 S3_URL = 'https://{}.s3.amazonaws.com/'.format(AWS_STORAGE_BUCKET_NAME)
 

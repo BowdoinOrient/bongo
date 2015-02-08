@@ -1,0 +1,9 @@
+---
+- name: Setup the Git repo
+  git: repo={{ git_repo }} version={{ branch }} dest={{ project_path }} accept_hostkey=yes
+  when: code_source == "git"
+  tags: git
+
+- name: Copy code using Vagrant shared folder
+  when: code_source == "vagrant"
+  command: rsync -a --owner={{ gunicorn_user }} --group={{ gunicorn_group }} /vagrant/ {{project_path}}

@@ -1,0 +1,13 @@
+---
+
+- name: Restart UFW
+  ufw: state=enabled
+
+- name: Reload UFW
+  ufw: state=reloaded
+
+- name: Restart Fail2ban
+  service: name=fail2ban state=restarted
+
+- name: Reload Fail2ban
+  service: name=fail2ban state=reloaded

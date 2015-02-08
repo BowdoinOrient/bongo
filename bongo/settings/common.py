@@ -9,10 +9,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 import os
-from datetime import timedelta
-from djcelery import setup_loader
-from kombu import serialization
-
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -26,6 +23,8 @@ SITE_NAME = os.path.basename(BASE_DIR)
 DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
+
+TEST = 'test' in sys.argv
 
 # Application definition
 
@@ -41,14 +40,12 @@ INSTALLED_APPS = (
     'suit',
     'django.contrib.admin',
 
-    # Asynchronous task queue:
-    'djcelery',
-
     # Local apps
     'bongo.apps.bongo',
     'bongo.apps.archive',
     'bongo.apps.api',
     'bongo.apps.frontend',
+    'bongo.apps.celery',
 
     # for the frontend
     'compressor',
@@ -148,28 +145,6 @@ LOGGING = {
     }
 }
 
-########## CELERY CONFIGURATION
-CELERY_ACCEPT_CONTENT = ['json']  # make Celery shut up about deprecation
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-serialization.registry._decoders.pop("application/x-python-serialize")
-
-# See: http://celery.readthedocs.org/en/latest/configuration.html#celery-task-result-expires
-CELERY_TASK_RESULT_EXPIRES = timedelta(minutes=30)
-
-# See: http://docs.celeryproject.org/en/master/configuration.html#std:setting-CELERY_CHORD_PROPAGATES
-CELERY_CHORD_PROPAGATES = True
-
-# See: http://celery.github.com/celery/django/
-setup_loader()
-
-CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
-
-CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
-
-BROKER_URL='amqp://localhost'
-########## END CELERY CONFIGURATION
-
 SUIT_CONFIG = {
     'ADMIN_NAME': SITE_NAME
 }
@@ -203,10 +178,16 @@ TEMPLATE_DIRS = (
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_SERIALIZER_CLASS': 'bongo.apps.api.pagination.CustomPaginationSerializer',
-    'PAGINATE_BY': 20,                 # Default to 20
-    'PAGINATE_BY_PARAM': 'limit',  # Allow client to override, using `?limit=xxx`.
+    'PAGINATE_BY': 20,                  # Default to 20
+    'PAGINATE_BY_PARAM': 'limit',       # Allow client to override, using `?limit=xxx`.
     'MAX_PAGINATE_BY': 100,             # Maximum limit allowed when using `?limit=xxx`.
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'COMPACT_JSON': False
 }
 
 ### end drf ###
@@ -214,7 +195,6 @@ REST_FRAMEWORK = {
 ### django-cors-headers ###
 
 CORS_ORIGIN_WHITELIST = (
-    'localhost:9000',
     'bjacobel.com',
     'bowdoinorient.com',
 )

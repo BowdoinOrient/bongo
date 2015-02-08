@@ -1,13 +1,9 @@
 from bongo.settings.common import *
-from os.path import join, normpath
+import yaml
 
 DEBUG = True
 
-SECRET_KEY = open(
-    normpath(
-        join(BASE_DIR, 'settings/secrets/secret_key')
-    )
-).read().strip()
+SECRET_KEY = "afakesecretkeyfordevelopment"
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
@@ -40,7 +36,7 @@ CACHES = {
 }
 
 ALLOWED_HOSTS = [
-    'localhost'
+    '*'
 ]
 
 INSTALLED_APPS += (
@@ -55,12 +51,14 @@ NOSE_TESTMATCH = '(?:^|[b_./-])[Tt]ests'
 
 os.environ['REUSE_DB'] = '1'
 
-AWS_ACCESS_KEY_ID = open(normpath(join(BASE_DIR, 'settings/secrets/aws_id'))).read().strip()
-AWS_SECRET_ACCESS_KEY = open(normpath(join(BASE_DIR, 'settings/secrets/aws_secret_key'))).read().strip()
+with open(os.path.normpath(os.path.join(SITE_ROOT, "ansible/env_vars/secure.yml")), "rb") as f:
+    secrets = yaml.load(f)
 
-DISQUS_API_KEY = open(normpath(join(BASE_DIR, 'settings/secrets/disqus_api_key'))).read().strip()
-SCRIBD_API_KEY = open(normpath(join(BASE_DIR, 'settings/secrets/scribd_api_key'))).read().strip()
-SCRIBD_API_SECRET = open(normpath(join(BASE_DIR, 'settings/secrets/scribd_api_secret'))).read().strip()
+    DISQUS_API_KEY = secrets['disqus_api_key']
+    SCRIBD_API_KEY = secrets['scribd_api_key']
+    SCRIBD_API_SECRET = secrets['scribd_api_secret']
 
 STATIC_URL ='/static/'
 MEDIA_URL='/media/'
+
+CELERY_ALWAYS_EAGER = True

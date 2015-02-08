@@ -1,0 +1,12 @@
+---
+
+git_repo: ssh://git@github.com/bowdoinorient/bongo.git
+branch: develop
+
+application_name: bongo
+project_name: bongo
+
+ssl_dest_dir: /etc/ssl
+
+db_user: "{{ application_name }}"
+db_name: "{{ application_name }}"

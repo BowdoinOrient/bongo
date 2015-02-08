@@ -1,0 +1,80 @@
+---
+
+- name: Install packages required by the Django app inside virtualenv
+  pip: virtualenv={{ virtualenv_path }} requirements={{ requirements_file }} extra_args="--upgrade"
+  tags:
+    - django
+
+- name: Run the Django syncdb command
+  django_manage:
+    command: syncdb
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: run_django_syncdb
+  tags:
+    - django
+    - django_syncdb
+
+- name: Run Django migrations
+  django_manage:
+    command: migrate
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: run_django_migration
+  tags:
+    - django
+    - django_migrate
+
+- name: Run Django collectstatic
+  django_manage:
+    command: fasts3collectstatic
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: run_django_collectstatic
+  tags:
+    - django
+    - django_collectstatic
+
+- name: Flush database
+  django_manage:
+    command: flush
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: flush_database
+  tags:
+    - django
+    - django_flush
+
+- name: Dump database to fixtures
+  django_manage:
+    command: dumpdata --format=yaml
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: dump_database
+  tags:
+    - django
+    - django_dumpdata
+
+- name: Load user data from fixtures
+  django_manage:
+    command: loaddata
+    fixtures: |
+      "{{ application_path }}/apps/{{ application_name }}/fixtures/data.yaml"
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: load_database
+  tags:
+    - django
+    - django_loaddata

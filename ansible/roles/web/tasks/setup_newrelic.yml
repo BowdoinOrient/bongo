@@ -1,0 +1,6 @@
+---
+
+- name: Create the New Relic configuration file
+  template: src=newrelic.j2
+            dest=/webapps/{{ application_name }}/{{ project_name }}/newrelic.ini
+            backup=no

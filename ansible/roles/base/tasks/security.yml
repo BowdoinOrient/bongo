@@ -1,0 +1,30 @@
+---
+
+- name: Install security packages
+  apt: name={{ item }} update_cache={{ update_apt_cache }} force=yes state=installed
+  with_items:
+    - fail2ban
+    - ufw
+  tags: packages
+  notify:
+    - Restart UFW
+    - Restart Fail2ban
+
+- name: Set default UFW policy to deny all incoming
+  ufw: policy=deny direction=incoming
+
+- name: Open TCP ports for UFW
+  ufw: rule=allow to_port={{ item }} proto=tcp
+  with_items:
+    - 22     # ssh
+    - 80     # http
+    - 443    # https
+    - 5555   # celery management console (flower)
+    - 15672  # rabbitmq management console
+  notify:
+    - Reload UFW
+
+- name: Install Fail2ban config
+  template: src=jail.local.j2 dest=/etc/fail2ban/jail.local
+  notify:
+    - Reload Fail2ban
