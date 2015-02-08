@@ -21,7 +21,7 @@ class IssueSerializer(serializers.ModelSerializer):
         depth = 2
 
 class SectionSerializer(serializers.ModelSerializer):
-    classname = serializers.Field(source='classname')
+    classname = serializers.SerializerMethodField()
 
     class Meta:
         model = Section
@@ -83,8 +83,8 @@ class PullquoteSerializer(serializers.ModelSerializer):
         depth = 2
 
 class PostSerializer(serializers.ModelSerializer):
-    content = serializers.Field(source='content')
-    creators = serializers.Field(source='creators')
+    content = serializers.SerializerMethodField()
+    creators = serializers.SerializerMethodField()
     section = SectionSerializer()
 
     class Meta:
