@@ -1,4 +1,5 @@
 -r common.txt
 factory_boy==2.4.1
 fake-factory==0.4.2
+ipdb==0.8
 git+git://github.com/BowdoinOrient/django-nose.git@b19a5821ae3d0d3a5f104c53e06e5ab6e8199ab4#egg=django-nose

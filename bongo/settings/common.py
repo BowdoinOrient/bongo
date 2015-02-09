@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 import os
-import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -23,8 +22,6 @@ SITE_NAME = os.path.basename(BASE_DIR)
 DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
-
-TEST = 'test' in sys.argv
 
 # Application definition
 
@@ -223,3 +220,5 @@ COMPRESS_PRECOMPILERS = (
 COMPRESS_OFFLINE = True
 
 ### end django-compressor ###
+
+CELERY_ALWAYS_EAGER = False

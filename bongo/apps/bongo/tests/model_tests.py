@@ -1,4 +1,4 @@
-from bongo.apps.bongo.tests.factories import *
+from bongo.apps.bongo.tests import factories
 from django.test import TestCase
 from django.contrib.auth.models import User
 
@@ -9,10 +9,10 @@ test, video, PDF, photo, HTML, pullquote, post
 
 class TextTestCase(TestCase):
     def test_creator(self):
-        text = TextFactory.build(); text.save()
+        text = factories.TextFactory.create()
 
-        creator1 = CreatorFactory.build(); creator1.save()
-        creator2 = CreatorFactory.build(); creator2.save()
+        creator1 = factories.CreatorFactory.create()
+        creator2 = factories.CreatorFactory.create()
 
         text.creators.add(creator1)
         text.creators.add(creator2)
@@ -29,11 +29,11 @@ class TextTestCase(TestCase):
         creator2.delete()
 
     def test_fields(self):
-        text = TextFactory.build()
+        text = factories.TextFactory.create()
         self.assertIsNotNone(text.caption)
 
     def test_excerpt(self):
-        text = TextFactory.build()
+        text = factories.TextFactory.build()
         self.assertEquals(text.excerpt, "The excerpt isn't correct until it's saved")
         text.body = "Quinoa hashtag Kickstarter bespoke. Schlitz PBR&B 3 wolf moon, photo booth swag occupy banh mi PBR artisan lo-fi nor.bongo. Lomo selvage leggings quinoa, ugh cliche cornhole asymmetrical gluten-free Echo Park. Tumblr put a bird on it drinking vinegar sriracha, leggings mumbl.bongo actually four loko twee fixie mustache. Mustache drinking vinegar cliche, meggings before they sold out fap Kickstarter tofu banjo master cleanse ennui fingerstache kogi you probably haven't heard of them. Polaroid photo booth chia biodiesel trust fund typewriter locavore, Blue Bottle 90's Neutra umami flannel. Portland Helvetica umami freegan locavore direct trade, polaroid 3 wolf moon actually."
         text.save()
@@ -42,10 +42,10 @@ class TextTestCase(TestCase):
 
 class VideoTestCase(TestCase):
     def test_creator(self):
-        video = VideoFactory.build(); video.save()
+        video = factories.VideoFactory.create()
 
-        creator1 = CreatorFactory.build(); creator1.save()
-        creator2 = CreatorFactory.build(); creator2.save()
+        creator1 = factories.CreatorFactory.create()
+        creator2 = factories.CreatorFactory.create()
 
         video.creators.add(creator1)
         video.creators.add(creator2)
@@ -62,17 +62,17 @@ class VideoTestCase(TestCase):
         creator2.delete()
 
     def test_fields(self):
-        video = VideoFactory.build()
+        video = factories.VideoFactory.build()
         self.assertIsNotNone(video.caption)
         self.assertIsNotNone(video.url())
 
 
 class PDFTestCase(TestCase):
     def test_creator(self):
-        pdf = PDFFactory.build(); pdf.save()
+        pdf = factories.PDFFactory.create()
 
-        creator1 = CreatorFactory.build(); creator1.save()
-        creator2 = CreatorFactory.build(); creator2.save()
+        creator1 = factories.CreatorFactory.create()
+        creator2 = factories.CreatorFactory.create()
 
         pdf.creators.add(creator1)
         pdf.creators.add(creator2)
@@ -89,17 +89,17 @@ class PDFTestCase(TestCase):
         creator2.delete()
 
     def test_fields(self):
-        pdf = PDFFactory.build()
+        pdf = factories.PDFFactory.create()
         self.assertIsNotNone(pdf.caption)
         # @todo: test staticfile
 
 
 class PhotoTestCase(TestCase):
     def test_creator(self):
-        photo = PhotoFactory.build(); photo.save()
+        photo = factories.PhotoFactory.create()
 
-        creator1 = CreatorFactory.build(); creator1.save()
-        creator2 = CreatorFactory.build(); creator2.save()
+        creator1 = factories.CreatorFactory.create()
+        creator2 = factories.CreatorFactory.create()
 
         photo.creators.add(creator1)
         photo.creators.add(creator2)
@@ -116,17 +116,17 @@ class PhotoTestCase(TestCase):
         creator2.delete()
 
     def test_fields(self):
-        photo = PhotoFactory.build()
+        photo = factories.PhotoFactory.create()
         self.assertIsNotNone(photo.caption)
         # @todo: test staticfile
 
 
 class HTMLTestCase(TestCase):
     def test_creator(self):
-        html = HTMLFactory.build(); html.save()
+        html = factories.HTMLFactory.create()
 
-        creator1 = CreatorFactory.build(); creator1.save()
-        creator2 = CreatorFactory.build(); creator2.save()
+        creator1 = factories.CreatorFactory.create()
+        creator2 = factories.CreatorFactory.create()
 
         html.creators.add(creator1)
         html.creators.add(creator2)
@@ -143,17 +143,17 @@ class HTMLTestCase(TestCase):
         creator2.delete()
 
     def test_fields(self):
-        html = HTMLFactory.build()
+        html = factories.HTMLFactory.create()
         self.assertIsNotNone(html.caption)
         self.assertIsNotNone(html.content)
 
 
 class PullquoteTestCase(TestCase):
     def test_creator(self):
-        pullquote = PullquoteFactory.build(); pullquote.save()
+        pullquote = factories.PullquoteFactory.create()
 
-        creator1 = CreatorFactory.build(); creator1.save()
-        creator2 = CreatorFactory.build(); creator2.save()
+        creator1 = factories.CreatorFactory.create()
+        creator2 = factories.CreatorFactory.create()
 
         pullquote.creators.add(creator1)
         pullquote.creators.add(creator2)
@@ -170,7 +170,7 @@ class PullquoteTestCase(TestCase):
         creator2.delete()
 
     def test_fields(self):
-        pullquote = PullquoteFactory.build()
+        pullquote = factories.PullquoteFactory.create()
         self.assertIsNotNone(pullquote.caption)
         self.assertIsNotNone(pullquote.quote)
         self.assertIsNotNone(pullquote.attribution)
@@ -181,9 +181,9 @@ class PostTestCase(TestCase):
 
         # Create post objects until both have tags (ugh)
         while True:
-            post = PostFactory.create(); post.save()
-            similar_post = PostFactory.create(); post.save()
-            text = TextFactory.create(); text.save()
+            post = factories.PostFactory.create()
+            similar_post = factories.PostFactory.create()
+            text = factories.TextFactory.create()
 
             post.text.add(text)
             post.save()
@@ -200,9 +200,9 @@ class PostTestCase(TestCase):
         self.assertEqual(post.similar_tags()[0], similar_post)
 
     def test_popularity(self):
-        post1 = PostFactory.create(); post1.views_global = 1
-        post2 = PostFactory.create(); post2.views_global = 2
-        post3 = PostFactory.create(); post3.views_global = 3
+        post1 = factories.PostFactory.create(); post1.views_global = 1
+        post2 = factories.PostFactory.create(); post2.views_global = 2
+        post3 = factories.PostFactory.create(); post3.views_global = 3
 
         self.assertGreater(post2.popularity(), post1.popularity())
         self.assertGreater(post3.popularity(), post2.popularity())
@@ -217,7 +217,7 @@ class UserTestCase(TestCase):
     def test_password(self):
         """ Test that a user gets a password, and it works to log them in """
 
-        user = UserFactory.build()
+        user = factories.UserFactory.create()
         self.assertNotEqual(user.password, u'')
         self.assertEqual(user.check_password("defaultpassword"), True)
 
@@ -225,9 +225,9 @@ class CreatorTestCase(TestCase):
     def test_foreign_key(self):
         """ Test that Creators are properly hooked up to Jobs and Users """
 
-        user = UserFactory.build()
-        creator = CreatorFactory.build()
-        job = JobFactory.build()
+        user = factories.UserFactory.create()
+        creator = factories.CreatorFactory.create()
+        job = factories.JobFactory.create()
 
         creator.user = user
         creator.job = job
@@ -243,13 +243,13 @@ class CreatorTestCase(TestCase):
     def test_works(self):
         """ Test the connection between a creator and the content they've made """
 
-        me = CreatorFactory.build(); me.save()
+        me = factories.CreatorFactory.create()
 
-        photo = PhotoFactory.build(); photo.save()
+        photo = factories.PhotoFactory.create()
         photo.creators.add(me)
         photo.save()
 
-        video = VideoFactory.build(); video.save()
+        video = factories.VideoFactory.create()
         video.creators.add(me)
         video.save()
 
@@ -262,8 +262,8 @@ class CreatorTestCase(TestCase):
 
 class JobTestCase(TestCase):
     def test_foreign_key(self):
-        job = JobFactory.build(); job.save()
-        creator = CreatorFactory.build(); creator.save()
+        job = factories.JobFactory.create()
+        creator = factories.CreatorFactory.create()
         creator.job = job
         creator.save()
 
@@ -294,9 +294,9 @@ class IssueTestCase(TestCase):
         pass
 
     def test_custom_save(self):
-        issue = IssueFactory.build()
-        volume = VolumeFactory.build(); volume.save()
-        issue.volume = volume
+        issue = factories.IssueFactory.create(
+            volume = factories.VolumeFactory.create()
+        )
         self.assertEqual(issue.scribd, None)
         self.assertEqual(issue.scribd_image, None)
         issue.scribd = 99999999
@@ -313,7 +313,7 @@ class SectionTestCase(TestCase):
         pass
 
     def test_shortname(self):
-        section = SectionFactory.build(); section.save()
+        section = factories.SectionFactory.create()
         self.assertLess(len(section.classname()), 9)
         self.assertEqual(section.classname(), section.classname().lower())
 

@@ -1,94 +1,80 @@
-from bongo.apps.bongo.models import *
+from bongo.apps.bongo import models
 from rest_framework import serializers
 
 
 class SeriesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Series
+        model = models.Series
         fields = ('id', 'name',)
-        depth = 2
 
 class VolumeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Volume
+        model = models.Volume
         fields = ('id', 'volume_number', 'volume_year_start', 'volume_year_end')
-        depth = 2
 
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Issue
+        model = models.Issue
         fields = ('id', 'issue_date', 'issue_number', 'volume', 'scribd')
-        depth = 2
 
 class SectionSerializer(serializers.ModelSerializer):
-    classname = serializers.SerializerMethodField()
+    classname = serializers.ReadOnlyField()
 
     class Meta:
-        model = Section
+        model = models.Section
         fields = ('id', 'section', 'classname', 'priority')
-        depth = 2
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Tag
+        model = models.Tag
         fields = ('id', 'tag',)
-        depth = 2
 
 class JobSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Job
+        model = models.Job
         fields = ('id', 'title',)
-        depth = 2
 
 class CreatorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Creator
+        model = models.Creator
         fields = ('id', 'user', 'name', 'job', 'twitter', 'profpic', 'courtesyof')
-        depth = 2
 
 class TextSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Text
+        model = models.Text
         fields = ('id', 'creators', 'caption', 'body', 'excerpt')
-        depth = 2
 
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Video
+        model = models.Video
         fields = ('id', 'creators', 'caption', 'host', 'uid')
-        depth = 2
 
 class PDFSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PDF
+        model = models.PDF
         fields = ('id', 'creators', 'caption', 'staticfile')
-        depth = 2
 
 class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Photo
+        model = models.Photo
         fields = ('id', 'creators', 'caption', 'staticfile')
-        depth = 2
 
 class HTMLSerializer(serializers.ModelSerializer):
     class Meta:
-        model = HTML
+        model = models.HTML
         fields = ('id', 'creators', 'caption', 'content')
-        depth = 2
 
 class PullquoteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Pullquote
+        model = models.Pullquote
         fields = ('id', 'creators', 'caption', 'quote', 'attribution')
-        depth = 2
 
 class PostSerializer(serializers.ModelSerializer):
-    content = serializers.SerializerMethodField()
-    creators = serializers.SerializerMethodField()
-    section = SectionSerializer()
+    content = serializers.ReadOnlyField()
+    creators = serializers.ReadOnlyField()
 
     class Meta:
-        model = Post
+        model = models.Post
         fields = (
             'id',
             'created',
@@ -109,39 +95,33 @@ class PostSerializer(serializers.ModelSerializer):
             'creators',
             'primary_type'
         )
-        depth = 2
 
 class AlertSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Alert
+        model = models.Alert
         fields = ('id', 'run_from', 'run_through', 'message', 'urgent')
-        depth = 2
 
 class AdvertiserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Advertiser
+        model = models.Advertiser
         fields = ('id', 'name',)
-        depth = 2
 
 class AdSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Ad
+        model = models.Ad
         fields = ('id', 'run_from', 'run_through', 'owner', 'url', 'adfile')
-        depth = 2
 
 class TipSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Tip
+        model = models.Tip
         fields = ('id', 'content', 'respond_to', 'submitted_at', 'submitted_from', 'useragent')
-        depth = 2
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Event
+        model = models.Event
         fields = ('id', )
-        depth = 2
 
 class ScheduledPostSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ScheduledPost
+        model = models.ScheduledPost
         fields = ('id', )

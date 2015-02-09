@@ -10,15 +10,26 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bongo.settings.dev')
 
 app = Celery('bongo.apps.celery')
 
+try:
+    if app.control.inspect().ping() != None:
+        celery_is_running = True
+    else:
+        celery_is_running = False
+except IOError:
+    celery_is_running = False
+
 app.conf.update(
     CELERY_TIMEZONE = settings.TIME_ZONE,
     CELERY_TASK_RESULT_EXPIRES = timedelta(hours=24),
     CELERY_CHORD_PROPAGATES = True,
     CELERY_RESULT_BACKEND='amqp',
-    BROKER_URL=os.environ.get("RABBITMQ_BROKER_URL", 'amqp://guest@localhost'),
-    CELERY_ALWAYS_EAGER=True if settings.CELERY_ALWAYS_EAGER and app.control.inspect().ping() == None else False,
+    BROKER_URL=os.environ.get("RABBITMQ_BROKER_URL", ''),
+    CELERY_ALWAYS_EAGER=(settings.CELERY_ALWAYS_EAGER and not celery_is_running),
     CELERY_EAGER_PROPAGATES_EXCEPTIONS = True,
-    CELERYD_HIJACK_ROOT_LOGGER = False
+    CELERYD_HIJACK_ROOT_LOGGER = False,
+    CELERY_ACCEPT_CONTENT = ['json', 'msgpack', 'yaml'],
+    CELERY_TASK_SERIALIZER = 'json',
+    CELERY_RESULT_SERIALIZER = 'json'
 )
 
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
@@ -30,7 +41,6 @@ if hasattr(settings, 'RAVEN_CONFIG'):
     register_signal(client)
 
 # Add scheduled tasks here.
-
 
 app.conf.update(
     CELERYBEAT_SCHEDULE = {

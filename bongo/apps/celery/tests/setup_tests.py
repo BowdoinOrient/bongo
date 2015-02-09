@@ -1,12 +1,10 @@
 from django.test import TestCase
-from django.test.utils import override_settings
 from celery import task
 
 @task()
 def add(x, y):
     return x + y
 
-@override_settings(CELERY_ALWAYS_EAGER=True)
 class TaskTestCase(TestCase):
     def test_add_task(self):
         """ Test a simple delayed task to make sure Celery is working """
