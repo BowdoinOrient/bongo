@@ -1,5 +1,5 @@
 -r prod.txt
 coveralls==0.4.1
-factory_boy
+factory_boy==2.4.1
+fake-factory==0.4.2
 -e git+git://github.com/BowdoinOrient/django-nose.git#egg=django-nose
-fake-factory
