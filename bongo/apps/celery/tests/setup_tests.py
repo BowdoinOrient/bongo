@@ -1,9 +1,5 @@
 from django.test import TestCase
-from celery import task
-
-@task()
-def add(x, y):
-    return x + y
+from bongo.apps.celery.celery import add
 
 class TaskTestCase(TestCase):
     def test_add_task(self):

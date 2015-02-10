@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 from datetime import timedelta
-from celery import Celery
+from celery import Celery, task
 from django.conf import settings
 from celery.schedules import crontab
 import os
@@ -29,7 +29,7 @@ app.conf.update(
     CELERYD_HIJACK_ROOT_LOGGER = False,
     CELERY_ACCEPT_CONTENT = ['json', 'msgpack', 'yaml'],
     CELERY_TASK_SERIALIZER = 'json',
-    CELERY_RESULT_SERIALIZER = 'json'
+    CELERY_RESULT_SERIALIZER = 'json',
 )
 
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
@@ -50,3 +50,9 @@ app.conf.update(
         },
     }
 )
+
+# Add other tasks (testing, one-off) here.
+
+@task(name='setup_tests.add')
+def add(x, y):
+    return x + y
