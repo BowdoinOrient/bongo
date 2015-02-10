@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -111,7 +112,7 @@ MANAGERS = ADMINS
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'filters': {
     'require_debug_false': {
         '()': 'django.utils.log.RequireDebugFalse'
@@ -120,8 +121,9 @@ LOGGING = {
     'handlers': {
         'console': {
             'level': 'DEBUG',
-            'class': 'logging.StreamHandler'
-        }
+            '()': 'logutils.colorize.ColorizingStreamHandler',
+            'stream': sys.stdout
+        },
     },
     'loggers': {
         'bongo': {

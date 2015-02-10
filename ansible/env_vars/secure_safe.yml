@@ -11,6 +11,9 @@ aws_secret_access_key:
 # Authenticated URL for Sentry (http://raven.readthedocs.org/en/latest/config/#the-sentry-dsn)
 raven_dsn:
 
+# API token for Logentries (https://logentries.com/doc/django/)
+logentries_token:
+
 # New Relic license key
 newrelic_key:
 
