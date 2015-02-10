@@ -113,12 +113,13 @@ ADMINS = (
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
+LOGENTRIES_TOKEN = ''
 try:
     with open(os.path.normpath(os.path.join(SITE_ROOT, "ansible/env_vars/secure.yml")), "rb") as f:
         secrets = yaml.load(f)
         LOGENTRIES_TOKEN = secrets['logentries_token']
 except:
-    pass
+    LOGENTRIES_TOKEN = os.environ.get('LOGENTRIES_TOKEN')
 
 LOGGING = {
     'version': 1,
@@ -135,7 +136,7 @@ LOGGING = {
             'stream': sys.stdout
         },
         'logentries': {
-            'token': os.environ.get('LOGENTRIES_TOKEN', LOGENTRIES_TOKEN),
+            'token': LOGENTRIES_TOKEN,
             'class': 'logentries.LogentriesHandler'
         }
     },
