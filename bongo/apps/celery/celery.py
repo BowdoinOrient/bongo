@@ -26,7 +26,7 @@ app.conf.update(
     BROKER_URL=os.environ.get("RABBITMQ_BROKER_URL", ''),
     CELERY_ALWAYS_EAGER=(settings.CELERY_ALWAYS_EAGER and not celery_is_running),
     CELERY_EAGER_PROPAGATES_EXCEPTIONS = True,
-    CELERYD_HIJACK_ROOT_LOGGER = False,
+    CELERYD_HIJACK_ROOT_LOGGER = True,
     CELERY_ACCEPT_CONTENT = ['json', 'msgpack', 'yaml'],
     CELERY_TASK_SERIALIZER = 'json',
     CELERY_RESULT_SERIALIZER = 'json',
@@ -55,4 +55,6 @@ app.conf.update(
 
 @task(name='setup_tests.add')
 def add(x, y):
+    logger = add.get_logger()
+    logger.warn("result will be {}".format(x + y))
     return x + y
