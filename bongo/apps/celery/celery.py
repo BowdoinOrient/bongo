@@ -23,7 +23,7 @@ app.conf.update(
     CELERY_TASK_RESULT_EXPIRES = timedelta(hours=24),
     CELERY_CHORD_PROPAGATES = True,
     CELERY_RESULT_BACKEND='amqp',
-    BROKER_URL=os.environ.get("RABBITMQ_BROKER_URL", ''),
+    BROKER_URL=os.environ.get("RABBITMQ_BROKER_URL", 'amqp://guest:guest@localhost:5672/'),
     CELERY_ALWAYS_EAGER=(settings.CELERY_ALWAYS_EAGER and not celery_is_running),
     CELERY_EAGER_PROPAGATES_EXCEPTIONS = True,
     CELERYD_HIJACK_ROOT_LOGGER = True,
