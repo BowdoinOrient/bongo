@@ -18,7 +18,7 @@ env:
     - secure: "rrGk1BvBIx5TZhHxrG/d8ClMcESzj0Y/puRiK0xZHFufdazaHiN5z9LLwrz+hM1K5FGQBYpgpCEwUekRtHNPpVTJX4bzgdjeH/SrQmxwJWCIZeHLuqwtMpG03BxkcJxgtReXgSH5Ibfqc5AmRvyTapIGQLBDaYZp5ghzFfZGQNo="
     - secure: "GnHGbcPj2rxWpH6/8yRcoEOA7XckztgyHGFEo4IE4QEraDye7r/7ANCwlKgL2S1IOUjyFdk/BVA16PUXaF7wTQmgO2p24ZEis12lCTnUA9WdZv214/zzuNEvlaHcpBy7Ne8bGMZsZ2ZOrGEeTzkUXNh10+3IgHeFs5fthCjG7SI="
     - secure: "HpEzCKwwkl59GkqqcP7lkdgVgokPvBgQCBwiI7nf4N2aeQvkkXZAB3KbElhSgI1TV5E/Xgm9tgWteJgNPFYg0JTsSzSD0sl27b3X1xArCm1Z4dUtS7GeV4NYHcTjalSwhuleXtwEwcVMQPJdrCyKAMvxaKiC3fp28TUnfIdW890="
-    - secure: "eFFNukDzwA76RzB/HZqU0aVGHa8lZBq01uLiMzu6/z442nxUl+8DW9AhT+cB7ujwJc2VRmEaclAs3FYWs/tXaw1kq4QwsjIRSJZj1n5733nGbqI3KO7LhEuJA8paZTFFy6LANJB/6Xly+5C9vwSvCoXMbb8hdlNIvT1O7tSfNmI="
+    - secure: "gKdM6gXjXFUuIf+MGwZQoTj1UMSNxoHuaN3dR+CT+GI6yvLpErt0W0a1nvxFCfHl0P1FAzBYPylQRQ3Jiw7QAo+LTLcZduvm7FcJC5I8I1wIu93gdx+A0uPjdFfdEv3rIjo4AE0+MzFL22WeBBGhWdPGrAcJJQ3uIwKiGv8KCJA="
 before_script:
   - psql -c 'create database bongo_test;' -U postgres
   - python manage.py syncdb --noinput
