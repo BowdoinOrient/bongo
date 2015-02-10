@@ -53,7 +53,7 @@ app.conf.update(
 
 # Add other tasks (testing, one-off) here.
 
-@task(name='setup_tests.add')
+@task(name='setup_tests.add', time_limit=1)
 def add(x, y):
     logger = add.get_logger()
     logger.warn("result will be {}".format(x + y))
