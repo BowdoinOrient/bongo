@@ -1,7 +1,5 @@
 from os import environ
 from bongo.settings.common import *
-from logentries import LogentriesHandler
-import logging
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
@@ -90,11 +88,5 @@ DISQUS_API_KEY = environ.get('DISQUS_API_KEY', '')
 SCRIBD_API_KEY = environ.get('SCRIBD_API_KEY', '')
 SCRIBD_API_SECRET = environ.get('SCRIBD_API_SECRET', '')
 
-LOGGING['handlers']['logentries'] = {
-    'token': environ.get('LOGENTRIES_TOKEN', ''),
-    'class': 'logentries.LogentriesHandler'
-}
-
-LOGGING['loggers']['bongo']['handlers'].append('logentries')
-LOGGING['loggers']['celery']['handlers'].append('logentries')
-LOGGING['loggers']['django.request']['handlers'].append('logentries')
+for logger in LOGGING['loggers']:
+    LOGGING['loggers'][logger]['handlers'].append('logentries')

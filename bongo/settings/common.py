@@ -10,6 +10,9 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 import os
 import sys
+from logentries import LogentriesHandler
+import logging
+import yaml
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -110,6 +113,13 @@ ADMINS = (
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
+try:
+    with open(os.path.normpath(os.path.join(SITE_ROOT, "ansible/env_vars/secure.yml")), "rb") as f:
+        secrets = yaml.load(f)
+        LOGENTRIES_TOKEN = secrets['logentries_token']
+except:
+    pass
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -124,6 +134,10 @@ LOGGING = {
             '()': 'logutils.colorize.ColorizingStreamHandler',
             'stream': sys.stdout
         },
+        'logentries': {
+            'token': os.environ.get('LOGENTRIES_TOKEN', LOGENTRIES_TOKEN),
+            'class': 'logentries.LogentriesHandler'
+        }
     },
     'loggers': {
         'bongo': {
