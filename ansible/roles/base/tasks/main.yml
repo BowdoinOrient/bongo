@@ -65,6 +65,8 @@
 - include: monitoring.yml tags=monitoring
   when: install_newrelic_server
 
+- include: performance.yml tags=performance
+
 - name: Append looback to /etc/hosts
   when: setup_etc_hosts
   sudo: yes

@@ -1,0 +1,14 @@
+---
+
+- name: Turn up the maximum open connections (part 1)
+  lineinfile: line="* soft nofile 4096"
+              state=present
+              dest=/etc/security/limits.conf
+
+- name: Turn up the maximum open connections (part 2)
+  lineinfile: line="* hard nofile 4096"
+              state=present
+              dest=/etc/security/limits.conf
+
+- name: Check that it worked
+  shell: if [ $(ulimit -n) = '4096' ] ; then exit 0 ; else exit 1 ; fi
