@@ -6,15 +6,6 @@
   tags: mysql_populate
   when: restore_mysql
 
-- name: Check to see if a file by that name already exists in /tmp
-  file:
-    state: file
-    path: /tmp/{{ archive_name.stdout }}
-  ignore_errors: yes
-  register: file_exists
-  tags: mysql_populate
-  when: restore_mysql
-
 - name: Download the database backup
   s3:
     aws_access_key: "{{ aws_access_key_id }}"
@@ -24,14 +15,14 @@
     dest: /tmp/{{ archive_name.stdout }}
     object: "{{ archive_name.stdout }}"
   tags: mysql_populate
-  when: restore_mysql=="true" and file_exists.failed==true
+  when: restore_mysql
 
 - name: Unzip database backup
-  command: gunzip /tmp/{{ archive_name.stdout }} > /tmp/DB02Orient.sql
+  shell: "gunzip --force /tmp/{{ archive_name.stdout }} > /tmp/DB02Orient.sql"
   tags: mysql_populate
-  when: restore_mysql=="true" and file_exists.failed==true
+  when: restore_mysql
 
 - name: Pipe the unzipped database backup to mysql
-  command: mysql -uroot -p{{ mysql_root_password }} {{ legacy_db_name }} < /tmp/DB02Orient.sql
+  shell: "mysql -uroot -p{{ mysql_root_password }} {{ legacy_db_name }} < /tmp/DB02Orient.sql"
   tags: mysql_populate
   when: restore_mysql
