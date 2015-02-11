@@ -1,11 +1,11 @@
 ---
 
 - name: Install libmemcached
-  apt: name=libmemcached-dev update_cache={{ update_apt_cache }} state=installed
+  apt: name=libmemcached-dev state=latest
   tags: packages
 
 - name: Install Memcached
-  apt: name=memcached update_cache={{ update_apt_cache }} state=installed
+  apt: name=memcached state=latest
   tags: packages
 
 - name: Create the Memcached configuration file

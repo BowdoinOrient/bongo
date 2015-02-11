@@ -5,8 +5,6 @@
   sudo: yes
   sudo_user: root
   remote_user: "{{ssh_user}}"
-  vars:
-    - update_apt_cache: no
   vars_files:
     - env_vars/base.yml
     - env_vars/secure.yml

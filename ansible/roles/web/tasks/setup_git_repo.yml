@@ -4,6 +4,14 @@
   when: code_source == "git"
   tags: git
 
+- name: Copy code from local machine using rsync
+  when: code_source == "rsync"
+  copy: src=../../../../
+        dest={{ project_path }}
+        force=yes
+        owner={{ gunicorn_user }}
+        group={{ gunicorn_group }}
+
 - name: Copy code using Vagrant shared folder
   when: code_source == "vagrant"
   command: rsync -a --owner={{ gunicorn_user }} --group={{ gunicorn_group }} /vagrant/ {{project_path}}

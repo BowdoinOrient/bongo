@@ -13,9 +13,9 @@ DATABASES = {
     },
     'archive': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DB02Orient',
-        'USER': 'root',
-        'PASSWORD': '',
+        'NAME': environ.get("LEGACY_DB_NAME", ""),
+        'USER': environ.get("LEGACY_DB_USER", ""),
+        'PASSWORD': environ.get("LEGACY_DB_PASSWORD", ""),
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }

@@ -1,1 +1,92 @@
 ---
+
+- name: Get the MariaDB apt keys
+  apt_key:
+    keyserver: hkp://keyserver.ubuntu.com:80
+    id: "0xcbcb082a1bb943db"
+    state: present
+
+- name: Add the MariaDB mirror to sources.list
+  apt_repository:
+    repo: deb http://nyc2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main
+    state: present
+
+- name: Install MariaDB
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: installed
+  with_items:
+    - mariadb-server
+    - mariadb-client
+    - libmariadbclient18
+    - libmariadbclient-dev
+  tags: packages
+
+- name: Ensure MySQL is running
+  service:
+    name: mysql
+    state: started
+
+- name: Change the root user's password
+  mysql_user:
+    user: root
+    host: "{{ item }}"
+    password: "{{ mysql_root_password }}"
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost
+  ignore_errors: yes  # This may fail, if so, run again with the newly changed password
+
+- name: Change the root user's password
+  mysql_user:
+    user: root
+    host: "{{ item }}"
+    password: "{{ mysql_root_password }}"
+    login_password: "{{ mysql_root_password }}"
+    login_user: root
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: Create Orient database user
+  mysql_user:
+    user: "{{ legacy_db_user }}"
+    host: "{{ item }}"
+    password: "{{ legacy_db_password }}"
+    priv: "{{ legacy_db_name }}.*:ALL"
+    state: present
+    login_password: "{{ mysql_root_password }}"
+    login_user: root
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: Create Orient database
+  mysql_db:
+    db: "{{ legacy_db_name }}"
+    state: present
+    login_password: "{{ mysql_root_password }}"
+    login_user: root
+
+- name: Remove the anonymous user
+  mysql_user:
+    name: ''
+    state: absent
+    host: "{{ item }}"
+    login_password: "{{ mysql_root_password }}"
+    login_user: root
+  with_items:
+    - localhost
+    - 127.0.0.1
+    - ::1
+
+- name: Remove the test database
+  mysql_db:
+    name: test
+    state: absent
+    login_password: "{{ mysql_root_password }}"
+    login_user: root

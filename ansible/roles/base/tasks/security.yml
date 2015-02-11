@@ -1,7 +1,7 @@
 ---
 
 - name: Install security packages
-  apt: name={{ item }} update_cache={{ update_apt_cache }} force=yes state=installed
+  apt: name={{ item }} force=yes state=latest
   with_items:
     - fail2ban
     - ufw

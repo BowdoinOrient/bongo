@@ -6,11 +6,10 @@
 
 - name: Add RabbitMQ to the sources list
   apt_repository: repo='deb http://www.rabbitmq.com/debian/ testing main'
-                  update_cache={{ update_apt_cache }}
                   state=present
 
 - name: Install RabbitMQ server
-  apt: name={{ item }} update_cache={{ update_apt_cache }} force=yes state=installed
+  apt: name={{ item }} force=yes state=latest
   with_items:
     - rabbitmq-server
 

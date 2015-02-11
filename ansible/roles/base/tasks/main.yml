@@ -1,7 +1,11 @@
 ---
 
+- name: Update apt cache
+  apt: update_cache=yes
+  tags: packages
+
 - name: Ensure bash, OpenSSl, and libssl are the latest versions
-  apt: name={{ item }} update_cache={{ update_apt_cache }} state=latest
+  apt: name={{ item }} state=latest
   with_items:
     - bash
     - openssl
@@ -9,22 +13,29 @@
     - libssl-doc
   tags: packages
 
+- name: Ensure all other packages are up to date
+  when: apt_get_upgrade
+  apt: upgrade=yes force=yes
+
 - name: Install base packages
-  apt: name={{ item }} update_cache={{ update_apt_cache }} force=yes state=installed
+  apt: name={{ item }} force=yes state=latest
   with_items:
     - build-essential
     - ntp
     - htop
     - git
     - python-dev
+    - python3.4-dev
     - python-pip
+    - python3-pip
     - python-pycurl
+    - python-mysqldb
     - supervisor
     - libyaml-dev
   tags: packages
 
 - name: Uninstall undesired packages
-  apt: name={{ item }} update_cache={{update_apt_cache}} force=yes state=absent
+  apt: name={{ item }} force=yes state=absent
   with_items:
     - landscape-client
     - landscape-client-ui

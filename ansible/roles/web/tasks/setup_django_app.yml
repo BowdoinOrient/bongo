@@ -1,7 +1,11 @@
 ---
 
 - name: Install packages required by the Django app inside virtualenv
-  pip: virtualenv={{ virtualenv_path }} requirements={{ requirements_file }} extra_args="--upgrade"
+  pip:
+    virtualenv: "{{ virtualenv_path }}"
+    requirements: "{{ requirements_file }}"
+    extra_args: "--upgrade"
+    executable: pip3
   tags:
     - django
 
@@ -68,8 +72,9 @@
 - name: Load user data from fixtures
   django_manage:
     command: loaddata
-    fixtures: |
-      "{{ application_path }}/apps/{{ application_name }}/fixtures/data.yaml"
+    fixtures: "{{ application_path }}/apps/{{ application_name }}/fixtures/{{ item }}.yaml"
+    with_items:
+      - users
     app_path: "{{ project_path }}"
     virtualenv: "{{ virtualenv_path }}"
     settings: "{{ django_settings_file }}"

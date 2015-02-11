@@ -28,6 +28,14 @@ scribd_api_secret:
 rabbitmq_admin_password:
 rabbitmq_application_password:
 
+# Credentials for the old MySQL database
+legacy_db_name:
+legacy_db_user:
+legacy_db_password:
+
+# Disable easy root access to the MySQL DB
+mysql_root_password:
+
 # SSL certificate - currently valid only for bowdoinorient.bjacobel.com @TODO
 ssl_crt: |
 

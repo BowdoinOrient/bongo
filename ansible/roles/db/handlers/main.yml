@@ -3,3 +3,9 @@
 - name: restart postgresql
   sudo: yes
   service: name=postgresql state=restarted enabled=yes
+
+- name: restart mysql
+  service:
+    name: mysql
+    state: restarted
+    enabled: yes
