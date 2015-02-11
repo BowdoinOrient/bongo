@@ -9,9 +9,13 @@
   apt_key:
     url: https://download.newrelic.com/548C16BF.gpg
     state: present
+  register: last_result
 
 - name: Install New Relic Server
-  apt: update_cache=yes name=newrelic-sysmond state=installed
+  apt:
+    update_cache: "{{ 'yes' if last_result.changed else 'no'}}"
+    name: newrelic-sysmond
+    state: installed
 
 - name: Add New Relic key to license file
   command: nrsysmond-config --set license_key={{ newrelic_key }}

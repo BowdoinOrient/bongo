@@ -12,3 +12,4 @@ db_user: "{{ application_name }}"
 db_name: "{{ application_name }}"
 
 apt_get_upgrade: no
+restore_mysql: false

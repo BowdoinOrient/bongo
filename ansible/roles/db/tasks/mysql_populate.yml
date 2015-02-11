@@ -1,0 +1,37 @@
+---
+
+- name: Get name of most recent database backup from S3
+  shell: "executable=/bin/bash AWS_ACCESS_KEY_ID={{ aws_access_key_id }} AWS_SECRET_ACCESS_KEY={{ aws_secret_access_key }} aws s3 ls bowdoinorient-bonus | grep .sql.gz | tail -1 | grep -oE '[^ ]+$'"
+  register: archive_name
+  tags: mysql_populate
+  when: restore_mysql
+
+- name: Check to see if a file by that name already exists in /tmp
+  file:
+    state: file
+    path: /tmp/{{ archive_name.stdout }}
+  ignore_errors: yes
+  register: file_exists
+  tags: mysql_populate
+  when: restore_mysql
+
+- name: Download the database backup
+  s3:
+    aws_access_key: "{{ aws_access_key_id }}"
+    aws_secret_key: "{{ aws_secret_access_key }}"
+    bucket: bowdoinorient-bonus
+    mode: get
+    dest: /tmp/{{ archive_name.stdout }}
+    object: "{{ archive_name.stdout }}"
+  tags: mysql_populate
+  when: restore_mysql=="true" and file_exists.failed==true
+
+- name: Unzip database backup
+  command: gunzip /tmp/{{ archive_name.stdout }} > /tmp/DB02Orient.sql
+  tags: mysql_populate
+  when: restore_mysql=="true" and file_exists.failed==true
+
+- name: Pipe the unzipped database backup to mysql
+  command: mysql -uroot -p{{ mysql_root_password }} {{ legacy_db_name }} < /tmp/DB02Orient.sql
+  tags: mysql_populate
+  when: restore_mysql

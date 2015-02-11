@@ -10,11 +10,12 @@
   apt_repository:
     repo: deb http://nyc2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main
     state: present
+  register: last_result
 
 - name: Install MariaDB
   apt:
     name: "{{ item }}"
-    update_cache: yes
+    update_cache: "{{ 'yes' if last_result.changed else 'no'}}"
     state: installed
   with_items:
     - mariadb-server
@@ -38,6 +39,7 @@
     - ::1
     - localhost
   ignore_errors: yes  # This may fail, if so, run again with the newly changed password
+  register: last_result
 
 - name: Change the root user's password
   mysql_user:
@@ -50,6 +52,7 @@
     - 127.0.0.1
     - ::1
     - localhost
+  when: last_result.failed
 
 - name: Create Orient database user
   mysql_user:
