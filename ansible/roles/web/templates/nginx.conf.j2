@@ -5,10 +5,10 @@ pid /run/nginx.pid;
 events {
     worker_connections 2048;
     multi_accept on;
+    use epoll;
 }
 
 worker_rlimit_nofile 4096;
-use epoll;
 
 http {
 
@@ -44,7 +44,6 @@ http {
     gzip_buffers 16 8k;
     gzip_http_version 1.1;
     gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
-
 
     include /etc/nginx/conf.d/*.conf;
     include /etc/nginx/sites-enabled/*;
