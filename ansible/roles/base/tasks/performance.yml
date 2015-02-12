@@ -9,6 +9,3 @@
   lineinfile: line="* hard nofile 4096"
               state=present
               dest=/etc/security/limits.conf
-
-- name: Check that it worked
-  shell: if [ $(ulimit -n) = '4096' ] ; then exit 0 ; else exit 1 ; fi

@@ -35,7 +35,7 @@
 
 - name: Run Django collectstatic
   django_manage:
-    command: fasts3collectstatic
+    command: s3collectstatic --noinput
     app_path: "{{ project_path }}"
     virtualenv: "{{ virtualenv_path }}"
     settings: "{{ django_settings_file }}"

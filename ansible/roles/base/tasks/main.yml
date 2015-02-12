@@ -16,6 +16,7 @@
 - name: Ensure all other packages are up to date
   when: apt_get_upgrade
   apt: upgrade=yes force=yes
+  tags: packages
 
 - name: Install base packages
   apt: name={{ item }} force=yes state=latest

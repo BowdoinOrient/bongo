@@ -13,6 +13,7 @@ exec celery worker -E -B \
     -A {{ application_name }}.apps.celery \
     --broker={{ rabbitmq_broker_url }} \
     -l {{ celery_loglevel }} \
+    --logfile="{{ celery_logfile }}" \
     -n worker1.{{ site_url }} \
     --concurrency={{ celery_num_workers }} \
     --config={{ celery_application_settings_file }}

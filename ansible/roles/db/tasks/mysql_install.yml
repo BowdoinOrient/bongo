@@ -39,7 +39,6 @@
     - ::1
     - localhost
   ignore_errors: yes  # This may fail, if so, run again with the newly changed password
-  register: last_result
 
 - name: Change the root user's password
   mysql_user:
@@ -52,7 +51,6 @@
     - 127.0.0.1
     - ::1
     - localhost
-  when: last_result.failed
 
 - name: Create Orient database user
   mysql_user:

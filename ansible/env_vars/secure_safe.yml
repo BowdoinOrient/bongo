@@ -41,3 +41,7 @@ ssl_crt: |
 
 # SSL key pair for above certificate. 4096 bits RSA.
 ssl_key: |
+
+git_ssh_pub_key: |
+
+git_ssh_priv_key: |

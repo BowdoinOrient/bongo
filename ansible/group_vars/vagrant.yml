@@ -38,7 +38,7 @@ django_settings_file: bongo.settings.prod
 django_debug: True
 run_django_syncdb: yes
 run_django_migration: yes
-run_django_collectstatic: yes
+run_django_collectstatic: no
 create_superuser_if_none_exists: yes
 dump_database: no
 load_database: no
@@ -53,7 +53,9 @@ fail2ban_maxretry: 10
 
 
 # Swapfile settings
-swapon: false
+swapon: true
+swapfile_swappiness: 1
+swapfile_size: 512MB
 
 
 # Monitoring settings
