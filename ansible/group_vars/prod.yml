@@ -52,6 +52,7 @@ fail2ban_maxretry: 3
 
 
 # Swap settings
+swapon: true
 swapfile_swappiness: 20
 swapfile_size: 1G
 
