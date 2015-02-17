@@ -1,2 +1,2 @@
 [prod]
-bowdoinorient.bjacobel.com ansible_ssh_host=162.243.211.131 ansible_ssh_user=orient
+bowdoinorient.bjacobel.com ansible_ssh_host=162.243.211.131 ansible_ssh_user=root

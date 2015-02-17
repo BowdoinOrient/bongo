@@ -11,3 +11,6 @@
 
 - name: Reload Fail2ban
   service: name=fail2ban state=reloaded
+
+- name: Restart sshd
+  service: sshd state=restarted

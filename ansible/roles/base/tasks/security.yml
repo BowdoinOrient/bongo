@@ -28,3 +28,10 @@
   template: src=jail.local.j2 dest=/etc/fail2ban/jail.local
   notify:
     - Reload Fail2ban
+
+- name: Disable password-based SSH entirely
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: PasswordAuthentication no
+    state: present
+  notify: Restart sshd

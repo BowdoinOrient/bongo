@@ -72,3 +72,5 @@
   when: setup_etc_hosts
   sudo: yes
   lineinfile: dest=/etc/hosts line="127.0.0.1 {{ site_url }}"
+
+- include: users.yml tags=users
