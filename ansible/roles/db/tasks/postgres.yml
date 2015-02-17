@@ -26,7 +26,6 @@
                  lc_ctype='en_US.UTF-8'
                  template='template0'
                  state=present
-  tags: debug
 
 - name: Ensure user has access to the database
   sudo_user: postgres
