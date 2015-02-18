@@ -21,9 +21,6 @@ DATABASES = {
     }
 }
 
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = environ.get('DJANGO_SECRET_KEY', '')
-
 # See: http://django-storages.readthedocs.org/en/latest/index.html
 INSTALLED_APPS += (
     'raven.contrib.django.raven_compat',
