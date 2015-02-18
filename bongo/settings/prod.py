@@ -65,7 +65,7 @@ MEDIA_URL = S3_URL
 #### RAVEN ###
 
 RAVEN_CONFIG = {
-    'dsn': environ.get('{}_RAVEN_DSN'.format(SITE_NAME.upper())),
+    'dsn': environ.get('RAVEN_DSN'),
 }
 
 ### END RAVEN #####
