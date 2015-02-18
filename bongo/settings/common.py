@@ -10,8 +10,6 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 import os
 import sys
-from logentries import LogentriesHandler
-import logging
 import yaml
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
