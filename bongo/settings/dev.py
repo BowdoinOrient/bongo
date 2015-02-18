@@ -3,6 +3,8 @@ import yaml
 
 DEBUG = True
 
+SECRET_KEY = 'afakesecretkeyfordevelopment'
+
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {

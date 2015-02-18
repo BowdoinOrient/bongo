@@ -25,9 +25,6 @@ DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fakesecretkeyfordevelopment')
-
 # Application definition
 
 INSTALLED_APPS = (

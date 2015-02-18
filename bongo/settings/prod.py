@@ -1,6 +1,9 @@
 from os import environ
 from bongo.settings.common import *
 
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {
