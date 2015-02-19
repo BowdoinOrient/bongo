@@ -172,12 +172,25 @@ def import_issues():
         if options.get("verbose"):
             print("importing issue #{}".format(old_issue.pk))
 
+        try:
+            vol = bongo_models.Volume.objects.get(volume_number__exact = old_issue.volume)
+        except bongo_models.Volume.DoesNotExist as e:
+            if old_issue.volume == 144:
+                (vol, created) = bongo_models.Volume.objects.get_or_create(
+                    volume_number = 144,
+                    volume_year_start = 2014,
+                    volume_year_end = 2015,
+                    imported = True
+                )
+            else:
+                raise e
+
         (issue, created) = bongo_models.Issue.objects.get_or_create(
             imported = True,
             pk = old_issue.id,
             issue_date = old_issue.issue_date,
             issue_number = old_issue.issue_number,
-            volume = bongo_models.Volume.objects.get(volume_number__exact = old_issue.volume),
+            volume = vol,
             scribd = old_issue.scribd,
             # @TODO: Host our own PDFs?
         )
