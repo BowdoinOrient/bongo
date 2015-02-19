@@ -179,7 +179,8 @@ def import_issues():
             vol = bongo_models.Volume.objects.get(volume_number__exact = old_issue.volume)
         except bongo_models.Volume.DoesNotExist as e:
             if old_issue.volume == 144:
-                for sql in management.call_command("sqlsequencereset bongo"): cursor.execute(sql)
+                cursor.execute("SELECT setval(pg_get_serial_sequence('\"bongo_volume\"','id'), coalesce(max(\"id\"), 1), max(\"id\") IS NOT null) FROM \"bongo_volume\";")
+
                 (vol, created) = bongo_models.Volume.objects.get_or_create(
                     volume_number = 144,
                     volume_year_start = 2014,
