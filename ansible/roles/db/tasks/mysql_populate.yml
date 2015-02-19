@@ -18,7 +18,7 @@
   when: restore_mysql
 
 - name: Unzip database backup
-  shell: "gunzip --force /tmp/{{ archive_name.stdout }} > /tmp/DB02Orient.sql"
+  shell: "gunzip -c --force /tmp/{{ archive_name.stdout }} > /tmp/DB02Orient.sql"
   tags: mysql_populate
   when: restore_mysql
 
