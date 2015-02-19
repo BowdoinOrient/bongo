@@ -76,12 +76,12 @@ def staticfiler(obj, filename, local_path, remote_uri):
 
 """ Convert a date to a datetime, do nothing to a datetime """
 def datetimeify(d):
-    if str(type(d)) == "<type 'datetime.datetime'>":
+    if d.__class__.__name__ == "datetime":
         return d
-    elif str(type(d)) == "<type 'datetime.date'>":
+    elif d.__class__.__name__ == "date":
         return datetime.combine(d, datetime.min.time())
     else:
-        raise Exception("Things are really fucked: datetimeify called with a "+str(type(d)))
+        raise Exception("Things are really fucked: datetimeify called with a " + d.__class__.__name__)
 
 
 """ Import the old ads table into the new Advertiser, Ad models """
