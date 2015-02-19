@@ -179,8 +179,9 @@ def import_issues():
             vol = bongo_models.Volume.objects.get(volume_number__exact = old_issue.volume)
         except bongo_models.Volume.DoesNotExist as e:
             if old_issue.volume == 144:
+                import ipdb; ipdb.set_trace()
                 (vol, created) = bongo_models.Volume.objects.get_or_create(
-                    id = archive_models.Volume.objects.all().count() + 1,
+                    id = archive_models.Volume.objects.using('archive').all().count() + 1,
                     volume_number = 144,
                     volume_year_start = 2014,
                     volume_year_end = 2015,
