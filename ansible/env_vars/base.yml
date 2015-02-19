@@ -13,3 +13,4 @@ db_name: "{{ application_name }}"
 
 apt_get_upgrade: true
 restore_mysql: false
+import_database: false

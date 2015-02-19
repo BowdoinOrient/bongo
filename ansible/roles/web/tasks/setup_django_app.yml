@@ -83,3 +83,15 @@
   tags:
     - django
     - django_loaddata
+
+- name: Populate Postgres database from legacy MySQL
+  django_manage:
+    command: importdb
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: import_database
+  tags:
+    - django
+    - django_import
