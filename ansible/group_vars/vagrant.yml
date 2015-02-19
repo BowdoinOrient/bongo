@@ -60,3 +60,7 @@ swapfile_size: 512MB
 
 # Monitoring settings
 install_newrelic_server: false
+
+
+# This step is so goddamn slow it's wise to skip it even if "bare" is set on Vagrant
+import_database: false

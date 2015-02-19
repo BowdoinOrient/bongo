@@ -83,6 +83,18 @@
     - django
     - django_loaddata
 
+- name: Download NLTK seed data
+  django_manage:
+    command: nltk-init
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: seed_nltk
+  tags:
+    - django
+    - django_ntlk
+
 - name: Populate Postgres database from legacy MySQL
   django_manage:
     command: importdb
