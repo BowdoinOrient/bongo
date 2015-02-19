@@ -3,6 +3,7 @@
 - name: Create a .ssh directory for root
   when: code_source == "git"
   file: path=/root/.ssh state=directory
+  tags: git
 
 - name: Create the SSH public key file
   copy:
@@ -10,6 +11,7 @@
     dest: /root/.ssh/id_rsa.pub
     mode: 0644
   when: code_source == "git"
+  tags: git
 
 - name: Create the SSH private key file
   copy:
@@ -17,6 +19,7 @@
     dest: /root/.ssh/id_rsa
     mode: 0600
   when: code_source == "git"
+  tags: git
 
 - name: Setup the Git repo
   git: repo={{ git_repo }} version={{ branch }} dest={{ project_path }} accept_hostkey=yes
