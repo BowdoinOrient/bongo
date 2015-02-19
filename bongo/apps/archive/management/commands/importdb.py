@@ -7,6 +7,8 @@ from django.core.files.storage import default_storage as storage
 from django.utils.timezone import make_aware
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
+from django.db import connection
+from django.core import management
 from datetime import datetime
 from optparse import make_option
 import pytz
@@ -16,6 +18,7 @@ import resource
 from django.test import override_settings
 
 tz = pytz.timezone('America/New_York')
+cursor = connection.cursor()
 
 def memcheck():
     return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000000.0
@@ -176,6 +179,7 @@ def import_issues():
             vol = bongo_models.Volume.objects.get(volume_number__exact = old_issue.volume)
         except bongo_models.Volume.DoesNotExist as e:
             if old_issue.volume == 144:
+                for sql in management.call_command("sqlsequencereset bongo"): cursor.execute(sql)
                 (vol, created) = bongo_models.Volume.objects.get_or_create(
                     volume_number = 144,
                     volume_year_start = 2014,
