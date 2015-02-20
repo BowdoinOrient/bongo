@@ -1,0 +1,15 @@
+- fields:
+    date_joined: 2015-02-20 00:00:01+00:00
+    email: bjacobel@gmail.com
+    first_name: Brian
+    groups: []
+    is_active: true
+    is_staff: true
+    is_superuser: true
+    last_login: 2015-02-20 00:00:02+00:00
+    last_name: Jacobel
+    password: pbkdf2_sha256$15000$XrKAtHfVaB7H$OmiTLdmcU7bydYEt08qPbQXpZ49vmEJW5yOa7z0jfnc=
+    user_permissions: []
+    username: bjacobel
+  model: auth.user
+  pk: 348
