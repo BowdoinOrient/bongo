@@ -15,7 +15,6 @@
     virtualenv: "{{ virtualenv_path }}"
     settings: "{{ django_settings_file }}"
   environment: django_environment
-  when: run_django_syncdb
   tags:
     - django
     - django_syncdb
@@ -27,7 +26,6 @@
     virtualenv: "{{ virtualenv_path }}"
     settings: "{{ django_settings_file }}"
   environment: django_environment
-  when: run_django_migration
   tags:
     - django
     - django_migrate
@@ -44,45 +42,6 @@
     - django
     - django_collectstatic
 
-- name: Flush database
-  django_manage:
-    command: flush
-    app_path: "{{ project_path }}"
-    virtualenv: "{{ virtualenv_path }}"
-    settings: "{{ django_settings_file }}"
-  environment: django_environment
-  when: flush_database
-  tags:
-    - django
-    - django_flush
-
-- name: Dump database to fixtures
-  django_manage:
-    command: dumpdata --format=yaml
-    app_path: "{{ project_path }}"
-    virtualenv: "{{ virtualenv_path }}"
-    settings: "{{ django_settings_file }}"
-  environment: django_environment
-  when: dump_database
-  tags:
-    - django
-    - django_dumpdata
-
-- name: Load user data from fixtures
-  django_manage:
-    command: loaddata
-    fixtures: "{{ application_path }}/apps/{{ application_name }}/fixtures/{{ item }}.yaml"
-    with_items:
-      - users
-    app_path: "{{ project_path }}"
-    virtualenv: "{{ virtualenv_path }}"
-    settings: "{{ django_settings_file }}"
-  environment: django_environment
-  when: load_database
-  tags:
-    - django
-    - django_loaddata
-
 - name: Download NLTK seed data
   django_manage:
     command: nltk-init
@@ -94,35 +53,3 @@
   tags:
     - django
     - django_ntlk
-
-- name: Populate Postgres database from legacy MySQL
-  django_manage:
-    command: importdb --verbose
-    app_path: "{{ project_path }}"
-    virtualenv: "{{ virtualenv_path }}"
-    settings: "{{ django_settings_file }}"
-  environment: django_environment
-  when: import_database
-  tags:
-    - django
-    - django_import
-
-- name: Generate sqlsequencereset commands
-  django_manage:
-    command: sqlsequencereset bongo
-    app_path: "{{ project_path }}"
-    virtualenv: "{{ virtualenv_path }}"
-    settings: "{{ django_settings_file }}"
-  environment: django_environment
-  when: import_database
-  tags:
-    - django
-    - django_import
-  register: result
-
-- name: Pipe sqlsequencereset commands into Postgres
-  shell: echo '{{ result.out }}' | PGPASSWORD={{ db_password }} psql -U bongo -d bongo
-  when: import_database
-  tags:
-    - django
-    - django_import

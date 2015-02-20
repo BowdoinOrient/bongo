@@ -20,3 +20,6 @@ apt_get_upgrade: "{{ bare }}"
 restore_mysql: "{{ bare }}"
 import_database: "{{ bare }}"
 seed_nltk: "{{ bare }}"
+flush_database: "{{ bare }}"
+
+backup_database: false

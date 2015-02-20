@@ -348,6 +348,8 @@ def import_content():
         if old_article.date_published is None:
             old_article.date_published = make_aware(datetime(1970, 1, 1), tz)
 
+        # @TODO: Fix a crash where the issue does not exist (article 9989 vol 144 issue 16)
+
         (post, created) = bongo_models.Post.objects.get_or_create(
             imported = True,
             pk = old_article.id,

@@ -36,13 +36,7 @@ celery_application_settings_file: bongo.settings.prod
 # Application settings.
 django_settings_file: bongo.settings.prod
 django_debug: True
-run_django_syncdb: yes
-run_django_migration: yes
 run_django_collectstatic: no
-create_superuser_if_none_exists: yes
-dump_database: no
-load_database: no
-flush_database: no
 setup_etc_hosts: yes
 
 
