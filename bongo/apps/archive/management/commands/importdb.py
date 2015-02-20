@@ -364,6 +364,31 @@ def import_content():
 
         # @TODO: Fix a crash where the issue does not exist (article 9989 vol 144 issue 16)
 
+        try:
+            iss = bongo_models.Issue.objects.get(
+                issue_number__exact = old_article.issue_number,
+                volume__exact = bongo_models.Volume.objects.get(
+                    volume_number__exact = old_article.volume
+                )
+            )
+        except bongo_models.Issue.DoesNotExist:
+            # Some articles specify an issue that does not exist (cough, 9989)
+            # Set their issue to be the existing issue with date closest to the article date
+            iss_before = bongo_models.Issue.objects.filter(issue_date_gt=old_article.issue_date).order_by('issue_date').first()
+            iss_after = bongo_models.Issue.objects.filter(issue_date_lt=old_article.issue_date).order_by('-issue_date').first()
+
+            if not iss_before and not iss_after:
+                raise Exception("Can't find any issues near this article's date")
+            elif not iss_before:
+                return iss_after
+            elif not iss_after:
+                return iss_before
+            elif old_article.issue_date - iss_before.issue_date > iss_after.issue_date - old_article.issue_date:
+                return iss_after
+            else:
+                return iss_before
+
+
         (post, created) = bongo_models.Post.objects.get_or_create(
             imported = True,
             pk = old_article.id,
@@ -374,12 +399,7 @@ def import_content():
             opinion = (
                 True if old_article.opinion == 1 else False
             ),
-            issue = bongo_models.Issue.objects.get(
-                issue_number__exact = old_article.issue_number,
-                volume__exact = bongo_models.Volume.objects.get(
-                    volume_number__exact = old_article.volume
-                )
-            ),
+            issue = iss,
             volume = bongo_models.Volume.objects.get(
                 volume_number__exact = old_article.volume
             ),
