@@ -7,14 +7,12 @@ from django.core.files.storage import default_storage as storage
 from django.utils.timezone import make_aware
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
+from django.test import override_settings
 from django.db import connection
 from datetime import datetime
 from optparse import make_option
 import pytz
 import requests
-import resource
-
-from django.test import override_settings
 
 options = None
 session = None
@@ -22,8 +20,12 @@ session = None
 tz = pytz.timezone('America/New_York')
 cursor = connection.cursor()
 
-def memcheck():
-    return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000000.0
+# Checks memory usage; this script used to run out of memory so this reporting was helpful.
+# Now the script runs out of CPU instead! slow clap
+# Commented out, left here so I remember how to do it if we need it again
+# def memcheck():
+#     import resource
+#     return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000000.0
 
 def staticfiler(obj, filename, local_path, remote_uri):
     global options
@@ -374,8 +376,12 @@ def import_content():
         except bongo_models.Issue.DoesNotExist:
             # Some articles specify an issue that does not exist (cough, 9989)
             # Set their issue to be the existing issue with date closest to the article date
-            iss_before = bongo_models.Issue.objects.filter(issue_date_gt=old_article.issue_date).order_by('issue_date').first()
-            iss_after = bongo_models.Issue.objects.filter(issue_date_lt=old_article.issue_date).order_by('-issue_date').first()
+
+            # shit. have to contert from a datetime (archive_models.Article.date_created) to a date (bongo_models.Issue.issue_date)
+            # @TODO
+
+            iss_before = bongo_models.Issue.objects.filter(issue_date__gt=old_article.date_created.date()).order_by('issue_date').first()
+            iss_after = bongo_models.Issue.objects.filter(issue_date__lt=old_article.date_created.date()).order_by('-issue_date').first()
 
             if not iss_before and not iss_after:
                 raise Exception("Can't find any issues near this article's date")
@@ -383,7 +389,7 @@ def import_content():
                 return iss_after
             elif not iss_after:
                 return iss_before
-            elif old_article.issue_date - iss_before.issue_date > iss_after.issue_date - old_article.issue_date:
+            elif old_article.date_created.date() - iss_before.issue_date > iss_after.issue_date - old_article.date_created.date():
                 return iss_after
             else:
                 return iss_before
