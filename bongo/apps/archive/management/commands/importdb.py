@@ -304,9 +304,12 @@ def import_attachment():
                 atchmt.creators.add(creator)
                 atchmt.save()
 
-            post = bongo_models.Post.objects.get(
-                pk__exact = old_attachment.article_id
-            )
+            try:
+                post = bongo_models.Post.objects.get(
+                    pk__exact = old_attachment.article_id
+                )
+            except:
+                if options.get("verbose")
             if old_attachment.type == "html":
                 post.html.add(atchmt)
             elif old_attachment.type == "vimeo":
