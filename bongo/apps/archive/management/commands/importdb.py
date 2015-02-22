@@ -309,7 +309,8 @@ def import_attachment():
                     pk__exact = old_attachment.article_id
                 )
             except:
-                if options.get("verbose")
+                if options.get("verbose"):
+                    print("Attachment {} wants to connect to post {}, but that post does not exist.".format(old_attachment.id, old_attachment.article_id))
             if old_attachment.type == "html":
                 post.html.add(atchmt)
             elif old_attachment.type == "vimeo":
