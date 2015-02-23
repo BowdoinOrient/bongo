@@ -1,0 +1,25 @@
+---
+
+git_repo: ssh://git@github.com/BowdoinOrient/bongo.git
+branch: develop
+
+application_name: bongo
+project_name: bongo
+
+ssl_dest_dir: /etc/ssl
+
+db_user: "{{ application_name }}"
+db_name: "{{ application_name }}"
+
+# Set "bare" to true if the machine has not yet had a complete successful deploy.
+# This performs one-time set-up steps like importing the MySQL database, doing
+# a complete apt-get upgrade, and downloading NLTK tokenizers.
+bare: true
+
+apt_get_upgrade: "{{ bare }}"
+restore_mysql: "{{ bare }}"
+import_database: "{{ bare }}"
+seed_nltk: "{{ bare }}"
+flush_database: "{{ bare }}"
+
+backup_database: false

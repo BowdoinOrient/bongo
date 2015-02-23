@@ -1,7 +1,7 @@
 from bongo.apps.bongo.models import *
 from bongo.apps.api.serializers import *
 from rest_framework import viewsets, permissions, filters
-from rest_framework.decorators import link
+from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
 
@@ -53,7 +53,7 @@ class SectionCrudRestricted(viewsets.ReadOnlyModelViewSet):
     serializer_class = SectionSerializer
     filter_backends = (filters.OrderingFilter,)
 
-    @link()
+    @list_route()
     def posts(self, request, pk=None):
         if 'limit' in request.GET:
             l = request.GET['limit']

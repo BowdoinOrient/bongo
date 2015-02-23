@@ -1,0 +1,55 @@
+---
+
+- name: Install packages required by the Django app inside virtualenv
+  pip:
+    virtualenv: "{{ virtualenv_path }}"
+    requirements: "{{ requirements_file }}"
+    executable: pip3
+  tags:
+    - django
+
+- name: Run the Django syncdb command
+  django_manage:
+    command: syncdb
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  tags:
+    - django
+    - django_syncdb
+
+- name: Run Django migrations
+  django_manage:
+    command: migrate
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  tags:
+    - django
+    - django_migrate
+
+- name: Run Django collectstatic
+  django_manage:
+    command: s3collectstatic --noinput
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: run_django_collectstatic
+  tags:
+    - django
+    - django_collectstatic
+
+- name: Download NLTK seed data
+  django_manage:
+    command: nltk-init
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: seed_nltk
+  tags:
+    - django
+    - django_ntlk

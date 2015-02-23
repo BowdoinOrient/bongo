@@ -1,0 +1,27 @@
+---
+
+- name: Set up an 'orient' user on the server for administration
+  user:
+    name: orient
+    createhome: yes
+    home: /home/orient
+    groups: sudo
+    shell: /bin/bash
+
+- name: Add ~/.ssh/citadel.pem.pub to the remote user's authorized_keys
+  lineinfile:
+    dest: /home/orient/.ssh/authorized_keys
+    line: "{{ citadel_pem_pub }}"
+    state: present
+    create: yes
+  notify: Restart sshd
+
+- name: Test that you can log in as this user
+  remote_user: orient
+  sudo: no
+  command: echo 'success'
+
+- name: Test that you can sudo as this user
+  remote_user: orient
+  sudo: yes
+  command: echo 'success'

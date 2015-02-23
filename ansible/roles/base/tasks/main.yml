@@ -1,0 +1,76 @@
+---
+
+- name: Update apt cache
+  apt: update_cache=yes
+  tags: packages
+
+- name: Ensure bash, OpenSSl, and libssl are the latest versions
+  apt: name={{ item }} state=latest
+  with_items:
+    - bash
+    - openssl
+    - libssl-dev
+    - libssl-doc
+  tags: packages
+
+- name: Ensure all other packages are up to date
+  when: apt_get_upgrade
+  apt: upgrade=yes force=yes
+  tags: packages
+
+- name: Install base packages
+  apt: name={{ item }} force=yes state=latest
+  with_items:
+    - build-essential
+    - ntp
+    - htop
+    - iftop
+    - git
+    - python-dev
+    - python3.4-dev
+    - python-pip
+    - python3-pip
+    - python-pycurl
+    - python-mysqldb
+    - supervisor
+    - libyaml-dev
+  tags: packages
+
+- name: Uninstall undesired packages
+  apt: name={{ item }} force=yes state=absent
+  with_items:
+    - landscape-client
+    - landscape-client-ui
+    - landscape-client-ui-install
+    - landscape-common
+  tags: packages
+
+- name: Remove undesired MOTD segments
+  file: path={{item}} state=absent
+  sudo: yes
+  with_items:
+    - /etc/update-motd.d/50-landscape-sysinfo
+    - /etc/update-motd.d/51-cloudguest
+
+- name: Install Python packages
+  pip: name={{ item }}
+  with_items:
+    - virtualenv
+    - newrelic
+    - awscli
+    - boto
+  tags: packages
+
+- include: security.yml tags=security
+
+- include: monitoring.yml tags=monitoring
+  when: install_newrelic_server
+
+- include: performance.yml tags=performance
+
+- name: Append looback to /etc/hosts
+  when: setup_etc_hosts
+  sudo: yes
+  lineinfile: dest=/etc/hosts line="127.0.0.1 {{ site_url }}"
+
+- include: users.yml tags=users

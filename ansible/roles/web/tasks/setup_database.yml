@@ -1,0 +1,73 @@
+---
+
+- name: Flush database
+  django_manage:
+    command: flush
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: flush_database
+  tags:
+    - django
+    - django_flush
+    - django_import
+
+- name: Populate Postgres database from legacy MySQL
+  django_manage:
+    command: importdb --verbose
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: import_database
+  tags:
+    - django
+    - django_import
+
+- name: Generate sqlsequencereset commands
+  django_manage:
+    command: sqlsequencereset bongo
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: import_database
+  tags:
+    - django
+    - django_import
+  register: result
+
+- name: Pipe sqlsequencereset commands into Postgres
+  shell: "echo '{{ result.out }}' | PGPASSWORD={{ db_password }} psql -U bongo -d bongo"
+  when: import_database
+  tags:
+    - django
+    - django_import
+
+- name: Load user data from fixtures
+  django_manage:
+    command: loaddata
+    fixtures: "{{ application_path }}/apps/{{ application_name }}/fixtures/{{ item }}.yaml"
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  with_items:
+    - users
+  environment: django_environment
+  tags:
+    - django
+    - django_loaddata
+    - django_import
+
+- name: Backup database to fixtures
+  django_manage:
+    command: dumpdata --format=yaml
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: backup_database
+  tags:
+    - django
+    - django_backup

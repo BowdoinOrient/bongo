@@ -1,0 +1,49 @@
+# See https://docs.djangoproject.com/en/1.7/ref/settings/#std:setting-SECRET_KEY
+django_secret_key:
+
+# Password for the 'bongo' postgres role
+db_password:
+
+# Amazon AWS credentials for the S3 bucket static files are stored on
+aws_access_key_id:
+aws_secret_access_key:
+
+# Authenticated URL for Sentry (http://raven.readthedocs.org/en/latest/config/#the-sentry-dsn)
+raven_dsn:
+
+# API token for Logentries (https://logentries.com/doc/django/)
+logentries_token:
+
+# New Relic license key
+newrelic_key:
+
+# Disqus API key
+disqus_api_key:
+
+# Scribd API credentials
+scribd_api_key:
+scribd_api_secret:
+
+# RabbitMQ credentials for management and worker control
+rabbitmq_admin_password:
+rabbitmq_application_password:
+
+# Credentials for the old MySQL database
+legacy_db_name:
+legacy_db_user:
+legacy_db_password:
+
+# Disable easy root access to the MySQL DB
+mysql_root_password:
+
+citadel_pem_pub:
+
+# SSL certificate - currently valid only for bowdoinorient.bjacobel.com @TODO
+ssl_crt: |
+
+# SSL key pair for above certificate. 4096 bits RSA.
+ssl_key: |
+
+git_ssh_pub_key: |
+
+git_ssh_priv_key: |

@@ -81,7 +81,7 @@ class Issue (models.Model):
                 try:
                     self.scribd_image = res.json()['rsp']['thumbnail_url']
                 except:
-                    logger.warning("bad scribd ID ({}) supplied when saving vol. {} issue {}, no thumbnail found".format(self.scribd, self.volume.volume_number, self.issue_number))
+                    logger.debug("bad scribd ID ({}) supplied when saving vol. {} issue {}, no thumbnail found".format(self.scribd, self.volume.volume_number, self.issue_number))
 
         super(Issue, self).save(*args, **kwargs)
         self.old_scribd = self.scribd

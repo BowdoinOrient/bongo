@@ -1,0 +1,20 @@
+---
+
+server_root_dir: /webapps
+setup_celeryflower: yes
+
+virtualenv_path: "{{ server_root_dir }}/bongo"
+project_path: "{{ server_root_dir }}/bongo/bongo"
+application_path: "{{ server_root_dir }}/bongo/bongo/bongo"
+
+celery_user: orient
+celery_group: webapps
+
+celery_application_name: celery
+celeryflower_application_name: celeryflower
+celery_scripts_dir: "{{ virtualenv_path }}/bin"
+celery_template_file: "{{ celery_application_name }}_start.j2"
+celeryflower_template_file: "{{ celeryflower_application_name }}_start.j2"
+
+celery_loglevel: info
+celery_logfile: "{{ application_log_dir }}/celery_supervisor.log"

@@ -1,28 +1,28 @@
 from os import environ
 from bongo.settings.common import *
 
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': SITE_NAME,
-        'USER': SITE_NAME,
-        'PASSWORD': environ.get("{}_POSTGRES_PASS".format(SITE_NAME.upper())),
+        'NAME': environ.get("DATABASE_NAME", ""),
+        'USER': environ.get("DATABASE_USER", ""),
+        'PASSWORD': environ.get("DATABASE_PASSWORD", ""),
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
     'archive': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DB02Orient',
-        'USER': 'root',
-        'PASSWORD': '',
+        'NAME': environ.get("LEGACY_DB_NAME", ""),
+        'USER': environ.get("LEGACY_DB_USER", ""),
+        'PASSWORD': environ.get("LEGACY_DB_PASSWORD", ""),
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = environ.get('{}_SECRET_KEY'.format(SITE_NAME.upper()), '')
 
 # See: http://django-storages.readthedocs.org/en/latest/index.html
 INSTALLED_APPS += (
@@ -52,8 +52,8 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 AWS_STORAGE_BUCKET_NAME = "bowdoinorient-bongo"
-AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
 AWS_PRELOAD_METADATA = True
 S3_URL = 'https://{}.s3.amazonaws.com/'.format(AWS_STORAGE_BUCKET_NAME)
 
@@ -65,7 +65,7 @@ MEDIA_URL = S3_URL
 #### RAVEN ###
 
 RAVEN_CONFIG = {
-    'dsn': environ.get('{}_RAVEN_DSN'.format(SITE_NAME.upper())),
+    'dsn': environ.get('RAVEN_DSN'),
 }
 
 ### END RAVEN #####
@@ -87,3 +87,6 @@ COMPRESS_STORAGE = STATICFILES_STORAGE
 DISQUS_API_KEY = environ.get('DISQUS_API_KEY', '')
 SCRIBD_API_KEY = environ.get('SCRIBD_API_KEY', '')
 SCRIBD_API_SECRET = environ.get('SCRIBD_API_SECRET', '')
+
+for logger in LOGGING['loggers']:
+    LOGGING['loggers'][logger]['handlers'].append('logentries')

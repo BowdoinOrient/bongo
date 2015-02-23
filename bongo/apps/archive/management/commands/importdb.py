@@ -7,20 +7,29 @@ from django.core.files.storage import default_storage as storage
 from django.utils.timezone import make_aware
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
+from django.test import override_settings
+from django.db import connection
 from datetime import datetime
 from optparse import make_option
 import pytz
 import requests
-import resource
 
-from django.test import override_settings
+options = None
+session = None
 
 tz = pytz.timezone('America/New_York')
+cursor = connection.cursor()
 
-def memcheck():
-    return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000000.0
+# Checks memory usage; this script used to run out of memory so this reporting was helpful.
+# Now the script runs out of CPU instead! slow clap
+# Commented out, left here so I remember how to do it if we need it again
+# def memcheck():
+#     import resource
+#     return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000000.0
 
 def staticfiler(obj, filename, local_path, remote_uri):
+    global options
+    global session
     # couple of cases here:
     #   - file already exists on the system, has filesize of 0
     #   - file already exists on system, has a filesize > 0
@@ -76,17 +85,18 @@ def staticfiler(obj, filename, local_path, remote_uri):
 
 """ Convert a date to a datetime, do nothing to a datetime """
 def datetimeify(d):
-    if str(type(d)) == "<type 'datetime.datetime'>":
+    if d.__class__.__name__ == "datetime":
         return d
-    elif str(type(d)) == "<type 'datetime.date'>":
+    elif d.__class__.__name__ == "date":
         return datetime.combine(d, datetime.min.time())
     else:
-        raise Exception("Things are really fucked: datetimeify called with a "+str(type(d)))
+        raise Exception("Things are really fucked: datetimeify called with a " + d.__class__.__name__)
 
 
 """ Import the old ads table into the new Advertiser, Ad models """
 """ There aren't actually any, so this is pointless """
 def import_ads():
+    global options
     for old_ad in archive_models.Ads.objects.using('archive').all().iterator():
         if options.get("verbose"):
             print("importing ad #{}".format(old_ad.pk))
@@ -115,6 +125,7 @@ def import_ads():
 
 """ Import the old tips table into the new Tip model """
 def import_tips():
+    global options
     for old_tip in archive_models.Tips.objects.using('archive').all().iterator():
         if options.get("verbose"):
             print("importing tip #{}".format(old_tip.pk))
@@ -132,6 +143,7 @@ def import_tips():
 
 """ Import the old alerts table into the new Alert model """
 def import_alerts():
+    global options
     for old_alert in archive_models.Alerts.objects.using('archive').all().iterator():
         if options.get("verbose"):
             print("importing alert #{}".format(old_alert.pk))
@@ -153,6 +165,7 @@ def import_alerts():
 
 """ Import the old volumes table into the new Volume model """
 def import_volumes():
+    global options
     for old_volume in archive_models.Volume.objects.using('archive').all().iterator():
         if options.get("verbose"):
             print("importing volume #{}".format(old_volume.pk))
@@ -168,16 +181,31 @@ def import_volumes():
 
 """ Import the old issues table into the new Issue model """
 def import_issues():
+    global options
     for old_issue in archive_models.Issue.objects.using('archive').all().iterator():
         if options.get("verbose"):
             print("importing issue #{}".format(old_issue.pk))
+
+        try:
+            vol = bongo_models.Volume.objects.get(volume_number__exact = old_issue.volume)
+        except bongo_models.Volume.DoesNotExist as e:
+            if old_issue.volume == 144:
+                (vol, created) = bongo_models.Volume.objects.get_or_create(
+                    id = archive_models.Volume.objects.using('archive').all().count() + 1,
+                    volume_number = 144,
+                    volume_year_start = 2014,
+                    volume_year_end = 2015,
+                    imported = True
+                )
+            else:
+                raise e
 
         (issue, created) = bongo_models.Issue.objects.get_or_create(
             imported = True,
             pk = old_issue.id,
             issue_date = old_issue.issue_date,
             issue_number = old_issue.issue_number,
-            volume = bongo_models.Volume.objects.get(volume_number__exact = old_issue.volume),
+            volume = vol,
             scribd = old_issue.scribd,
             # @TODO: Host our own PDFs?
         )
@@ -185,6 +213,7 @@ def import_issues():
 
 """ Import the old series table into the new Series model """
 def import_series():
+    global options
     for old_series in archive_models.Series.objects.using('archive').all().iterator():
         if options.get("verbose"):
             print("importing series #{}".format(old_series.pk))
@@ -197,6 +226,7 @@ def import_series():
 
 """ Import the old sections table into the new Section model """
 def import_section():
+    global options
     for old_section in archive_models.Section.objects.using('archive').all().iterator():
         if options.get("verbose"):
             print("importing section #{}".format(old_section.pk))
@@ -210,6 +240,7 @@ def import_section():
 
 """ Import the old jobs table into the new Job model """
 def import_job():
+    global options
     for old_job in archive_models.Job.objects.using('archive').all().iterator():
         if options.get("verbose"):
             print("importing job #{}".format(old_job.pk))
@@ -224,6 +255,7 @@ def import_job():
 """ Holy shit all of these last few are interrelated so this is going to be a piece of work """
 
 def import_attachment():
+    global options
     for old_attachment in archive_models.Attachments.objects.using('archive').all().iterator():
         if options.get("verbose"):
             print("importing attachment #{}".format(old_attachment.pk))
@@ -272,9 +304,13 @@ def import_attachment():
                 atchmt.creators.add(creator)
                 atchmt.save()
 
-            post = bongo_models.Post.objects.get(
-                pk__exact = old_attachment.article_id
-            )
+            try:
+                post = bongo_models.Post.objects.get(
+                    pk__exact = old_attachment.article_id
+                )
+            except:
+                if options.get("verbose"):
+                    print("Attachment {} wants to connect to post {}, but that post does not exist.".format(old_attachment.id, old_attachment.article_id))
             if old_attachment.type == "html":
                 post.html.add(atchmt)
             elif old_attachment.type == "vimeo":
@@ -291,6 +327,7 @@ def import_attachment():
 """ this is complex """
 @override_settings(DEBUG = False)
 def import_content():
+    global options
     archive_articles = archive_models.Article.objects.using('archive').all().iterator()
     archive_articlebodies = archive_models.Articlebody.objects.using('archive')
     archive_articleauthors = archive_models.Articleauthor.objects.using('archive')
@@ -331,6 +368,37 @@ def import_content():
         if old_article.date_published is None:
             old_article.date_published = make_aware(datetime(1970, 1, 1), tz)
 
+        # @TODO: Fix a crash where the issue does not exist (article 9989 vol 144 issue 16)
+
+        try:
+            iss = bongo_models.Issue.objects.get(
+                issue_number__exact = old_article.issue_number,
+                volume__exact = bongo_models.Volume.objects.get(
+                    volume_number__exact = old_article.volume
+                )
+            )
+        except bongo_models.Issue.DoesNotExist:
+            # Some articles specify an issue that does not exist (cough, 9989)
+            # Set their issue to be the existing issue with date closest to the article date
+
+            # shit. have to contert from a datetime (archive_models.Article.date_created) to a date (bongo_models.Issue.issue_date)
+            # @TODO
+
+            iss_before = bongo_models.Issue.objects.filter(issue_date__gt=old_article.date_created.date()).order_by('issue_date').first()
+            iss_after = bongo_models.Issue.objects.filter(issue_date__lt=old_article.date_created.date()).order_by('-issue_date').first()
+
+            if not iss_before and not iss_after:
+                raise Exception("Can't find any issues near this article's date")
+            elif not iss_before:
+                return iss_after
+            elif not iss_after:
+                return iss_before
+            elif old_article.date_created.date() - iss_before.issue_date > iss_after.issue_date - old_article.date_created.date():
+                return iss_after
+            else:
+                return iss_before
+
+
         (post, created) = bongo_models.Post.objects.get_or_create(
             imported = True,
             pk = old_article.id,
@@ -341,12 +409,7 @@ def import_content():
             opinion = (
                 True if old_article.opinion == 1 else False
             ),
-            issue = bongo_models.Issue.objects.get(
-                issue_number__exact = old_article.issue_number,
-                volume__exact = bongo_models.Volume.objects.get(
-                    volume_number__exact = old_article.volume
-                )
-            ),
+            issue = iss,
             volume = bongo_models.Volume.objects.get(
                 volume_number__exact = old_article.volume
             ),
@@ -391,6 +454,7 @@ def import_content():
 
 
 def import_creator():
+    global options
     for old_author in archive_models.Author.objects.using('archive').all().iterator():
         if options.get("verbose"):
             print("importing author #{}".format(old_author.pk))
@@ -416,6 +480,7 @@ def import_creator():
 
 
 def import_photo():
+    global options
     new_ids_created = 1
     for old_photo in archive_models.Photo.objects.using('archive').all().iterator():
         if options.get("verbose"):

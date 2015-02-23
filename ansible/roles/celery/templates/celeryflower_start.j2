@@ -1,0 +1,17 @@
+#!/bin/sh
+
+DJANGODIR={{ project_path }}
+
+# Activate the virtual environment.
+cd $DJANGODIR
+. ../bin/activate
+. ../bin/postactivate
+
+# Programs meant to be run under supervisor should not daemonize themselves
+# (do not use --daemon).
+exec celery flower \
+    -A {{ application_name }}.apps.celery \
+    --broker={{ rabbitmq_broker_url }} \
+    --broker_url={{ rabbitmq_broker_url }} \
+    --address=0.0.0.0 \
+    --port=5555

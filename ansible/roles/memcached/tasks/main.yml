@@ -1,0 +1,20 @@
+---
+
+- name: Install libmemcached
+  apt: name=libmemcached-dev state=latest
+  tags: packages
+
+- name: Install Memcached
+  apt: name=memcached state=latest
+  tags: packages
+
+- name: Create the Memcached configuration file
+  template: src=memcached.conf.j2
+            dest=/etc/memcached.conf
+            mode=0644
+            backup=yes
+  notify:
+    - restart memcached
+
+- name: Ensure the Memcached service is running
+  service: name=memcached state=started enabled=yes

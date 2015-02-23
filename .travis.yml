@@ -12,17 +12,18 @@ install:
 env:
   global:
     - DJANGO_SETTINGS_MODULE="bongo.settings.travis"
-    - BONGO_SECRET_KEY="totallynotmyrealsecretkey"
-    - BONGO_LOGENTRIES_TOKEN="nopenotreal"
-    - BONGO_RAVEN_DSN="http://dd2c825ff9b1417d88a99573903ebf80:91631495b10b45f8a1cdbc492088da6a@localhost:9000/1"
+    - DJANGO_SECRET_KEY="totallynotmyrealsecretkey"
+    - RAVEN_DSN="http://dd2c825ff9b1417d88a99573903ebf80:91631495b10b45f8a1cdbc492088da6a@localhost:9000/1"
     - secure: "fQbky6XqlOcEtd97/GNvOca7VK4n2cyV7USf+2Bt+aFC3LyZRyPSSYjjdxUBjeRheGhdov/sjxcpwWIEJ6lF/JxOjyv4ekEQBlLHk1q34pQxPmaYcJ6DOIm/U6Vv/IRyOtBizc3TqutLOzpLlfxdDr0SbGyM+EJbNBdb1tUrLNo="
     - secure: "rrGk1BvBIx5TZhHxrG/d8ClMcESzj0Y/puRiK0xZHFufdazaHiN5z9LLwrz+hM1K5FGQBYpgpCEwUekRtHNPpVTJX4bzgdjeH/SrQmxwJWCIZeHLuqwtMpG03BxkcJxgtReXgSH5Ibfqc5AmRvyTapIGQLBDaYZp5ghzFfZGQNo="
     - secure: "GnHGbcPj2rxWpH6/8yRcoEOA7XckztgyHGFEo4IE4QEraDye7r/7ANCwlKgL2S1IOUjyFdk/BVA16PUXaF7wTQmgO2p24ZEis12lCTnUA9WdZv214/zzuNEvlaHcpBy7Ne8bGMZsZ2ZOrGEeTzkUXNh10+3IgHeFs5fthCjG7SI="
     - secure: "HpEzCKwwkl59GkqqcP7lkdgVgokPvBgQCBwiI7nf4N2aeQvkkXZAB3KbElhSgI1TV5E/Xgm9tgWteJgNPFYg0JTsSzSD0sl27b3X1xArCm1Z4dUtS7GeV4NYHcTjalSwhuleXtwEwcVMQPJdrCyKAMvxaKiC3fp28TUnfIdW890="
+    - secure: "gKdM6gXjXFUuIf+MGwZQoTj1UMSNxoHuaN3dR+CT+GI6yvLpErt0W0a1nvxFCfHl0P1FAzBYPylQRQ3Jiw7QAo+LTLcZduvm7FcJC5I8I1wIu93gdx+A0uPjdFfdEv3rIjo4AE0+MzFL22WeBBGhWdPGrAcJJQ3uIwKiGv8KCJA="
 before_script:
   - psql -c 'create database bongo_test;' -U postgres
   - python manage.py syncdb --noinput
   - python manage.py nltk-init
+  - celery -A bongo.apps.bongo worker &
 script:
   - coverage run --source=bongo manage.py test
 after_success:

@@ -1,0 +1,24 @@
+---
+
+- name: Add New Relic to apt sources
+  apt_repository:
+    repo: deb http://apt.newrelic.com/debian/ newrelic non-free
+    state: present
+
+- name: Get the New Relic apt key
+  apt_key:
+    url: https://download.newrelic.com/548C16BF.gpg
+    state: present
+  register: last_result
+
+- name: Install New Relic Server
+  apt:
+    update_cache: "{{ 'yes' if last_result.changed else 'no'}}"
+    name: newrelic-sysmond
+    state: installed
+
+- name: Add New Relic key to license file
+  command: nrsysmond-config --set license_key={{ newrelic_key }}
+
+- name: Start New Relic monitoring daemon
+  command: /etc/init.d/newrelic-sysmond start

@@ -19,6 +19,6 @@ INSTALLED_APPS += (
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-NOSE_ARGS = ['--with-fixture-bundling', '--nologcapture']
+NOSE_ARGS = ['--with-fixture-bundling', '--nologcapture', '--verbosity=2']
 
 NOSE_TESTMATCH = '(?:^|[b_./-])[Tt]ests'
