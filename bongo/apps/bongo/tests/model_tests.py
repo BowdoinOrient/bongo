@@ -1,7 +1,6 @@
 from bongo.apps.bongo.tests import factories
 from django.test import TestCase
 from django.contrib.auth.models import User
-from django.utils.encoding import python_2_unicode_compatible
 
 """
 Test content type models and related:
@@ -178,7 +177,6 @@ class PullquoteTestCase(TestCase):
 
 
 class PostTestCase(TestCase):
-    @python_2_unicode_compatible
     def test_similar_tags(self):
 
         # this is a damn good article. one of the best.
