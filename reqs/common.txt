@@ -1,4 +1,4 @@
-django==1.7.3
+django==1.7.5
 djangorestframework==3.0.4
 django-cors-headers==0.12
 django-compressor==1.4
