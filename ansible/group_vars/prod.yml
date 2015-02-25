@@ -36,6 +36,7 @@ celery_application_settings_file: bongo.settings.prod
 # Application settings.
 django_settings_file: bongo.settings.prod
 run_django_collectstatic: yes
+run_django_compress: yes
 setup_etc_hosts: no
 
 

@@ -42,6 +42,18 @@
     - django
     - django_collectstatic
 
+- name: Run Django compress
+  django_manage:
+    command: compress
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  when: run_django_compress
+  tags:
+    - django
+    - django_compress
+
 - name: Download NLTK seed data
   django_manage:
     command: nltk-init
