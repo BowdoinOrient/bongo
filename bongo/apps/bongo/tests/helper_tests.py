@@ -53,6 +53,8 @@ class TaggerTestCase(TestCase):
         Furthermore, test that the tags are chosen irrelevant of HTML in the article
         """
 
-        tagify(articletext)
+        self.assertEqual(len(tagify(articletext)), 5)
 
-        tagify(articlehtml)
+        self.assertEqual(len(tagify(articlehtml)), 5)
+
+        self.assertEqual(tagify(articlehtml), tagify(articletext))

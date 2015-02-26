@@ -1,7 +1,7 @@
-# from topia.termextract import extract
-import tagger
+from tagger import tagger
 import pickle
-import nltk
+import os
+from django.conf import settings
 
 # Python 3 moves HTMLParser to html.parser
 try:
@@ -9,11 +9,15 @@ try:
 except ImportError:
     from html.parser import HTMLParser as htmlparse
 
+with open(os.path.join(settings.SITE_ROOT, "data", "dict.pkl"), 'rb') as f:
+    weights = pickle.load(f)
+
 class MLStripper(htmlparse):
     def __init__(self):
         self.convert_charrefs=False
         self.reset()
         self.fed = []
+        self.strict = True
     def handle_data(self, d):
         self.fed.append(d)
     def get_data(self):
@@ -26,16 +30,12 @@ def strip_tags(html):
 
 def tagify(text):
     text = strip_tags(text)
-
-    with open('/tmp/dict.pkl', 'wb') as f:
-        tagger.extras.build_dict_from_nltk(f, nltk.corpus.brown,
-            nltk.corpus.stopwords.words('english'), measure='ICF')
-        weights = pickle.load(f)
-        myreader = tagger.Reader()
-        mystemmer = tagger.Stemmer()
-        myrater = tagger.Rater(weights)
-        mytagger = tagger.Tagger(myreader, mystemmer, myrater)
-        return mytagger(text, 5)
+    mytagger = tagger.Tagger(
+        tagger.Reader(),
+        tagger.Stemmer(),
+        tagger.Rater(weights)
+    )
+    return mytagger(text, 5)
 
 
 def arbitrary_serialize(obj):

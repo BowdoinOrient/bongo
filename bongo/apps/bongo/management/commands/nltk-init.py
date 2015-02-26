@@ -1,5 +1,8 @@
 from django.core.management.base import BaseCommand
 import nltk
+import os
+from django.conf import settings
+from tagger.extras import build_dict_from_nltk
 
 class Command(BaseCommand):
 
@@ -25,3 +28,14 @@ class Command(BaseCommand):
         except:
             print("Downloading NLTK stopwords...")
             nltk.download("stopwords")
+
+        if os.path.exists(os.path.join(settings.SITE_ROOT, "data", "dict.pkl")):
+            print("Tagging dictionary already present!")
+        else:
+            print("Building tagging dictionary...")
+            build_dict_from_nltk(
+                os.path.join(settings.SITE_ROOT, "data", "dict.pkl"),
+                nltk.corpus.brown,
+                nltk.corpus.stopwords.words('english'),
+                measure='ICF'
+            )
