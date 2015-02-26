@@ -1,4 +1,7 @@
-from topia.termextract import extract
+# from topia.termextract import extract
+import tagger
+import pickle
+import nltk
 
 # Python 3 moves HTMLParser to html.parser
 try:
@@ -24,10 +27,16 @@ def strip_tags(html):
 def tagify(text):
     text = strip_tags(text)
 
-    extractor = extract.TermExtractor()
-    extractor.filter = extract.DefaultFilter(singleStrengthMinOccur=4)
+    with open('/tmp/dict.pkl', 'wb') as f:
+        tagger.extras.build_dict_from_nltk(f, nltk.corpus.brown,
+            nltk.corpus.stopwords.words('english'), measure='ICF')
+        weights = pickle.load(f)
+        myreader = tagger.Reader()
+        mystemmer = tagger.Stemmer()
+        myrater = tagger.Rater(weights)
+        mytagger = tagger.Tagger(myreader, mystemmer, myrater)
+        return mytagger(text, 5)
 
-    return [w for (w, x, y) in extractor(text)[:5] if len(w) < 25]
 
 def arbitrary_serialize(obj):
     from bongo.apps.api import serializers

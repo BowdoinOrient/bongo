@@ -16,6 +16,6 @@ class Command(BaseCommand):
                 post = Object()
                 post.title = "Undefined post"
 
-            print "Suggested tags for post \"{}\":".format(post.title)
-            print tagify(text.body)
-            print ""
+            print("Suggested tags for post \"{}\":".format(post.title))
+            print(tagify(text.body))
+            print("")

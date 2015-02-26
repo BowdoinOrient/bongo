@@ -12,4 +12,16 @@ class Command(BaseCommand):
             print("Downloading NLTK tokenizers...")
             nltk.download("punkt")
 
-        nltk.download("stopwords")
+        try:
+            from nltk.corpus import brown
+            print("Brown corpus already present!")
+        except:
+            print("Downloading Brown corpus...")
+            nltk.download("brown")
+
+        try:
+            from nltk.corpus import stopwords
+            print("NLTK stopwords already present!")
+        except:
+            print("Downloading NLTK stopwords...")
+            nltk.download("stopwords")
