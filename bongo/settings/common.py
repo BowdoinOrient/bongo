@@ -25,6 +25,17 @@ DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
+# Security settings
+
+SECURE_SSL_REDIRECT = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_FRAME_DENY = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SESSION_COOKIE_SECURE = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -34,6 +45,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djangobower',
+    'djangosecure',
 
     # Suit has to come before contrib.admin
     'suit',
@@ -56,6 +68,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'djangosecure.middleware.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
