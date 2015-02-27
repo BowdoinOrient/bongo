@@ -1,16 +1,14 @@
 from tagger import tagger
+from django.conf import settings
+from django.core.cache import cache
 import pickle
 import os
-from django.conf import settings
 
 # Python 3 moves HTMLParser to html.parser
 try:
     from HTMLParser import HTMLParser as htmlparse
 except ImportError:
     from html.parser import HTMLParser as htmlparse
-
-with open(os.path.join(settings.SITE_ROOT, "data", "dict.pkl"), 'rb') as f:
-    weights = pickle.load(f)
 
 class MLStripper(htmlparse):
     def __init__(self):
@@ -29,6 +27,13 @@ def strip_tags(html):
     return s.get_data()
 
 def tagify(text):
+    # cache weights so we don't do this IO repeatedly
+    weights = cache.get("weights")
+    if not weights:
+        with open(os.path.join(settings.SITE_ROOT, "data", "dict.pkl"), 'rb') as f:
+            weights = pickle.load(f)
+        cache.set("weights", weights, 3600)
+
     text = strip_tags(text)
     mytagger = tagger.Tagger(
         tagger.Reader(),
