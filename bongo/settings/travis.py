@@ -2,6 +2,8 @@ from bongo.settings.prod import *
 
 # The same settings as production, but no database password.
 
+SECURE_SSL_REDIRECT = False
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',

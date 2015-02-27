@@ -1,9 +1,7 @@
 from os import environ
 from bongo.settings.common import *
 
-# Security settings
 SECURE_SSL_REDIRECT = True
-SECURE_REDIRECT_EXEMPT = ["http://testserver",]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')

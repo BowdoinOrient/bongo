@@ -5,6 +5,8 @@ DEBUG = True
 
 SECRET_KEY = 'afakesecretkeyfordevelopment'
 
+SECURE_SSL_REDIRECT = False
+
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {

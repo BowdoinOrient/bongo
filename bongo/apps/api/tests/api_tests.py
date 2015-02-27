@@ -16,7 +16,7 @@ def authorize(client):
 def crud(self, object, model, endpoint=None):
     if not endpoint:
         # not sure if this is a hack or clever
-        endpoint = "https://testserver/api/v1/" + str(type(object)).split('.')[-1][:-2] + "/"
+        endpoint = "http://testserver/api/v1/" + str(type(object)).split('.')[-1][:-2] + "/"
 
     # use DRF's APICLient rather than django.test.Client because the latter is
     # totally broken with regards to content_type
