@@ -51,6 +51,7 @@ INSTALLED_APPS = (
 
     # for the API
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
 )
 
