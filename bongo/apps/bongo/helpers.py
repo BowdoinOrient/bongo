@@ -1,4 +1,8 @@
-from topia.termextract import extract
+from tagger import tagger
+from django.conf import settings
+from django.core.cache import cache
+import pickle
+import os
 
 # Python 3 moves HTMLParser to html.parser
 try:
@@ -11,6 +15,7 @@ class MLStripper(htmlparse):
         self.convert_charrefs=False
         self.reset()
         self.fed = []
+        self.strict = True
     def handle_data(self, d):
         self.fed.append(d)
     def get_data(self):
@@ -22,12 +27,21 @@ def strip_tags(html):
     return s.get_data()
 
 def tagify(text):
+    # cache weights so we don't do this IO repeatedly
+    weights = cache.get("weights")
+    if not weights:
+        with open(os.path.join(settings.SITE_ROOT, "data", "dict.pkl"), 'rb') as f:
+            weights = pickle.load(f)
+        cache.set("weights", weights, 3600)
+
     text = strip_tags(text)
+    mytagger = tagger.Tagger(
+        tagger.Reader(),
+        tagger.Stemmer(),
+        tagger.Rater(weights)
+    )
+    return mytagger(text, 5)
 
-    extractor = extract.TermExtractor()
-    extractor.filter = extract.DefaultFilter(singleStrengthMinOccur=4)
-
-    return [w for (w, x, y) in extractor(text)[:5] if len(w) < 25]
 
 def arbitrary_serialize(obj):
     from bongo.apps.api import serializers

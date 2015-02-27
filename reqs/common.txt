@@ -17,7 +17,7 @@ logutils==0.3.3
 libsass==0.6.2
 django-libsass==0.2
 pyyaml==3.11
-logentries==0.2.1
+LogentriesLogger==0.2.1
 git+git://github.com/signalkraft/django-suit.git@b10e8888972e873b7baa5337130e035b2e3b2957#egg=django-suit
 git+git://github.com/BowdoinOrient/django-storages-py3.git@83f18f5ccf39b5be230c6fc24d3b0b35c98277db#egg=django-storages
-git+git://github.com/BowdoinOrient/topia.termextract.git@2effd5f7274fb962292503d6d16938e68497059e#egg=topia.termextract
+git+git://github.com/BowdoinOrient/tagger.git@c26dd928ff7d9401607e67c0af7934d573164120#egg=tagger
