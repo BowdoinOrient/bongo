@@ -1,7 +1,10 @@
 ###Bongo 
 [![Build Status](https://img.shields.io/travis/BowdoinOrient/bongo/develop.svg?style=flat)](https://travis-ci.org/BowdoinOrient/bongo) [![Coverage Status](https://img.shields.io/coveralls/BowdoinOrient/bongo/develop.svg?style=flat)](https://coveralls.io/r/BowdoinOrient/bongo?branch=develop)  [![Stories in Progress](https://badge.waffle.io/BowdoinOrient/bongo.svg?label=In%20Progress&title=In%20Progress)](http://waffle.io/BowdoinOrient/bongo)
 ---
-Bongo is the third version of the Bowdoin Orient Network Update System. The project's goal is to provide a professional, scalable and modern platform on which readers, editors and contributors of the Bowdoin Orient can read and write Bowdoin's news for the next decade.
+Bongo is the third version of the Bowdoin Orient Network Update System. The project's goal is to provide a professional, scalable and modern platform on which readers, editors and contributors of the Bowdoin Orient can read and write Bowdoin's news for the next decade. In addition, Bongo hopes to be a platform that can be reused and remixed to meet the needs of other journalistic organizations.
+
+####Contributing
+Bongo is using [waffle.io](http://waffle.io/BowdoinOrient/bongo) for project management. If you're interested in contributing code to Bongo, check out the scrum board and see what's in the backlog. Most stories should already be pointed, prioritized and given acceptance criteria. If you're interested in a story that's missing one of those, or have any other questions, email [Brian](mailto:bjacobel@gmail.com) - he can help match up your skills with the Orient's needs.
 
 
 ####Setup
@@ -57,7 +60,7 @@ and visit [http://bowdoinorient.local](http://bowdoinorient.local) in your brows
 Bongo is currently deployed at [bowdoinorient.bjacobel.com](https://bowdoinorient.bjacobel.com).
 
 ####Tests
-You can run Bongo's test suite with `python manage.py test`. The current build status shown at the top of this readme.
+You can run Bongo's test suite with `python manage.py test`. The current build status and test coverage stats are shown at the top of this readme.
 
 
 The test suite currently runs against both Python 2.7 and 3.4. so please ensure all pull requests are backwards-compatible (or forwards-, if developed with 2.7).
@@ -91,3 +94,7 @@ Every endpoint accepts two query parameters.
 Some endpoints allow you to cross-reference resources. For example, to return a  list of all of the posts in a particular section:
 
         GET /api/v1/section/3/posts
+
+        
+#### License
+Bongo is released under the MIT license. If you have questions about using Bongo for your organization, please [get in touch](mailto:bjacobel@gmail.com).
