@@ -1,6 +1,8 @@
-###Bongo
+###Bongo 
+[![Build Status](https://img.shields.io/travis/BowdoinOrient/bongo/develop.svg?style=flat)](https://travis-ci.org/BowdoinOrient/bongo) [![Coverage Status](https://img.shields.io/coveralls/BowdoinOrient/bongo/develop.svg?style=flat)](https://coveralls.io/r/BowdoinOrient/bongo?branch=develop)  [![Stories in Progress](https://badge.waffle.io/BowdoinOrient/bongo.svg?label=In%20Progress&title=In%20Progress)](http://waffle.io/BowdoinOrient/bongo)
 ---
 Bongo is the third version of the Bowdoin Orient Network Update System. The project's goal is to provide a professional, scalable and modern platform on which readers, editors and contributors of the Bowdoin Orient can read and write Bowdoin's news for the next decade.
+
 
 ####Setup
 You'll need:
@@ -55,9 +57,8 @@ and visit [http://bowdoinorient.local](http://bowdoinorient.local) in your brows
 Bongo is currently deployed at [bowdoinorient.bjacobel.com](https://bowdoinorient.bjacobel.com).
 
 ####Tests
-You can run Bongo's test suite with `python manage.py test`. The current build status is:
+You can run Bongo's test suite with `python manage.py test`. The current build status shown at the top of this readme.
 
-[![Build Status](https://img.shields.io/travis/BowdoinOrient/bongo/develop.svg?style=flat)](https://travis-ci.org/BowdoinOrient/bongo) [![Coverage Status](https://img.shields.io/coveralls/BowdoinOrient/bongo/develop.svg?style=flat)](https://coveralls.io/r/BowdoinOrient/bongo?branch=develop)
 
 The test suite currently runs against both Python 2.7 and 3.4. so please ensure all pull requests are backwards-compatible (or forwards-, if developed with 2.7).
 
