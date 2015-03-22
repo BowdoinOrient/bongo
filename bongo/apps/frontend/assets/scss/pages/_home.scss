@@ -39,7 +39,7 @@
                 text-align:center;
                 width:25px;
                 height:25px;
-                font-family: "MyriadPro";
+                font-family: $myriad-stack;
                 font-style:bold;
                 font-weight:500;
 
@@ -62,7 +62,7 @@
         }
 
         .top-title {
-            font-family: "MinionPro";
+            font-family: $minion-stack;
             display:inline-block;
             max-width:80%;
             margin:10px 0 10px 40px;
@@ -87,7 +87,7 @@
                 padding-bottom:5px;
                 margin-bottom:15px;
                 border-bottom:2px solid $lightergray;
-                font-family:"MyriadPro";
+                font-family:$myriad-stack;
                 font-size:1.3em;
                 text-transform:uppercase;
 

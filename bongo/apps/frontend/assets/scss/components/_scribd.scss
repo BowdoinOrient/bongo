@@ -7,7 +7,7 @@
     min-height:201px;
 
     .current-issue-title {
-        font-family:"MyriadPro";
+        font-family:$myriad-stack;
         font-size:1.3em;
         text-transform: uppercase;
         padding-bottom:5px;
@@ -30,7 +30,7 @@
         .issue-details {
             max-width:154px;
             width:50%;
-            font-family:"MyriadPro";
+            font-family:$myriad-stack;
             font-size:1.2em;
             float:right;
             padding-left:15px;

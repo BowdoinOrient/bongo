@@ -6,7 +6,7 @@
     margin:10px 0;
 
     .dsq-widget-title {
-        font-family:"MyriadPro";
+        font-family:$myriad-stack;
         font-size:1.3em;
         text-transform: uppercase;
         padding-bottom:5px;
@@ -18,7 +18,7 @@
     }
 
     .dsq-widget-item {
-        font-family:"MinionPro";
+        font-family:$minion-stack;
         font-size:1.2em;
         line-height:1.2em;
         font-weight:bold;
