@@ -1,7 +1,7 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from bongo.apps.frontend import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', views.HomeView, name="home"),
     url(r'^article/', views.ArticleView, name="article"),
     url(r'^author/', views.AuthorView, name="author"),
@@ -13,4 +13,4 @@ urlpatterns = patterns('',
     url(r'^subscribe/', views.SubscribeView, name="subscribe"),
     url(r'^ethics/', views.EthicsView, name="ethics"),
     url(r'^advertise/', views.AdvertiseView, name="advertise"),
-)
+]

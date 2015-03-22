@@ -24,3 +24,4 @@ bongo/media/*
 
 .vagrant/*
 
+bongo/settings/whoosh_index

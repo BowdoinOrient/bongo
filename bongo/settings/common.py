@@ -50,11 +50,15 @@ INSTALLED_APPS = (
     'suit',
     'django.contrib.admin',
 
+    # Search
+    'haystack',
+
     # Local apps
     'bongo.apps.bongo',
     'bongo.apps.archive',
     'bongo.apps.api',
     'bongo.apps.frontend',
+    'bongo.apps.search',
 
     # for the frontend
     'compressor',
@@ -195,6 +199,7 @@ TEMPLATE_LOADERS = (
 TEMPLATE_DIRS = (
     os.path.normpath(os.path.join(BASE_DIR, 'templates')),
     os.path.normpath(os.path.join(BASE_DIR, 'apps/frontend/templates')),
+    os.path.normpath(os.path.join(BASE_DIR, 'apps/search/templates')),
 )
 
 
@@ -247,3 +252,14 @@ COMPRESS_PRECOMPILERS = (
 COMPRESS_OFFLINE = True
 
 ### end django-compressor ###
+
+### Haystack ###
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
+}
+
+### End Haystack ###
