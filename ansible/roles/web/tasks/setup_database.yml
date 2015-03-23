@@ -74,7 +74,7 @@
 
 - name: Build search index
   django_manage:
-    command: update_index
+    command: update_index --noinput
     app_path: "{{ project_path }}"
     virtualenv: "{{ virtualenv_path }}"
     settings: "{{ django_settings_file }}"
