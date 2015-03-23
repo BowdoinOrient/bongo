@@ -1,9 +1,5 @@
-from django.conf.urls import url
-from haystack.views import SearchView
-from haystack.forms import ModelSearchForm
+from django.conf.urls import url, include
 
 urlpatterns = [
-    url(r'^search/', SearchView(
-        form_class=ModelSearchForm
-    ), name='haystack_search'),
+    url(r'^search/$', include('haystack.urls')),
 ]

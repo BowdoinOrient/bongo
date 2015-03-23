@@ -32,16 +32,20 @@ def HomeView(request):
 
     return render(request, 'pages/home.html', ctx)
 
-def ArticleView(request):
+def ArticleView(request, id=None, slug=None):
     ctx = {}
     return render(request, 'pages/article.html', ctx)
 
-def AuthorView(request):
-    ctx = {}
+def AuthorView(request, id=None):
+    ctx = {
+        "author": models.Creator.objects.filter(id__exact=id).first()
+    }
     return render(request, 'pages/author.html', ctx)
 
-def SeriesView(request):
-    ctx = {}
+def SeriesView(request, id=None):
+    ctx = {
+        "series": models.Series.objects.filter(id__exact=id).first()
+    }
     return render(request, 'pages/series.html', ctx)
 
 def AboutView(request):

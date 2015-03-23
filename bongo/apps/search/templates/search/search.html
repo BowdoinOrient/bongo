@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load class_name %}
 
 {% block content %}
     <h2>Search</h2>
@@ -19,7 +20,11 @@
 
             {% for result in page.object_list %}
                 <p>
-                    <a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
+                    {% if result.object|class_name == 'Creator' %}
+                        <a href="{% url 'author' result.object.id %}">{{ result.object.name }}</a>
+                    {% elif result.object|class_name == 'Series' %}
+                        <a href="{% url 'series' result.object.id %}">{{ result.object.name }}</a>
+                    {% endif %}
                 </p>
             {% empty %}
                 <p>No results found.</p>
