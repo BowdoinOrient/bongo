@@ -71,3 +71,13 @@
   tags:
     - django
     - django_backup
+
+- name: Build search index
+  django_manage:
+    command: update_index
+    app_path: "{{ project_path }}"
+    virtualenv: "{{ virtualenv_path }}"
+    settings: "{{ django_settings_file }}"
+  environment: django_environment
+  tags:
+    - django

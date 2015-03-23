@@ -7,6 +7,7 @@ services:
   - postgresql
   - redis
   - memcached
+  - elasticsearch
 install:
   - pip install -r reqs/travis.txt
 cache:
@@ -29,6 +30,8 @@ before_script:
   - psql -c 'create database bongo_test;' -U postgres
   - python manage.py syncdb --noinput
   - python manage.py nltk-init
+  - python manage.py rebuild_index
+  - celery -A bongo.apps.bongo worker &
 script:
   - coverage run --source=bongo manage.py test
 after_success:
