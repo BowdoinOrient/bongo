@@ -35,11 +35,6 @@ class SearchTestCase(TestCase):
         """Assert that you can find Articles via search"""
         pass
 
-    def test_search_index(self):
-        """Assert that there are Haystack indexes to search"""
-        sqs = SearchQuerySet().all()
-        self.assertGreater(sqs.count(), 0)
-
     def test_search_view(self):
         """Test that you can search by querying the search page"""
         c = Client()
