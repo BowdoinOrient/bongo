@@ -1,20 +1,21 @@
 ---
 
 - name: Add the Nginx signing key to apt keys
-  tags: packages
   apt_key:
     url: http://nginx.org/keys/nginx_signing.key
     state: present
+  tags: packages
 
 - name: Add Nginx mainline to sources.list
-  tags: packages
   apt_repository:
     repo: deb http://nginx.org/packages/mainline/ubuntu/ trusty nginx
     state: present
+  tags: packages
+  register: last_result
 
 - name: Install Nginx mainline
   apt:
-    update: yes
+    update_cache: "{{ 'yes' if last_result.changed else 'no'}}"
     name: nginx
     state: latest
   tags: packages
@@ -52,6 +53,11 @@
 - name: Ensure that the application site is enabled
   command: ln -s /etc/nginx/sites-available/{{ application_name }} /etc/nginx/sites-enabled/{{ application_name }} creates=/etc/nginx/sites-enabled/{{ application_name }}
   notify: reload nginx
+
+- name: Set up log rotation
+  template:
+    src=logrotate_nginx.j2
+    dest=/etc/logrotate.d/nginx
 
 - name: Ensure Nginx service is started
   service:

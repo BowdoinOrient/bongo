@@ -1,13 +1,13 @@
 ---
 
-- name: Add New Relic to apt sources
-  apt_repository:
-    repo: deb http://apt.newrelic.com/debian/ newrelic non-free
-    state: present
-
 - name: Get the New Relic apt key
   apt_key:
     url: https://download.newrelic.com/548C16BF.gpg
+    state: present
+
+- name: Add New Relic to apt sources
+  apt_repository:
+    repo: deb http://apt.newrelic.com/debian/ newrelic non-free
     state: present
   register: last_result
 
@@ -22,3 +22,31 @@
 
 - name: Start New Relic monitoring daemon
   command: /etc/init.d/newrelic-sysmond start
+
+- name: Add the Rsyslog 8 repository
+  apt_repository:
+    repo: ppa:adiscon/v8-stable
+  tags: packages
+  register: last_result
+
+- name: Ensure Rsyslog 8 is installed
+  apt:
+    name: rsyslog
+    state: installed
+    update_cache: "{{ 'yes' if last_result.changed else 'no'}}"
+  tags: packages
+
+- name: Add Logentries configuration to rsyslog conf
+  template:
+    src: rsyslog.conf.j2
+    dest: /etc/rsyslog.conf
+  notify: restart rsyslog
+
+- name: Add nginx logs to rsyslog collection
+  template:
+    src: 22-nginx.conf.j2
+    dest: /etc/rsyslog.d/22-nginx.conf
+  notify: restart rsyslog
+
+- name: validate rsyslog config
+  shell: rsyslogd -N1

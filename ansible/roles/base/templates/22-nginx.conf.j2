@@ -1,0 +1,13 @@
+module(load="imfile" PollingInterval="10")
+
+input(type="imfile"
+      File="{{ project_path }}/logs/nginx_access.log"
+      Tag="nginx-access"
+      Severity="info"
+      Facility="local7")
+
+input(type="imfile"
+      File="{{ project_path }}/logs/nginx_error.log"
+      Tag="nginx-error"
+      Severity="error"
+      Facility="local7")

@@ -5,12 +5,14 @@
     keyserver: hkp://keyserver.ubuntu.com:80
     id: "0xcbcb082a1bb943db"
     state: present
+  tags: packages
 
 - name: Add the MariaDB mirror to sources.list
   apt_repository:
     repo: deb http://nyc2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main
     state: present
   register: last_result
+  tags: packages
 
 - name: Install MariaDB
   apt:
