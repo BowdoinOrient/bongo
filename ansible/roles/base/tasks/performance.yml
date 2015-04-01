@@ -1,11 +1,11 @@
 ---
 
 - name: Turn up the maximum open connections (part 1)
-  lineinfile: line="* soft nofile 4096"
+  lineinfile: line="* soft nofile 65535"
               state=present
               dest=/etc/security/limits.conf
 
 - name: Turn up the maximum open connections (part 2)
-  lineinfile: line="* hard nofile 4096"
+  lineinfile: line="* hard nofile 65535"
               state=present
               dest=/etc/security/limits.conf
