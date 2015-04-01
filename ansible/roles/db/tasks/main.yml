@@ -1,7 +1,9 @@
 ---
 
 - include: mysql_install.yml
+  tags: "mysql"
 
 - include: mysql_populate.yml
+  tags: "mysql"
 
 - include: postgres.yml

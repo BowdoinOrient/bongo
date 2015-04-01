@@ -11,15 +11,26 @@
 # For explanations see
 # http://dev.mysql.com/doc/mysql/en/server-system-variables.html
 
+# This will be passed to all mysql clients
+# It has been reported that passwords should be enclosed with ticks/quotes
+# escpecially if they contain "#" chars...
+# Remember to edit /etc/mysql/debian.cnf when changing the socket location.
 [client]
 port                    = 3306
 socket                  = /var/run/mysqld/mysqld.sock
 
+# Here is entries for some specific programs
+# The following values assume you have at least 32M ram
+
+# This was formally known as [safe_mysqld]. Both versions are currently parsed.
 [mysqld_safe]
 socket                  = /var/run/mysqld/mysqld.sock
 nice                    = 0
 
 [mysqld]
+#
+# * Basic Settings
+#
 user                    = mysql
 pid-file                = /var/run/mysqld/mysqld.pid
 socket                  = /var/run/mysqld/mysqld.sock
@@ -31,56 +42,60 @@ lc_messages_dir         = /usr/share/mysql
 lc_messages             = en_US
 skip-external-locking
 
+#
+# Instead of skip-networking the default is now to listen only on
+# localhost which is more compatible and is not less secure.
 bind-address            = 127.0.0.1
 
-max_connections         = 5
-connect_timeout         = 5
-wait_timeout            = 600
+key_buffer_size         = 256K
 max_allowed_packet      = 1M
+table_cache             = 2
 sort_buffer_size        = 64K
-bulk_insert_buffer_size = 16M
-thread_stack            = 131072
-thread_cache_size       = 0
-host_cache_size         = 0
-
-myisam_recover          = BACKUP
-key_buffer_size         = 16K
-open-files-limit        = 2000
-table_open_cache        = 4
-myisam_sort_buffer_size = 64K
-concurrent_insert       = 2
-read_buffer_size        = 64K
-read_rnd_buffer_size    = 64K
-
-tmp_table_size          = 256K
-
+query_cache_size        = 32K
 query_cache_limit       = 64K
-query_cache_size        = 2M
-
-log_warnings            = 2
-
-log_bin                 = /var/log/mysql/mariadb-bin
-log_bin_index           = /var/log/mysql/mariadb-bin.index
-
-expire_logs_days        = 10
-max_binlog_size         = 100M
-
-default_storage_engine  = InnoDB
-
-innodb_buffer_pool_size = 256K
-innodb_sort_buffer_size = 64K
+read_buffer_size        = 256K
+read_rnd_buffer_size    = 256K
+net_buffer_length       = 2K
+thread_stack            = 64K
+max_connections         = 2
+innodb_buffer_pool_size = 1M
+innodb_additional_mem_pool_size = 512K
+innodb_log_file_size    = 5242880
 innodb_log_buffer_size  = 256K
-innodb_file_per_table   = 1
-innodb_open_files       = 400
-innodb_io_capacity      = 400
-innodb_flush_method     = O_DIRECT
+innodb_flush_log_at_trx_commit = 1
+innodb_lock_wait_timeout = 50
+
+[innodb]
+buffer_pool_size        = 1M
+ft_cache_size           = 1M
+ft_total_cache_size     = 2M
+sort_buffer_size        = 64K
+log_file_size           = 256K
+log_buffer_size         = 56K
 
 [mysqldump]
 quick
-quote-names
 max_allowed_packet      = 1M
 
-[isamchk]
-key_buffer              = 2M
+[mysql]
+no-auto-rehash
+#safe-updates
 
+[isamchk]
+key_buffer              = 1M
+sort_buffer_size        = 1M
+
+[myisamchk]
+key_buffer              = 1M
+sort_buffer_size        = 1M
+
+[mysqlhotcopy]
+interactive-timeout
+
+performance_schema      = 0
+
+#
+# * IMPORTANT: Additional settings that can override those from this file!
+#   The files must end with '.cnf', otherwise they'll be ignored.
+#
 !includedir /etc/mysql/conf.d/
