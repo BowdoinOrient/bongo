@@ -4,13 +4,13 @@
   apt: name=supervisor state=latest
   tags:
     - celery
-    - celeryflower
+    # - celeryflower
 
 - name: Ensure supervisor service is started
   service: name=supervisor state=started enabled=yes
   tags:
     - celery
-    - celeryflower
+    # - celeryflower
 
 - name: Create the Supervisor config file for {{ celery_application_name }}
   template: src=supervisor_{{ celery_application_name }}.conf.j2
@@ -18,12 +18,12 @@
   tags:
     - celery
 
-- name: Create the Supervisor config file for {{ celeryflower_application_name }}
-  template: src=supervisor_{{ celeryflower_application_name }}.conf.j2
-            dest=/etc/supervisor/conf.d/{{ celeryflower_application_name }}.conf
-  when: setup_celeryflower
-  tags:
-    - celeryflower
+# - name: Create the Supervisor config file for {{ celeryflower_application_name }}
+#   template: src=supervisor_{{ celeryflower_application_name }}.conf.j2
+#             dest=/etc/supervisor/conf.d/{{ celeryflower_application_name }}.conf
+#   when: setup_celeryflower
+#   tags:
+#     - celeryflower
 
 - name: Create the celery log folder
   file: path=/var/log/celery
@@ -33,7 +33,7 @@
         state=directory
   tags:
     - celery
-    - celeryflower
+    # - celeryflower
 
 - name: Create the {{ celery_application_name }} log file
   file: path=/var/log/celery/{{ celery_application_name }}.log
@@ -44,24 +44,24 @@
   tags:
     - celery
 
-- name: Create the {{ celeryflower_application_name }} log file
-  file: path=/var/log/celery/{{ celeryflower_application_name }}.log
-        owner={{ celery_user }}
-        group={{ celery_group }}
-        mode=0774
-        state=touch
-  when: setup_celeryflower
-  tags:
-    - celeryflower
+# - name: Create the {{ celeryflower_application_name }} log file
+#   file: path=/var/log/celery/{{ celeryflower_application_name }}.log
+#         owner={{ celery_user }}
+#         group={{ celery_group }}
+#         mode=0774
+#         state=touch
+#   when: setup_celeryflower
+#   tags:
+#     - celeryflower
 
 - name: Re-read the Supervisor config files
   command: supervisorctl reread
   tags:
     - celery
-    - celeryflower
+    # - celeryflower
 
 - name: Update Supervisor to add the app in the process group
   command: supervisorctl update
   tags:
     - celery
-    - celeryflower
+    # - celeryflower

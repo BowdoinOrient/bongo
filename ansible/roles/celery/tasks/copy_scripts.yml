@@ -8,7 +8,7 @@
         state=directory
   tags:
     - celery
-    - celeryflower
+    # - celeryflower
 
 - name: Create the {{ celery_application_name }} script file
   template: src={{ celery_template_file }}
@@ -19,12 +19,12 @@
   tags:
     - celery
 
-- name: Create the {{ celeryflower_application_name }} script file
-  template: src={{ celeryflower_template_file }}
-            dest={{ celery_scripts_dir }}/{{ celeryflower_application_name }}_start
-            owner={{ celery_user }}
-            group={{ celery_group }}
-            mode=0755
-  when: setup_celeryflower
-  tags:
-    - celeryflower
+# - name: Create the {{ celeryflower_application_name }} script file
+#   template: src={{ celeryflower_template_file }}
+#             dest={{ celery_scripts_dir }}/{{ celeryflower_application_name }}_start
+#             owner={{ celery_user }}
+#             group={{ celery_group }}
+#             mode=0755
+#   when: setup_celeryflower
+#   tags:
+#     - celeryflower

@@ -3,5 +3,5 @@
 - name: restart {{ celery_application_name }}
   supervisorctl: name={{ celery_application_name }} state=restarted
 
-- name: restart {{ celeryflower_application_name }}
-  supervisorctl: name={{ celeryflower_application_name }} state=restarted
+# - name: restart {{ celeryflower_application_name }}
+#   supervisorctl: name={{ celeryflower_application_name }} state=restarted
