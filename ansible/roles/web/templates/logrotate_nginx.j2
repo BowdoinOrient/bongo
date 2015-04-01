@@ -1,4 +1,4 @@
-/var/log/nginx/*.log {{ project_path }}/logs/nginx_*.log {
+/var/log/nginx/*.log {{ virtualenv_path }}/logs/*.log {
     weekly
     missingok
     rotate 52

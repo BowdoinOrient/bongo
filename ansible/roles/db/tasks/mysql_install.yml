@@ -26,6 +26,12 @@
     - libmariadbclient-dev
   tags: packages
 
+- name: Install custom my.cnf
+  template:
+    src: my.cnf.j2
+    dest: /etc/mysql/my.cnf
+  notify: restart mysql
+
 - name: Ensure MySQL is running
   service:
     name: mysql
