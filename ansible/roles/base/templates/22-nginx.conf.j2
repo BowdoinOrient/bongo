@@ -1,13 +1,15 @@
 module(load="imfile" PollingInterval="10")
 
 input(type="imfile"
-      File="{{ project_path }}/logs/nginx_access.log"
+      File="{{ virtualenv_path }}/logs/nginx_access.log"
       Tag="nginx-access"
       Severity="info"
+      StateFile="/var/spool/rsyslog/bongo_nginx_access"
       Facility="local7")
 
 input(type="imfile"
-      File="{{ project_path }}/logs/nginx_error.log"
+      File="{{ virtualenv_path }}/logs/nginx_error.log"
       Tag="nginx-error"
       Severity="error"
+      StateFile="/var/spool/rsyslog/bongo_nginx_error"
       Facility="local7")
