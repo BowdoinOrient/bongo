@@ -1,5 +1,10 @@
 #!/bin/sh
 
+DJANGODIR={{ project_path }}
+
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+
 # Activate the virtual environment.
 cd $DJANGODIR
 . ../bin/activate
@@ -10,4 +15,4 @@ cd $DJANGODIR
 exec rqworker \
     --url {{ redis_url }} \
     --name rq \
-    --sentry_dsn {{ raven_dsn }} \
+    --sentry-dsn {{ raven_dsn }} \

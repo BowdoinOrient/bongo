@@ -8,12 +8,12 @@
 
 - name: Install Redis
   apt:
-    name: redis
+    name: redis-server
     force: yes
     state: latest
     update_cache: "{{ 'yes' if last_result.changed else 'no'}}"
   tags: packages
 
 - name: Ensure that the Redis service is running
-  service: name=redis state=started enabled=yes
+  service: name=redis-server state=started enabled=yes
   tags: packages
