@@ -6,7 +6,7 @@ from subprocess import Popen
 try:
     from subprocess import DEVNULL as devnull
 except ImportError:
-    from os import devnull
+    from os import devnull  # fix for python < 3.3
 
 def add(x, y):
     return x + y
