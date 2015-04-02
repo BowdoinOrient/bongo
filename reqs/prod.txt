@@ -3,3 +3,4 @@ gunicorn==19.2.1
 raven==5.1.1
 newrelic==2.42.0.35
 git+git://github.com/Supervisor/supervisor.git@eb8396d62038ec7578fd967e0854d56c17cca75b#egg=supervisor
+git+git://github.com/lericson/pylibmc.git@64c927e2613b7f1360a9f495e9b3e91e8b230c98#egg=pylibmc
