@@ -3,12 +3,23 @@
 - name: Ensure supervisor service is started
   service: name=supervisor state=started enabled=yes
 
-- name: Create the Supervisor config file for RQ
+- name: Create the Supervisor config file for rq
   template: src=supervisor_rq.conf.j2
             dest=/etc/supervisor/conf.d/rq.conf
 
 - name: Create the rq log file
   file: path={{ application_log_dir }}/rq.log
+        owner={{ rq_user }}
+        group={{ rq_group }}
+        mode=0774
+        state=touch
+
+- name: Create the Supervisor config file for rq-dashboard
+  template: src=supervisor_rq_dashboard.conf.j2
+            dest=/etc/supervisor/conf.d/rq_dashboard.conf
+
+- name: Create the rq-dashboard log file
+  file: path={{ application_log_dir }}/rq_dashboard.log
         owner={{ rq_user }}
         group={{ rq_group }}
         mode=0774

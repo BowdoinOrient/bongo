@@ -2,7 +2,14 @@ module(load="imfile" PollingInterval="10")
 
 input(type="imfile"
       File="{{ application_log_dir }}/rq.log"
-      Tag="celery"
+      Tag="rq"
       Severity="info"
       StateFile="/var/spool/rsyslog/bongo_rq"
+      Facility="local7")
+
+input(type="imfile"
+      File="{{ application_log_dir }}/rq_dashboard.log"
+      Tag="rq-dashboard"
+      Severity="info"
+      StateFile="/var/spool/rsyslog/bongo_rq_dashboard"
       Facility="local7")

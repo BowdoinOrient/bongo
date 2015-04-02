@@ -15,3 +15,11 @@
     owner: "{{ rq_user }}"
     group: "{{ rq_group }}"
     mode: 0755
+
+- name: Create the rq dashboard script file
+  template:
+    src: rq_dashboard_start.j2
+    dest: "{{ rq_scripts_dir }}/rq_dashboard_start"
+    owner: "{{ rq_user }}"
+    group: "{{ rq_group }}"
+    mode: 0755

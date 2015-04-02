@@ -48,6 +48,7 @@
     - /var/spool/rsyslog/bongo_nginx_error
     - /var/spool/rsyslog/bongo_nginx_access
     - /var/spool/rsyslog/bongo_rq
+    - /var/spool/rsyslog/bongo_rq_dashboard
   notify: restart rsyslog
 
 - name: Add nginx logs to rsyslog collection
