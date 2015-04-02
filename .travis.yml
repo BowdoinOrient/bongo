@@ -5,7 +5,7 @@ python:
   - "3.4"
 services:
   - postgresql
-  - rabbitmq
+  - redis
   - memcached
 install:
   - pip install -r reqs/travis.txt
@@ -23,7 +23,7 @@ before_script:
   - psql -c 'create database bongo_test;' -U postgres
   - python manage.py syncdb --noinput
   - python manage.py nltk-init
-  - celery -A bongo.apps.bongo worker &
+  - rqworker
 script:
   - coverage run --source=bongo manage.py test
 after_success:

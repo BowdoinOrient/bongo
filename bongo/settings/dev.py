@@ -56,5 +56,3 @@ with open(os.path.normpath(os.path.join(SITE_ROOT, "ansible/env_vars/secure.yml"
 
 STATIC_URL ='/static/'
 MEDIA_URL='/media/'
-
-CELERY_ALWAYS_EAGER = True

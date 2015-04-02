@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Activate the virtual environment.
+cd $DJANGODIR
+. ../bin/activate
+. ../bin/postactivate
+
+# Programs meant to be run under supervisor should not daemonize themselves
+# (do not use --daemon).
+exec rqworker \
+    --url {{ redis_url }} \
+    --name rq \
+    --sentry_dsn {{ raven_dsn }} \

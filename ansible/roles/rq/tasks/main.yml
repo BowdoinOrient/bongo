@@ -1,0 +1,13 @@
+---
+
+- include: copy_scripts.yml
+
+- include: setup_supervisor.yml
+
+- name: Check running applications managed by supervisor
+  shell: supervisorctl status
+  register: supervisor_applications
+
+- name: Restart rq worker
+  supervisorctl: name=rq state=restarted
+  when: supervisor_applications.stdout.find('rq') != -1

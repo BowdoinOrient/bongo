@@ -1,0 +1,10 @@
+[program:rq]
+command={{ celery_scripts_dir }}/rq_start
+
+autostart=true
+autorestart=true
+
+user={{ rq_user }}
+
+stdout_logfile={{ application_log_dir }}/rq.log
+redirect_stderr = true

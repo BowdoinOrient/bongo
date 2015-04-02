@@ -1,0 +1,21 @@
+---
+
+- name: Ensure supervisor service is started
+  service: name=supervisor state=started enabled=yes
+
+- name: Create the Supervisor config file for RQ
+  template: src=supervisor_rq.conf.j2
+            dest=/etc/supervisor/conf.d/rq.conf
+
+- name: Create the rq log file
+  file: path={{ application_log_dir }}/rq.log
+        owner={{ rq_user }}
+        group={{ rq_group }}
+        mode=0774
+        state=touch
+
+- name: Re-read the Supervisor config files
+  command: supervisorctl reread
+
+- name: Update Supervisor to add the app in the process group
+  command: supervisorctl update

@@ -1,0 +1,6 @@
+---
+
+rq_user: orient
+rq_group: webapps
+
+celery_scripts_dir: "{{ virtualenv_path }}/bin"

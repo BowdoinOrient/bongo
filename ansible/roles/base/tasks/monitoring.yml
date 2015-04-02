@@ -47,8 +47,7 @@
   with_items:
     - /var/spool/rsyslog/bongo_nginx_error
     - /var/spool/rsyslog/bongo_nginx_access
-    - /var/spool/rsyslog/bongo_celery
-    - /var/spool/rsyslog/bongo_celeryflower
+    - /var/spool/rsyslog/bongo_rq
   notify: restart rsyslog
 
 - name: Add nginx logs to rsyslog collection
@@ -59,8 +58,8 @@
 
 - name: Add celery logs to rsyslog collection
   template:
-    src: 23-celery.conf.j2
-    dest: /etc/rsyslog.d/23-celery.conf
+    src: 24-rq.conf.j2
+    dest: /etc/rsyslog.d/24-rq.conf
   notify: restart rsyslog
 
 - name: Install default rsyslog configuration
@@ -71,3 +70,8 @@
 
 - name: validate rsyslog config
   shell: rsyslogd -N1
+
+- name: Set up log rotation
+  template:
+    src=bongo_logrotate.j2
+    dest=/etc/logrotate.d/bongo

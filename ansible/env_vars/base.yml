@@ -11,6 +11,11 @@ ssl_dest_dir: /etc/ssl
 db_user: "{{ application_name }}"
 db_name: "{{ application_name }}"
 
+virtualenv_path: "/webapps/{{ application_name }}"
+project_path: "{{ virtualenv_path }}/{{ project_name }}"
+application_path: "{{ project_path }}/{{ application_name }}"
+application_log_dir: "{{ virtualenv_path }}/logs"
+
 # Set "bare" to true if the machine has not yet had a complete successful deploy.
 # This performs one-time set-up steps like importing the MySQL database, doing
 # a complete apt-get upgrade, and downloading NLTK tokenizers.

@@ -55,7 +55,6 @@ INSTALLED_APPS = (
     'bongo.apps.archive',
     'bongo.apps.api',
     'bongo.apps.frontend',
-    'bongo.apps.celery',
 
     # for the frontend
     'compressor',
@@ -248,5 +247,3 @@ COMPRESS_PRECOMPILERS = (
 COMPRESS_OFFLINE = True
 
 ### end django-compressor ###
-
-CELERY_ALWAYS_EAGER = False
