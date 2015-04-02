@@ -1,20 +1,23 @@
 from django.test import TestCase
 from rq import Queue
 from redis import Redis
-from subprocess import Popen
+from subprocess import call
 
 try:
     from subprocess import DEVNULL as devnull
 except ImportError:
-    from os import devnull  # fix for python < 3.3
+    import os
+    devnull = open(os.devnull, 'w')
 
 def add(x, y):
     return x + y
 
 class QueueTestCase(TestCase):
     def test_queued_code(self):
+        """Test a simple queuing task with rq"""
+
         # make sure an rqworker is running
-        rqworker = Popen("rqworker", shell=True, stdout=devnull, stderr=devnull)
+        rqworker = call("rqworker", shell=True, stdout=devnull, stderr=devnull, close_fds=True)
 
         q = Queue(connection=Redis())
         job = q.enqueue(add, 2, 2)
@@ -27,3 +30,6 @@ class QueueTestCase(TestCase):
         finally:
             # kill the rqworker, regardless of succcess
             rqworker.terminate()
+
+    def test_scheduled_code(self):
+        """Test scheduling something with rq-scheduler"""
