@@ -1,7 +1,8 @@
 from django.test import TestCase
 from rq import Queue
+from rq_scheduler import Scheduler
 from redis import Redis
-from subprocess import call
+from subprocess import Popen
 
 try:
     from subprocess import DEVNULL as devnull
@@ -17,7 +18,7 @@ class QueueTestCase(TestCase):
         """Test a simple queuing task with rq"""
 
         # make sure an rqworker is running
-        rqworker = call("rqworker", shell=True, stdout=devnull, stderr=devnull, close_fds=True)
+        rqworker = Popen("rqworker", shell=True, stdout=devnull, stderr=devnull, close_fds=True)
 
         q = Queue(connection=Redis())
         job = q.enqueue(add, 2, 2)
@@ -33,3 +34,4 @@ class QueueTestCase(TestCase):
 
     def test_scheduled_code(self):
         """Test scheduling something with rq-scheduler"""
+        pass
