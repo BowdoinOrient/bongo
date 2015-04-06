@@ -1,5 +1,4 @@
 language: python
-cache: pip
 sudo: false
 python:
   - "2.7"
@@ -16,6 +15,12 @@ addons:
 install:
   - pip install -r reqs/travis.txt
   - cd wraith && bundle install && cd ../
+cache:
+  directories:
+  - vendor/bundle
+  - $HOME/.pip-cache/
+  - /home/travis/virtualenv/python2.7.9
+  - /home/travis/virtualenv/python3.4.2
 env:
   global:
     - DJANGO_SETTINGS_MODULE="bongo.settings.travis"
