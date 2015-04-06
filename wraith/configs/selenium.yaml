@@ -1,0 +1,184 @@
+#######################################################################
+#
+# Test config file for running Wraith-Selenium using a selenium grid
+# and browser-based comparison. This file can be used as a template for
+# production configuration.
+#
+######################################################################
+
+#change this line based on which suite of browsers you want to run
+suite: "standard"
+
+#define different suites of browsers here
+suites:
+  standard: ["firefox","chrome"]
+
+#define different engines/drivers to run your browser suites here - e.g. selenium
+engine:
+  standard: "selenium"
+
+#engine_mode - set to 'grid' if using a selenium grid, defaults to 'local'
+engine_mode: "grid"
+
+#If you want to have multiple snapping files, set the file name here
+snap_file:
+  webkit: "javascript/snap.js"
+  standard: ""
+
+# The name of the directory that shots will be stored in
+directory:
+  - 'shots'
+
+#thumbnail images subdirectory name
+thumbnail_directory: thumbnails
+
+#cropped images subdirectory name
+crops_directory: crops
+
+# if you are using url comparison, set the url: base: and url: compare: values
+# if using browser comparison, set the url: compare: value
+# when using browser-based comparison, always leave the base value blank, as we only use the comparison value
+domains:
+  url:
+    base:
+    compare:
+  browser:
+    base:
+    compare: "http://localhost:8000/"
+
+#Type screen widths below, here are a couple of examples
+screen_properties:
+  desktop:
+    - 320
+    - 600
+    - 768
+    - 1024
+    - 1280
+  device:
+    - 1024
+
+#Type page URL paths below
+paths:
+  home: /
+  article: /article/10000
+
+#Amount of fuzz ImageMagick will use
+fuzz: '20%'
+
+#Set the number of days to keep the site spider file
+spider_days:
+  - 10
+
+###################################################################
+#
+# SELENIUM ONLY OPTIONS BELOW HERE
+#
+###################################################################
+
+#set the devices you want to run each browser in your suite on here.
+#This will configure the capabilities object you wish to pass to the
+#selenium grid. You can have multiple capability objects per browser,
+#thereby allowing you test different browser versions or platforms
+browser_devices:
+  firefox:
+    desktop:
+      - :capabilities:
+          :platform: WINDOWS
+          :version: '12.0'
+  chrome:
+    desktop:
+      - :capabilities:
+          :platform: WINDOWS
+          :version: '36'
+
+
+#you can define some default parameters to pass to the selenium driver here,
+#if you are not defining specific capabilities for each browser
+#Filling in these values is optional, but don't delete the key structure
+default_parameters:
+  :url:
+  :capabilities:
+    :version:
+    :platform:
+
+#if you have just set screen widths in screen_dimensions, you can set a generic height for the screen here
+default_screen_height: 1000
+
+#page load timeout
+timeout: 20
+
+#base type - either 'browser' or 'url'.
+#browser base type will compare a given url using a browser as a base.
+#url base type will use a url as the basis for comparison against a second url
+base_type: browser
+
+#set this if you are using browser type based comparison.
+#With URL-based comparison this parameter will be ignored.
+base_browser: chrome
+
+#set this flag to true if using browser based comparison and you wish to compare
+#the base browser image to a shot of the refreshed page url using the same base browser.
+#This can be useful to check for page differences caused by loading or other instabilities,
+#but first check that caching in the base browser has been entirely disabled.
+compare_base_to_base: true
+
+#set this to get selenium to wait until a certain page element is displayed
+default_wait_until_element: comp-most-popular
+
+#very annoyingly and weirdly, selenium often interprets screenshot sizes differently from those
+#stipulated in your window dimensions. Offset behaviour seems inconsistent between browsers,
+#browser versions and between different widths.
+#Your first run using selenium using browser-based comparison may well result in some
+#invalid diff comparisons due to screen shot width variation.
+#To rectify this, inspect the screenshot widths produced against your configured widths,
+#You can then add a bias value for each browser screen width as shown below.
+screenshot_bias:
+  width:
+    ie:
+      desktop:
+        320: 0
+        600: 0
+        768: 0
+        1024: 0
+        1280: 0
+      device:
+        1024: 0
+    chrome:
+      desktop:
+        320: 0
+        600: 0
+        768: 0
+        1024: 0
+        1280: 0
+      device:
+        1024: 0
+    firefox:
+      desktop:
+        320: 15
+        600: 15
+        768: 15
+        1024: 15
+        1280: 15
+      device:
+        1024: 15
+    safari:
+      desktop:
+        320: 15
+        600: 15
+        768: 15
+        1024: 15
+        1280: 15
+      device:
+        1024: 15
+
+###################################################################
+#
+# SELENIUM GRID ONLY OPTIONS BELOW HERE
+#
+###################################################################
+
+#URL of the selenium grid.
+#If set, this will override any url set under the browser_devices
+#or default_parameters configuration sections.
+#Obviously should always be set for grid operation
+grid_url: http://localhost:4445
