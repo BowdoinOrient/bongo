@@ -84,25 +84,25 @@ browser_devices:
     desktop:
       - :capabilities:
           :platform: ANY
+          :version: '36'
+      - :capabilities:
+          :platform: ANY
           :version: '35'
       - :capabilities:
           :platform: ANY
           :version: '34'
-      - :capabilities:
-          :platform: ANY
-          :version: '33'
 
   chrome:
     desktop:
       - :capabilities:
           :platform: ANY
+          :version: '41'
+      - :capabilities:
+          :platform: ANY
+          :version: '40'
+      - :capabilities:
+          :platform: ANY
           :version: '39'
-      - :capabilities:
-          :platform: ANY
-          :version: '38'
-      - :capabilities:
-          :platform: ANY
-          :version: '37'
 
   safari:
     desktop:
