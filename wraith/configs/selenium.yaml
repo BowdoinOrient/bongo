@@ -212,4 +212,4 @@ screenshot_bias:
 #If set, this will override any url set under the browser_devices
 #or default_parameters configuration sections.
 #Obviously should always be set for grid operation
-grid_url: http://localhost:4445
+grid_url: http://localhost:4445/wd/hub
