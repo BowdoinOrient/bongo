@@ -83,13 +83,50 @@ browser_devices:
   firefox:
     desktop:
       - :capabilities:
-          :platform: WINDOWS
-          :version: '12.0'
+          :platform: ANY
+          :version: '35'
+      - :capabilities:
+          :platform: ANY
+          :version: '34'
+      - :capabilities:
+          :platform: ANY
+          :version: '33'
+
   chrome:
     desktop:
       - :capabilities:
-          :platform: WINDOWS
-          :version: '36'
+          :platform: ANY
+          :version: '39'
+      - :capabilities:
+          :platform: ANY
+          :version: '38'
+      - :capabilities:
+          :platform: ANY
+          :version: '37'
+
+  safari:
+    desktop:
+      - :capabilities:
+          :platform: MAC
+          :version: '8'
+      - :capabilities:
+          :platform: MAC
+          :version: '7'
+
+  internet explorer:
+    desktop:
+      - capabilities
+        :platform: WIN8
+        :version: 10
+      - capabilities
+        :platform: WIN8
+        :version: 11
+      - capabilities
+        :platform: WINDOWS
+        :version: 10
+      - capabilities
+        :platform: WINDOWS
+        :version: 11
 
 
 #you can define some default parameters to pass to the selenium driver here,
