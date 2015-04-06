@@ -14,6 +14,7 @@ addons:
       secure: "QpAgQkThq5kWL1vnMRR4NvJFIVrJeTyoM/HQMNptUDYdbKuhDalcKyjUQ7l7/kCeG8TPyvoNI4fhSLQrHg+p6493ILdoa3kaQxa2nDuKLdiCitcgiBs+Yc/D22kP1xBK7BrxKeFp1MG1bdl7ium5xeT1ECXZoKHiBASuikHhKe0="
 install:
   - pip install -r reqs/travis.txt
+  - cd wraith && bundle install && cd ../
 env:
   global:
     - DJANGO_SETTINGS_MODULE="bongo.settings.travis"
@@ -33,6 +34,6 @@ before_script:
   - sc -i $TRAVIS_JOB_NUMBER &
 script:
   - coverage run --source=bongo manage.py test
-  - cd wraith && bundle install && bundle exec wraith capture selenium
+  - cd wraith && bundle exec wraith capture selenium
 after_success:
   - coveralls

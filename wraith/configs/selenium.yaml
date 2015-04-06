@@ -109,16 +109,16 @@ browser_devices:
 
   internet explorer:
     desktop:
-      - capabilities
+      - :capabilities:
         :platform: WIN8
         :version: 10
-      - capabilities
+      - :capabilities:
         :platform: WIN8
         :version: 11
-      - capabilities
+      - :capabilities:
         :platform: WINDOWS
         :version: 10
-      - capabilities
+      - :capabilities:
         :platform: WINDOWS
         :version: 11
 
