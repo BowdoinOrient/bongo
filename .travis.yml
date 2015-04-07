@@ -37,7 +37,6 @@ before_script:
   - python manage.py nltk-init
   - celery -A bongo.apps.bongo worker &
   - python manage.py runserver &
-  - sc -i $TRAVIS_JOB_NUMBER &
 script:
   - coverage run --source=bongo manage.py test
   - cd wraith && bundle exec wraith capture selenium
