@@ -1,3 +1,3 @@
 source 'https://rubygems.org'
 
-gem 'selenium-wraith', github: 'andrewccadman/wraith-selenium'
+gem 'selenium-wraith', github: 'bjacobel/wraith-selenium'

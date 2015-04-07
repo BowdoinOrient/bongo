@@ -44,7 +44,7 @@ domains:
     compare:
   browser:
     base:
-    compare: "http://localhost:8000/"
+    compare: "http://127.0.0.1:8000"
 
 #Type screen widths below, here are a couple of examples
 screen_properties:
@@ -154,7 +154,7 @@ base_browser: chrome
 compare_base_to_base: true
 
 #set this to get selenium to wait until a certain page element is displayed
-default_wait_until_element: comp-most-popular
+default_wait_until_element: main-content
 
 #very annoyingly and weirdly, selenium often interprets screenshot sizes differently from those
 #stipulated in your window dimensions. Offset behaviour seems inconsistent between browsers,
@@ -212,4 +212,4 @@ screenshot_bias:
 #If set, this will override any url set under the browser_devices
 #or default_parameters configuration sections.
 #Obviously should always be set for grid operation
-grid_url: http://localhost:4445/wd/hub
+grid_url: <%= "http://" + ENV['SAUCE_USERNAME'] + ":" + ENV['SAUCE_ACCESS_KEY'] + "@localhost:4445/wd/hub" %>
