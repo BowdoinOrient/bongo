@@ -86,12 +86,12 @@ browser_devices:
           :platform: ANY
           :version: '36'
           :name: Firefox 36
-          :tunnel-identifier: <%= ENV['TRAVIS_JOB_NUMBER'].to_s %>
+          :tunnel-identifier: "<%= ENV['TRAVIS_JOB_NUMBER'] %>"
       - :capabilities:
           :platform: ANY
           :version: '35'
           :name: Firefox 35
-          :tunnel-identifier: <%= ENV['TRAVIS_JOB_NUMBER'].to_s %>
+          :tunnel-identifier: "<%= ENV['TRAVIS_JOB_NUMBER'] %>"
 
   chrome:
     desktop:
@@ -99,12 +99,12 @@ browser_devices:
           :platform: ANY
           :version: '41'
           :name: Chrome 41
-          :tunnel-identifier: <%= ENV['TRAVIS_JOB_NUMBER'].to_s %>
+          :tunnel-identifier: "<%= ENV['TRAVIS_JOB_NUMBER'] %>"
       - :capabilities:
           :platform: ANY
           :version: '40'
           :name: Chrome 40
-          :tunnel-identifier: <%= ENV['TRAVIS_JOB_NUMBER'].to_s %>
+          :tunnel-identifier: "<%= ENV['TRAVIS_JOB_NUMBER'] %>"
 
   safari:
     desktop:
@@ -112,12 +112,12 @@ browser_devices:
           :platform: MAC
           :version: '8'
           :name: Safari 8
-          :tunnel-identifier: <%= ENV['TRAVIS_JOB_NUMBER'].to_s %>
+          :tunnel-identifier: "<%= ENV['TRAVIS_JOB_NUMBER'] %>"
       - :capabilities:
           :platform: MAC
           :version: '7'
           :name: Safari 7
-          :tunnel-identifier: <%= ENV['TRAVIS_JOB_NUMBER'].to_s %>
+          :tunnel-identifier: "<%= ENV['TRAVIS_JOB_NUMBER'] %>"
 
   internet explorer:
     desktop:
@@ -125,22 +125,22 @@ browser_devices:
         :platform: WIN8
         :version: 10
         :name: IE 10 - Windows 8
-        :tunnel-identifier: <%= ENV['TRAVIS_JOB_NUMBER'].to_s %>
+        :tunnel-identifier: "<%= ENV['TRAVIS_JOB_NUMBER'] %>"
       - :capabilities:
         :platform: WIN8
         :version: 11
         :name: IE 11 - Windows 8.1
-        :tunnel-identifier: <%= ENV['TRAVIS_JOB_NUMBER'].to_s %>
+        :tunnel-identifier: "<%= ENV['TRAVIS_JOB_NUMBER'] %>"
       - :capabilities:
         :platform: WINDOWS
         :version: 10
         :name: IE 10 - Windows 7
-        :tunnel-identifier: <%= ENV['TRAVIS_JOB_NUMBER'].to_s %>
+        :tunnel-identifier: "<%= ENV['TRAVIS_JOB_NUMBER'] %>"
       - :capabilities:
         :platform: WINDOWS
         :version: 11
         :name: IE11 - Windows 7
-        :tunnel-identifier: <%= ENV['TRAVIS_JOB_NUMBER'].to_s %>
+        :tunnel-identifier: "<%= ENV['TRAVIS_JOB_NUMBER'] %>"
 
 
 #you can define some default parameters to pass to the selenium driver here,
