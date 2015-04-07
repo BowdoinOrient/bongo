@@ -17,7 +17,7 @@ install:
   - cd wraith && bundle install && cd ../
 cache:
   directories:
-  - vendor/bundle
+  - wraith/vendor/bundle
   - $HOME/.pip-cache/
   - /home/travis/virtualenv/python2.7.9
   - /home/travis/virtualenv/python3.4.2
