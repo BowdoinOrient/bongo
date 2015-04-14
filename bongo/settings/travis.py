@@ -16,11 +16,6 @@ DATABASES = {
 }
 
 INSTALLED_APPS += (
-    'django_nose',
 )
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-
-NOSE_ARGS = ['--with-fixture-bundling', '--nologcapture', '--verbosity=2']
-
-NOSE_TESTMATCH = '(?:^|[b_./-])[Tt]ests'
+TEST_RUNNER = 'bongo.settings.tests.ReusableRunner'
