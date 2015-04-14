@@ -14,10 +14,10 @@ addons:
       secure: "QpAgQkThq5kWL1vnMRR4NvJFIVrJeTyoM/HQMNptUDYdbKuhDalcKyjUQ7l7/kCeG8TPyvoNI4fhSLQrHg+p6493ILdoa3kaQxa2nDuKLdiCitcgiBs+Yc/D22kP1xBK7BrxKeFp1MG1bdl7ium5xeT1ECXZoKHiBASuikHhKe0="
 install:
   - pip install -r reqs/travis.txt
-  - cd wraith && bundle install && cd ../
+  - bundle install
 cache:
   directories:
-  - wraith/vendor/bundle
+  - vendor/bundle
   - $HOME/.pip-cache/
   - /home/travis/virtualenv/python2.7.9
   - /home/travis/virtualenv/python3.4.2
