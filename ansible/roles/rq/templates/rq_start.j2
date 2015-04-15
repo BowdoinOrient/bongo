@@ -16,3 +16,7 @@ exec rqworker \
     --url {{ redis_url }} \
     --name rq \
     --sentry-dsn {{ raven_dsn }} \
+
+exec rqscheduler \
+    --host {{ redis_host }} \
+    --port {{ redis_port }} \
