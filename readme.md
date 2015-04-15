@@ -13,6 +13,7 @@ You'll need:
 - Python 3.4
 - NodeJS >= 0.10
 - Postgres ([Postgres.app](http://postgresapp.com) is a good option if you're on OS X).
+- Redis >= 2.8
 - Vagrant, if you plan to contribute to the project's Ansible playbook
 - MySQL, if you plan to contribute changes to the project's adapter to the 2002-2015 database.
 
