@@ -1,10 +1,6 @@
 ---
 
 # Application settings.
-virtualenv_path: "/webapps/{{ application_name }}"
-project_path: "{{ virtualenv_path }}/{{ project_name }}"
-application_path: "{{ project_path }}/{{ application_name }}"
-application_log_dir: "{{ virtualenv_path }}/logs"
 application_log_file: "{{ application_log_dir }}/gunicorn_supervisor.log"
 requirements_file: "{{ project_path }}/reqs/prod.txt"
 
@@ -31,7 +27,6 @@ django_environment:
   DATABASE_PASSWORD: "{{ db_password }}"
   DATABASE_NAME: "{{ db_name }}"
   RAVEN_DSN: "{{ raven_dsn }}"
-  RABBITMQ_BROKER_URL: "{{ rabbitmq_broker_url }}"
   SITE_URL: "{{ site_url }}"
   AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
   AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"

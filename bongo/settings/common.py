@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import os
 import sys
 import yaml
+from redis import Redis
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -55,7 +56,6 @@ INSTALLED_APPS = (
     'bongo.apps.archive',
     'bongo.apps.api',
     'bongo.apps.frontend',
-    'bongo.apps.celery',
 
     # for the frontend
     'compressor',
@@ -248,5 +248,3 @@ COMPRESS_PRECOMPILERS = (
 COMPRESS_OFFLINE = True
 
 ### end django-compressor ###
-
-CELERY_ALWAYS_EAGER = False

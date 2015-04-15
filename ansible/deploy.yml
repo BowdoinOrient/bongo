@@ -14,5 +14,5 @@
     - { role: db, tags: ['db'] }
     - { role: memcached, tags: ['memcached'] }
     - { role: web, tags: ['web'] }
-    - { role: rabbitmq, tags: ['rabbitmq'] }
-    - { role: celery, tags: ['celery'] }
+    - { role: redis, tags: ['redis'] }
+    - { role: rq, tags: ['rq'] }

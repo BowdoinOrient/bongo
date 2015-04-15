@@ -290,26 +290,26 @@ class Post (models.Model):
     published = models.DateTimeField()
     is_published = models.BooleanField(default=False)  # allow for drafts
 
-    series = models.ManyToManyField(Series, null=True, blank=True)
+    series = models.ManyToManyField(Series, blank=True)
     issue = models.ForeignKey(Issue, null=True, blank=True)  # issue might be null in the case of a web-only post
     volume = models.ForeignKey(Volume)  # volume cannot be null because it represents an academic year
     section = models.ForeignKey(Section)
 
     title = models.CharField(max_length=180)
     slug = models.CharField(max_length=180, verbose_name="Slug. WARNING: Changing this will change the post URL, breaking existing links.")  # http://en.wikipedia.org/wiki/Clean_URL#Slug
-    tags = models.ManyToManyField(Tag, null=True, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     opinion = models.BooleanField(default=False)
 
     views_local = models.IntegerField(editable=False, default=0)
     views_global = models.IntegerField(editable=False, default=0)
 
-    text = models.ManyToManyField(Text, null=True, blank=True)
-    video = models.ManyToManyField(Video, null=True, blank=True)
-    pdf = models.ManyToManyField(PDF, null=True, blank=True)
-    photo = models.ManyToManyField(Photo, null=True, blank=True)
-    html = models.ManyToManyField(HTML, null=True, blank=True)
-    pullquote = models.ManyToManyField(Pullquote, null=True, blank=True)
+    text = models.ManyToManyField(Text, blank=True)
+    video = models.ManyToManyField(Video, blank=True)
+    pdf = models.ManyToManyField(PDF, blank=True)
+    photo = models.ManyToManyField(Photo, blank=True)
+    html = models.ManyToManyField(HTML, blank=True)
+    pullquote = models.ManyToManyField(Pullquote, blank=True)
 
     imported = models.BooleanField(default=False, editable=False)
 

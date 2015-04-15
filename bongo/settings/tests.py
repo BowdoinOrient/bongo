@@ -6,5 +6,6 @@ class ReusableRunner(DiscoverRunner):
     def __init__(self, **args):
         super(ReusableRunner, self).__init__(
             keepdb=True,
-            pattern="*_tests.py"
+            pattern="*_tests.py",
+            verbosity=2
         )

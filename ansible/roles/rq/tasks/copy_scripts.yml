@@ -1,0 +1,25 @@
+---
+
+- name: Create the folder for the celery scripts
+  file:
+    path: "{{ rq_scripts_dir }}"
+    owner: "{{ rq_user }}"
+    group: "{{ rq_group }}"
+    mode: 0774
+    state: directory
+
+- name: Create the rq worker script file
+  template:
+    src: rq_start.j2
+    dest: "{{ rq_scripts_dir }}/rq_start"
+    owner: "{{ rq_user }}"
+    group: "{{ rq_group }}"
+    mode: 0755
+
+- name: Create the rq dashboard script file
+  template:
+    src: rq_dashboard_start.j2
+    dest: "{{ rq_scripts_dir }}/rq_dashboard_start"
+    owner: "{{ rq_user }}"
+    group: "{{ rq_group }}"
+    mode: 0755

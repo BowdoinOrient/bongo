@@ -2,6 +2,9 @@
 
 DJANGODIR={{ project_path }}
 
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+
 # Activate the virtual environment.
 cd $DJANGODIR
 . ../bin/activate
@@ -9,9 +12,7 @@ cd $DJANGODIR
 
 # Programs meant to be run under supervisor should not daemonize themselves
 # (do not use --daemon).
-exec celery flower \
-    -A {{ application_name }}.apps.celery \
-    --broker={{ rabbitmq_broker_url }} \
-    --broker_url={{ rabbitmq_broker_url }} \
-    --address=0.0.0.0 \
-    --port=5555
+exec rqworker \
+    --url {{ redis_url }} \
+    --name rq \
+    --sentry-dsn {{ raven_dsn }} \
