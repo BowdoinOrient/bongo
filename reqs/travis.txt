@@ -1,5 +1,4 @@
 -r prod.txt
-coveralls==0.4.1
+coveralls==1.0a2
 factory_boy==2.4.1
 fake-factory==0.4.2
-django-nose==1.3

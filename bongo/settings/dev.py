@@ -42,16 +42,9 @@ ALLOWED_HOSTS = [
 ]
 
 INSTALLED_APPS += (
-    'django_nose',
 )
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-
-NOSE_ARGS = ['--with-fixture-bundling', '--nologcapture']
-
-NOSE_TESTMATCH = '(?:^|[b_./-])[Tt]ests'
-
-os.environ['REUSE_DB'] = '1'
+TEST_RUNNER = 'bongo.settings.tests.ReusableRunner'
 
 with open(os.path.normpath(os.path.join(SITE_ROOT, "ansible/env_vars/secure.yml")), "rb") as f:
     secrets = yaml.load(f)
