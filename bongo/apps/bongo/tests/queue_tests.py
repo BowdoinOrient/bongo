@@ -43,16 +43,16 @@ class QueueTestCase(TestCase):
             devnull = open(os.devnull, 'w')
 
         # make sure an rqworker is running
-        rqworker = Popen("rqworker", shell=True, stdout=devnull, stderr=devnull, close_fds=True)
+        rqworker = Popen("rqscheduler", shell=True, stdout=devnull, stderr=devnull, close_fds=True)
 
         s = Scheduler(connection=Redis())
-        job = s.enqueue_in(timedelta(seconds=1))
+        job = s.enqueue_in(timedelta(minutes=1), add, 2, 2)
 
-        while not job.result:
-            pass
+        # Maximum enqueueing resolution is 1 minute, so just test that it was scheduled successfully
 
         try:
-            self.assertEqual(add(2, 2), job.result)
+            self.assertIn(job, s)
+            self.assertEqual(add(2, 2), job.perform())
         finally:
             # kill the rqworker, regardless of succcess
             rqworker.terminate()
