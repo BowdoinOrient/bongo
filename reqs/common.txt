@@ -19,6 +19,6 @@ django-secure==1.0.1
 rq==0.5.1
 rq-scheduler==0.5.1
 redis==2.10.3
-git+git://github.com/django-compressor/django-compressor.git@79bdf0ad254c7d7cb704e68516a8ba795c39a0b3#egg=django-comressor
+git+git://github.com/django-compressor/django-compressor.git@79bdf0ad254c7d7cb704e68516a8ba795c39a0b3#egg=django-compressor
 git+git://github.com/BowdoinOrient/django-storages-py3.git@83f18f5ccf39b5be230c6fc24d3b0b35c98277db#egg=django-storages
 git+git://github.com/BowdoinOrient/tagger.git@c26dd928ff7d9401607e67c0af7934d573164120#egg=tagger
