@@ -1,0 +1,4 @@
+---
+
+- name: restart rq
+  supervisorctl: name=rq state=restarted

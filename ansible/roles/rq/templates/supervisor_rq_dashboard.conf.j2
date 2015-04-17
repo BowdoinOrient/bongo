@@ -1,0 +1,10 @@
+[program:rq_dashboard]
+command={{ rq_scripts_dir }}/rq_dashboard_start
+
+autostart=true
+autorestart=true
+
+user={{ rq_user }}
+
+stdout_logfile={{ application_log_dir }}/rq_dashboard.log
+redirect_stderr = true

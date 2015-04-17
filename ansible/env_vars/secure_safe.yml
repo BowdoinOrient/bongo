@@ -24,10 +24,6 @@ disqus_api_key:
 scribd_api_key:
 scribd_api_secret:
 
-# RabbitMQ credentials for management and worker control
-rabbitmq_admin_password:
-rabbitmq_application_password:
-
 # Credentials for the old MySQL database
 legacy_db_name:
 legacy_db_user:
