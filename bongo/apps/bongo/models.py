@@ -334,6 +334,9 @@ class Post (models.Model):
             self.pullquote.all()
         )
 
+    def text_content(self):
+        pass
+
     def excerpt(self):
         try:
             if self.primary_type == "photo":

@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load class_name %}
 
+{% block title %}
+    <title>Search | The Bowdoin Orient</title>
+{% endblock %}
+
 {% block content %}
     <form method="get" action="/search" id="search-form">
         <div class="basic-search">
