@@ -1,11 +1,12 @@
 @import 'fonts';
+@import 'colors';
 @import 'mixins';
 @import 'overrides';
 @import 'responsive';
-@import 'colors';
 
 @import 'pages/home';
 @import 'pages/article';
+@import 'pages/search';
 
 @import 'components/header';
 @import 'components/basement-menu';

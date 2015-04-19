@@ -4,3 +4,20 @@ body {
 
 $minion-stack: minion-pro, Garamond;
 $myriad-stack: myriad-pro, helvetica, arial;
+
+%header-style {
+    margin:0 0 15px 0;
+    padding-bottom:5px;
+    font-family:$myriad-stack;
+    font-size:1.3em;
+    text-transform:uppercase;
+
+    &:first-letter {
+        font-size:1.35em;
+    }
+}
+
+// Hide flash of unstyled text
+.wf-loading {
+    visibility: hidden;
+}

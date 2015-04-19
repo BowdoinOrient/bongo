@@ -1,0 +1,107 @@
+#search-form {
+    padding: 30px;
+
+    .basic-search {
+        .search-label {
+            display: none;
+        }
+
+        #search-box {
+            width: 100%;
+            height: 60px;
+            font-size: 1.5em;
+            font-family:$minion-stack;
+            padding: 7px;
+        }
+    }
+
+    .search-submit {
+        font-family:$myriad-stack;
+        font-size: 1.4em;
+        color: white;
+        height: 40px;
+        width: 90px;
+        background-color: $opinion;
+        margin: 20px 0;
+        cursor: pointer;
+
+        &:hover {
+            @include vendor-prefix("box-shadow", "0 0 8px rgba(82,168,236,.6)")
+        }
+    }
+
+    .advanced-open {
+        cursor: pointer;
+        margin-bottom: 10px;
+        font-size:1.2em;
+
+        * {
+            display: inline-block;
+            @extend %noselect;
+        }
+
+        .title {
+            font-family: $myriad-stack;
+            font-size: 1.3em;
+        }
+
+        .chevron {
+            margin-left:10px;
+            @include arrow("right", 5px, black);
+            @include double-prefix("transition", "transform", ".15s ease");
+
+            &.rotate {
+                @include vendor-prefix("transform", "rotate(90deg)");
+            }
+        }
+    }
+
+    .advanced-search {
+        height: 0;
+        visibility: hidden;
+        overflow: hidden;
+        width: 100%;
+
+        background-color: $lightergray;
+        @include vendor-prefix("border-radius", 3px);
+        padding: 8px;
+
+        font-size: 1.3em;
+        font-family:$myriad-stack;
+
+        @include vendor-prefix("transition", "height .2s ease");
+
+        .categories {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .search-options {
+            margin-bottom: 15px;
+
+            .filter-type {
+                display: inline-block;
+                margin-right: 10px;
+                height: 26px;
+
+                input {
+                    display: inline-block;
+                    margin: 6px;
+                }
+
+                p {
+                    display: inline-block;
+                    height: 100%;
+                    margin: 0;
+                    vertical-align: middle;
+                }
+            }
+        }
+
+        &.visible {
+            height: 120px;
+            visibility: visible;
+        }
+    }
+
+}

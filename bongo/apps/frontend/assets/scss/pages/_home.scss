@@ -83,17 +83,8 @@
 
         section {
             h2 {
-                margin:0;
-                padding-bottom:5px;
-                margin-bottom:15px;
                 border-bottom:2px solid $lightergray;
-                font-family:$myriad-stack;
-                font-size:1.3em;
-                text-transform:uppercase;
-
-                &:first-letter {
-                    font-size:1.35em;
-                }
+                @extend %header-style;
             }
 
             .section-post {

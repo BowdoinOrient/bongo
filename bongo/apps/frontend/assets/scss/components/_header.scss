@@ -26,6 +26,7 @@ header {
             max-width:620px;
             margin:0 auto;
             position:relative;
+            overflow: hidden;
 
             span {
                 height:45px;
@@ -38,6 +39,8 @@ header {
                 font-style: bold;
                 font-weight: 700;
                 font-size:1.53em;
+
+                cursor: pointer;
 
                 text-transform: uppercase;
 

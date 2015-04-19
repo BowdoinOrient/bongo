@@ -16,8 +16,7 @@
 
 @mixin arrow($direction, $size, $color) {
     $transparent: $size solid transparent;
-    $sizeborder: $size solid $color;
-    display: block;
+    $sizeborder: 1.5 * $size solid $color;
     height: 0;
     width: 0;
 
