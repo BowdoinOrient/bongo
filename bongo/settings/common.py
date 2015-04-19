@@ -59,6 +59,7 @@ INSTALLED_APPS = (
     'bongo.apps.api',
     'bongo.apps.frontend',
     'bongo.apps.search',
+    'bongo.apps.tasks',
 
     # for the frontend
     'compressor',
