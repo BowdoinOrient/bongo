@@ -4,4 +4,23 @@
     .search-title {
         @extend %rcol-widget-header;
     }
+
+    .search-box {
+        height: 30px;
+        width: calc(100% - 84px);
+        font-style: $minion-stack;
+        font-size:.9em;
+    }
+
+    .search-submit {
+        background-color: $opinion;
+        height: 30px;
+        width: 70px;
+        color: white;
+        font-style: $myriad-stack;
+        font-size:1em;
+        margin-left:10px;
+        position: relative;
+        top: 1px;
+    }
 }
