@@ -56,6 +56,14 @@
                 <a class="twitter-timeline" href="https://twitter.com/bowdoinorient" data-widget-id="265860324312354816">Tweets by @bowdoinorient</a>
             </div>
 
+            {# search #}
+            <div class="homepage-search">
+                <h2 class="search-title">Search</h2>
+                <form method="get" action="/search" id="homepage-search-form">
+                    <input type="search">
+                </form>
+            </div>
+
             {# scribd #}
             {% if current_issue.scribd_image %}
                 <div class="current-issue">

@@ -41,3 +41,23 @@
         border-bottom: $transparent;
     }
 }
+
+%rcol-widget {
+    width:100%;
+    display:block;
+    border-left: 2px solid $lightergray;
+    padding:0 15px;
+    margin:10px 0;
+}
+
+%rcol-widget-header {
+    font-family:$myriad-stack;
+    font-size:1.3em;
+    text-transform: uppercase;
+    padding-bottom:5px;
+    border-bottom: 2px solid $lightergray;
+
+    &:first-letter {
+        font-size:1.35em;
+    }
+}

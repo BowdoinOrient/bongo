@@ -18,36 +18,37 @@ class SeriesIndex(indexes.SearchIndex, indexes.Indexable):
 
 class PostIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(model_attr="title", document=True)
-    article_content = indexes.CharField(model_attr="text")
-    creators = indexes.CharField(model_attr="creators")
-    article_content = indexes.CharField(model_attr="text")
-    video_content = indexes.CharField(model_attr="video")
-    pdf_content = indexes.CharField(model_attr="pdf")
-    photo_content = indexes.CharField(model_attr="photo")
-    html_content = indexes.CharField(model_attr="html")
-    pullquote_content = indexes.CharField(model_attr="pullquote")
-    tags = indexes.CharField(model_attr="tags")
+    article_content = indexes.MultiValueField()
+    creators = indexes.MultiValueField()
+    article_content = indexes.MultiValueField()
+    video_content = indexes.MultiValueField()
+    pdf_content = indexes.MultiValueField()
+    photo_content = indexes.MultiValueField()
+    html_content = indexes.MultiValueField()
+    pullquote_content = indexes.MultiValueField()
+    tags = indexes.MultiValueField()
+    published = indexes.DateTimeField(model_attr='published')
 
     def get_model(self):
         return Post
 
     def prepare_article_content(self, obj):
-        return [o.body for o in obj.article_set]
+        return [o.body for o in obj.text.all()]
 
     def prepare_video_content(self, obj):
-        return [o.caption for o in obj.video_set]
+        return [o.caption for o in obj.video.all()]
 
     def prepare_pdf_content(self, obj):
-        return [o.caption for o in obj.pdf_set]
+        return [o.caption for o in obj.pdf.all()]
 
     def prepare_photo_content(self, obj):
-        return [o.caption for o in obj.photo_set]
+        return [o.caption for o in obj.photo.all()]
 
     def prepare_html_content(self, obj):
-        return [o.caption for o in obj.html_set]
+        return [o.caption for o in obj.html.all()]
 
     def prepare_pullquote_content(self, obj):
-        return [o.quote for o in obj.pullquote_set] + [o.caption for o in obj.pullquote_set]
+        return [o.quote for o in obj.pullquote.all()] + [o.caption for o in obj.pullquote.all()]
 
     def prepare_tags(self, obj):
-        return [o.tag for o in obj.tag_set]
+        return [o.tag for o in obj.tags.all()]

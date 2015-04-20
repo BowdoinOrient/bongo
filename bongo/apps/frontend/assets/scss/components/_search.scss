@@ -1,0 +1,7 @@
+.homepage-search {
+    @extend %rcol-widget;
+
+    .search-title {
+        @extend %rcol-widget-header;
+    }
+}
