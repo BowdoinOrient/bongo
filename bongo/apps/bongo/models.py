@@ -334,9 +334,6 @@ class Post (models.Model):
             self.pullquote.all()
         )
 
-    def text_content(self):
-        pass
-
     def excerpt(self):
         try:
             if self.primary_type == "photo":
@@ -352,6 +349,21 @@ class Post (models.Model):
         except:
             logger.error("Could not get an excerpt for article {}".format(self.pk))
             return ""
+
+    def content_as_text(self):
+        content = []
+
+        content.append([item.caption for item in self.photo.all()])
+        content.append([item.caption for item in self.video.all()])
+        content.append([item.caption for item in self.html.all()])
+        content.append([item.caption for item in self.photo.all()])
+        content.append([item.body for item in self.text.all()])
+        content.append([item.caption for item in self.pullquote.all()])
+        content.append([item.quote for item in self.pullquote.all()])
+
+        content = [val for sublist in content for val in sublist]
+
+        return ' '.join(content)
 
     def creators(self):
         crtrs = ()

@@ -1,0 +1,4 @@
+{{ object.title }}
+{{ object.series }}
+{{ object.content_as_text }}
+{{ object.creators.all }}
