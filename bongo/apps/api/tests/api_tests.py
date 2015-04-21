@@ -66,6 +66,26 @@ class APITestCase(TestCase):
         obj = factories.PostFactory.create()
         crud(self, obj, models.Post)
 
+    def test_root_endpoint(self):
+        client = APIClient()
+
+        res = client.get("http://testserver/api/v1/")
+
+        self.assertEqual(res.status_code, 200)
+
+        js_res = json.loads(res.content.decode("utf-8"))
+
+        js_res_keys = js_res.keys()
+
+        for model in ["series", "volume", "issue", "section", "tag", "job", "creator", "text", "video", "pdf", "photo", "html", "pullquote", "post", "alert", "advertiser", "ad", "tip", "event", "scheduledpost", "search"]:
+            self.assertIn(model, js_res_keys)
+
+        for model in js_res_keys:
+            res = client.get(js_res[model])
+
+            # Some endpoints do not accept GET, so allow a 405 status code
+            self.assertIn(res.status_code, [200, 405])
+
 
     def test_search_endpoint(self):
         client = APIClient()
