@@ -40,7 +40,10 @@ class SearchTestCase(TestCase):
         management.call_command('update_index', verbosity=0, interactive=False)
 
         sqs = SearchQuerySet().all()
-        res = sqs.auto_query(obj.text.all()[0].body[:100])
+
+        # Haystack seems to only be returning searches for complete words
+        # So some finangling here is needed until I figure that out
+        res = sqs.auto_query(' '.join(obj.text.all()[0].body.split(' ')[:4]))
 
         self.assertGreater(len(res), 0)
         self.assertIn(Post.objects.filter(pk__exact=obj.pk).first(), [res_item.object for res_item in res])
