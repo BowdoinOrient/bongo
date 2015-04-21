@@ -9,6 +9,12 @@ services:
   - memcached
 install:
   - pip install -r reqs/travis.txt
+cache:
+  directories:
+  - $HOME/.pip-cache/
+  - /home/travis/virtualenv/python2.7.9
+  - /home/travis/virtualenv/python3.4.2
+  - /home/travis/nltk_data
 env:
   global:
     - DJANGO_SETTINGS_MODULE="bongo.settings.travis"
