@@ -21,6 +21,7 @@ from .endpoints.tip import TipCrud, TipCrudRestricted
 from .endpoints.event import EventCrud, EventCrudRestricted
 from .endpoints.scheduledpost import ScheduledPostCrud, ScheduledPostCrudRestricted
 from .endpoints.search import search
+from .endpoints.root import api_root
 
 router = DefaultRouter()
 
@@ -69,9 +70,9 @@ router.register(r'(?i)tip', TipCrudRestricted)
 router.register(r'(?i)event', EventCrudRestricted)
 router.register(r'(?i)scheduledpost', ScheduledPostCrudRestricted)
 
-router.register(r'(?i)search', search, base_name="search")
-
 urlpatterns = [
+    url(r'^$', api_root),
     url(r'^', include(router.urls)),
+    url(r'(?i)search/', search, name="search"),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

@@ -220,6 +220,8 @@ REST_FRAMEWORK = {
     'COMPACT_JSON': False
 }
 
+API_VERSION = 1
+
 ### end drf ###
 
 ### django-cors-headers ###

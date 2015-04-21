@@ -1,6 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from haystack.query import SearchQuerySet
+from bongo.apps.bongo.helpers import arbitrary_serialize
 
 @api_view(('POST',))
 def search(request, format=None):
@@ -12,6 +13,6 @@ def search(request, format=None):
     sqs = SearchQuerySet().all()
     res = sqs.auto_query(query)
 
-    results = [res_item.object for res_item in res]
+    results = [arbitrary_serialize(res_item.object) for res_item in res]
 
     return Response(results, status=200)
