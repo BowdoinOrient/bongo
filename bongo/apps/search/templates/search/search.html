@@ -9,10 +9,9 @@
     <form method="get" action="/search" id="search-form">
         <div class="basic-search">
             <label class="search-label" for="search-box">Search:</label>
-            <input id="search-box" name="q" type="search" placeholder="Search...">
+            <input id="search-box" name="q" type="search" placeholder="Search..." {% if query %} value="{{ query }}" {% endif %}>
+            <input class="search-submit" type="submit" value="Search">
         </div>
-
-        <input class="search-submit" type="submit" value="Search">
 
         <div class="advanced-open">
             <span class="title">Advanced Search<i class="chevron"></i></span>

@@ -11,7 +11,15 @@
         -ms-#{$first}:     -ms-#{$second} #{$params};
        -moz-#{$first}:    -moz-#{$second} #{$params};
          -o-#{$first}:      -o-#{$second} #{$params};
-            #{$first}:         #{$second} #{$params};    
+            #{$first}:         #{$second} #{$params};
+}
+
+@mixin box-shadow($spread, $color, $opacity){
+    -webkit-box-shadow:  0 0 $spread rgba($color, $opacity);
+        -ms-box-shadow:  0 0 $spread rgba($color, $opacity);
+       -moz-box-shadow:  0 0 $spread rgba($color, $opacity);
+         -o-box-shadow:  0 0 $spread rgba($color, $opacity);
+            box-shadow:  0 0 $spread rgba($color, $opacity);
 }
 
 @mixin arrow($direction, $size, $color) {
@@ -46,7 +54,7 @@
     width:100%;
     display:block;
     border-left: 2px solid $lightergray;
-    padding:0 15px;
+    padding-left: 15px;
     margin:10px 0;
 }
 

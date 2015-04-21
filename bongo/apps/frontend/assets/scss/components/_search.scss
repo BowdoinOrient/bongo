@@ -13,7 +13,7 @@
     }
 
     .search-submit {
-        background-color: $opinion;
+        background-color: $search;
         height: 30px;
         width: 70px;
         color: white;
@@ -22,5 +22,10 @@
         margin-left:10px;
         position: relative;
         top: 1px;
+        cursor: pointer;
+
+        &:hover {
+            @include box-shadow(8px, $search, 0.5);
+        }
     }
 }

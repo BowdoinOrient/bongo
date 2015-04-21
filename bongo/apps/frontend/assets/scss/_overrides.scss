@@ -49,8 +49,8 @@ input[type=text] {
     border: 1px solid $lightgray;
 
     &:focus {
-        border: 1px solid rgba(82,168,236,.8);
-        @include vendor-prefix("box-shadow", "0 0 8px rgba(82,168,236,.6)");
+        border: 1px solid rgba($lightblue, 0.8);
+        @include box-shadow(8px, $lightblue, 0.6);
     }
 }
 

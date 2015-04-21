@@ -16,6 +16,10 @@
     .sections {
         width:100%;
 
+        a {
+            text-decoration: none !important;
+        }
+
         span {
             width:100%;
             height:80px;
@@ -64,6 +68,12 @@
                 background-color: rgba($opinion, 0.45);
                 &:hover {
                     background-color: rgba($opinion, 0.65);
+                }
+            }
+            &.search {
+                background-color: rgba($search, 0.45);
+                &:hover {
+                    background-color: rgba($search, 0.65);
                 }
             }
         }
