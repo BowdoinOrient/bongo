@@ -44,46 +44,68 @@ def tagify(text):
 
 
 def arbitrary_serialize(obj):
-    from bongo.apps.api import serializers
     if obj.__class__.__name__ == "Series":
-        return serializers.SeriesSerializer(obj).data
+        from bongo.apps.api.serializers.series import SeriesSerializer
+        return SeriesSerializer(obj).data
     elif obj.__class__.__name__ == "Volume":
-        return serializers.VolumeSerializer(obj).data
+        from bongo.apps.api.serializers.volume import VolumeSerializer
+        return VolumeSerializer(obj).data
     elif obj.__class__.__name__ == "Issue":
-        return serializers.IssueSerializer(obj).data
+        from bongo.apps.api.serializers.issue import IssueSerializer
+        return IssueSerializer(obj).data
     elif obj.__class__.__name__ == "Section":
-        return serializers.SectionSerializer(obj).data
+        from bongo.apps.api.serializers.section import SectionSerializer
+        return SectionSerializer(obj).data
     elif obj.__class__.__name__ == "Tag":
-        return serializers.TagSerializer(obj).data
+        from bongo.apps.api.serializers.tag import TagSerializer
+        return TagSerializer(obj).data
     elif obj.__class__.__name__ == "Job":
-        return serializers.JobSerializer(obj).data
+        from bongo.apps.api.serializers.job import JobSerializer
+        return JobSerializer(obj).data
     elif obj.__class__.__name__ == "Creator":
-        return serializers.CreatorSerializer(obj).data
+        from bongo.apps.api.serializers.creator import CreatorSerializer
+        return CreatorSerializer(obj).data
     elif obj.__class__.__name__ == "Text":
-        return serializers.TextSerializer(obj).data
+        from bongo.apps.api.serializers.text import TextSerializer
+        return TextSerializer(obj).data
     elif obj.__class__.__name__ == "Video":
-        return serializers.VideoSerializer(obj).data
+        from bongo.apps.api.serializers.video import VideoSerializer
+        return VideoSerializer(obj).data
     elif obj.__class__.__name__ == "PDF":
-        return serializers.PDFSerializer(obj).data
+        from bongo.apps.api.serializers.pdf import PDFSerializer
+        return PDFSerializer(obj).data
     elif obj.__class__.__name__ == "Photo":
-        return serializers.PhotoSerializer(obj).data
+        from bongo.apps.api.serializers.photo import PhotoSerializer
+        return PhotoSerializer(obj).data
     elif obj.__class__.__name__ == "Video":
-        return serializers.VideoSerializer(obj).data
+        from bongo.apps.api.serializers.video import VideoSerializer
+        return VideoSerializer(obj).data
     elif obj.__class__.__name__ == "HTML":
-        return serializers.HTMLSerializer(obj).data
+        from bongo.apps.api.serializers.html import HTMLSerializer
+        return HTMLSerializer(obj).data
     elif obj.__class__.__name__ == "Pullquote":
-        return serializers.PullquoteSerializer(obj).data
+        from bongo.apps.api.serializers.pullquote import PullquoteSerializer
+        return PullquoteSerializer(obj).data
     elif obj.__class__.__name__ == "Post":
-        return serializers.PostSerializer(obj).data
+        from bongo.apps.api.serializers.post import PostSerializer
+        return PostSerializer(obj).data
     elif obj.__class__.__name__ == "Alert":
-        return serializers.AlertSerializer(obj).data
+        from bongo.apps.api.serializers.alert import AlertSerializer
+        return AlertSerializer(obj).data
     elif obj.__class__.__name__ == "Advertiser":
-        return serializers.AdvertiserSerializer(obj).data
+        from bongo.apps.api.serializers.advertiser import AdvertiserSerializer
+        return AdvertiserSerializer(obj).data
+    elif obj.__class__.__name__ == "Ad":
+        from bongo.apps.api.serializers.ad import AdSerializer
+        return AdSerializer(obj).data
     elif obj.__class__.__name__ == "Tip":
-        return serializers.TipSerializer(obj).data
+        from bongo.apps.api.serializers.tip import TipSerializer
+        return TipSerializer(obj).data
     elif obj.__class__.__name__ == "Event":
-        return serializers.EventSerializer(obj).data
+        from bongo.apps.api.serializers.event import EventSerializer
+        return EventSerializer(obj).data
     elif obj.__class__.__name__ == "ScheduledPost":
-        return serializers.ScheduledPostSerializer(obj).data
+        from bongo.apps.api.serializers.scheduledpost import ScheduledPostSerializer
+        return ScheduledPostSerializer(obj).data
     else:
         raise Exception("Cannot serialize this type: {}".format(obj.__class__.__name____))
