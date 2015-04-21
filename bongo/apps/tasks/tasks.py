@@ -18,9 +18,10 @@ def update_es_index():
         repeat=None,                                                    # Repeat this number of times (None means repeat forever)
     )
 
-    index_job = scheduler.get_jobs()[-1]
-
-    assert(index_job.func_name == 'django.core.management.call_command("update_index")')
+    for job in scheduler.get_jobs():
+        index_job = job
+        if index_job.func_name == 'django.core.management.call_command("update_index")':
+            break
 
     index_job.meta['task_type'] = "update_index"
     index_job.save()

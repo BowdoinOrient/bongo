@@ -96,6 +96,16 @@ class PostSerializer(serializers.ModelSerializer):
             'primary_type'
         )
 
+    def get_content(self, obj):
+        return {
+            "text": TextSerializer(self.text.all(), many=True),
+            "video": VideoSerializer(self.video.all(), many=True),
+            "pdf": PDFSerializer(self.pdf.all(), many=True),
+            "photo": PhotoSerializer(self.photo.all(), many=True),
+            "html": HTMLSerializer(self.html.all(), many=True),
+            "pullquote": PullquoteSerializer(self.pullquote.all(), many=True)
+        }
+
 class AlertSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Alert

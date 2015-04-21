@@ -135,3 +135,17 @@ class PostFactory(Factory):
     volume = factory.SubFactory(VolumeFactory)
     issue = factory.SubFactory(IssueFactory)
     section = factory.SubFactory(SectionFactory)
+
+    @factory.post_generation
+    def content(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        self.text.add(TextFactory.create())
+        self.video.add(VideoFactory.create())
+        self.text.add(TextFactory.create())
+        self.pdf.add(PDFFactory.create())
+        self.photo.add(PhotoFactory.create())
+        self.html.add(HTMLFactory.create())
+        self.pullquote.add(PullquoteFactory.create())

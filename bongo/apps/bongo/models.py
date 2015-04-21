@@ -324,16 +324,6 @@ class Post (models.Model):
 
     primary_type = models.CharField(max_length=8, choices=types, default="generic")
 
-    def content(self):
-        return chain(
-            self.text.all(),
-            self.video.all(),
-            self.pdf.all(),
-            self.photo.all(),
-            self.html.all(),
-            self.pullquote.all()
-        )
-
     def excerpt(self):
         try:
             if self.primary_type == "photo":
@@ -349,6 +339,16 @@ class Post (models.Model):
         except:
             logger.error("Could not get an excerpt for article {}".format(self.pk))
             return ""
+
+    def content_as_chain(self):
+        return chain(
+            self.text.all(),
+            self.video.all(),
+            self.pdf.all(),
+            self.photo.all(),
+            self.html.all(),
+            self.pullquote.all()
+        )
 
     def content_as_text(self):
         content = []
@@ -367,7 +367,7 @@ class Post (models.Model):
 
     def creators(self):
         crtrs = ()
-        for cont in self.content():
+        for cont in self.content_as_chain():
             chain(crtrs, cont.creators.all())
         return crtrs
 
