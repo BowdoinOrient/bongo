@@ -23,6 +23,8 @@ SITE_NAME = os.path.basename(BASE_DIR)
 
 DEBUG = False
 
+OFFLINE = False
+
 TEMPLATE_DEBUG = DEBUG
 
 # Security settings

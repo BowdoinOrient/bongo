@@ -1,5 +1,6 @@
 {% load compress %}
 {% load static %}
+{% load offline %}
 
 <!doctype html>
 <html class="no-js" lang="en">
@@ -15,8 +16,14 @@
         {% compress css %}
             <link type="text/x-scss" rel="stylesheet" href="{% static 'scss/main.scss' %}">
         {% endcompress %}
-        <script type="text/javascript" src="https:////use.typekit.com/rmt0nbm.js"></script>
-        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+        {% if request|offline %}
+            {% compress css %}
+                <link type="text/x-scss" rel="stylesheet" href="{% static 'scss/devfonts.scss' %}">
+            {% endcompress %}
+        {% else %}
+            <script type="text/javascript" src="https://use.typekit.com/rmt0nbm.js"></script>
+            <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+        {% endif %}
     </head>
     <body>
         <div class="header-wrapper">
