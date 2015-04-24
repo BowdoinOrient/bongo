@@ -16,7 +16,7 @@
         {% compress css %}
             <link type="text/x-scss" rel="stylesheet" href="{% static 'scss/main.scss' %}">
         {% endcompress %}
-        {% if request|offline %}
+        {% if debug %}
             {% compress css %}
                 <link type="text/x-scss" rel="stylesheet" href="{% static 'scss/devfonts.scss' %}">
             {% endcompress %}
