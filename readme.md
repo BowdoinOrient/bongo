@@ -13,29 +13,34 @@ You'll need:
 - Python 3.4
 - NodeJS >= 0.10
 - Postgres ([Postgres.app](http://postgresapp.com) is a good option if you're on OS X).
-- Redis >= 2.8
-- Vagrant, if you plan to contribute to the project's Ansible playbook
-- MySQL, if you plan to contribute changes to the project's adapter to the 2002-2015 database.
+- Redis >= 2.8 (if you plan to contribute to scheduled task-related functionality)
+- Elasticsearch >= 1.5.0 (if you plan to contribute to search-related functionality)
+- Vagrant (if you plan to contribute to the project's Ansible playbook)
+- MySQL (if you plan to contribute changes to the project's adapter to the 2002-2015 database)
 
 Note that while all current development is being done with Python 3.4, the code base should support Python 2.7 if you are for some reason unable to upgrade.
 
+1. Install system-level dependencies (you may omit some of these, per guidelines above):
 
-1. Run the following commands in psql or [PG Commander](https://eggerapps.at/pgcommander/) to set up the Postgres database:
+        brew install python3 node redis elasticseach vagrant mariadb
+
+
+2. Run the following commands in psql or [PG Commander](https://eggerapps.at/pgcommander/) to set up the Postgres database:
 
         CREATE ROLE bongo WITH LOGIN CREATEDB PASSWORD 'bongo';
         CREATE DATABASE bongo;
 
-2. Install Python dependencies with:
+3. Install Python dependencies with:
 
         pip install -r reqs/dev.txt
 
-3. Obtain a copy of the `ansible/env_vars/secure.yml` file. It contains application secrets and third-party API credentials. An example file with secrets ommitted is at `ansible/env_vars/secure_safe.yml`. You may commit changes to this file to the repository, but please ensure you do not commit the actual secrets file.
+4. Obtain a copy of the `ansible/env_vars/secure.yml` file. It contains application secrets and third-party API credentials. An example file with secrets ommitted is at `ansible/env_vars/secure_safe.yml`. You may commit changes to this file to the repository, but please ensure you do not commit the actual secrets file.
 
-4. Set up the database with:
+5. Set up the database with:
 
         python manage.py syncdb
 
-5. Check that setup was successful with:
+6. Check that setup was successful with:
 
         python manage.py check
 

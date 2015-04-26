@@ -10,7 +10,7 @@ class SearchTestCase(TestCase):
 
         obj = CreatorFactory.create()
 
-        management.call_command('update_index', verbosity=0, interactive=False)
+        management.call_command('update_index', age=1, verbosity=0, interactive=False)
 
         sqs = SearchQuerySet().all()
         res = sqs.auto_query(obj.name)
@@ -23,7 +23,7 @@ class SearchTestCase(TestCase):
 
         obj = SeriesFactory.create()
 
-        management.call_command('update_index', verbosity=0, interactive=False)
+        management.call_command('update_index', age=1, verbosity=0, interactive=False)
 
         sqs = SearchQuerySet().all()
         res = sqs.auto_query(obj.name)
@@ -37,7 +37,7 @@ class SearchTestCase(TestCase):
 
         obj = PostFactory.create()
 
-        management.call_command('update_index', verbosity=0, interactive=False)
+        management.call_command('update_index', age=1, verbosity=0, interactive=False)
 
         sqs = SearchQuerySet().all()
 

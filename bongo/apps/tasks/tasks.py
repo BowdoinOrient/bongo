@@ -12,10 +12,10 @@ def update_es_index():
             scheduler.cancel(job)
 
     scheduler.schedule(
-        scheduled_time=datetime.now(),                                  # Time for first execution, in UTC timezone
-        func='django.core.management.call_command("update_index")',     # Function to be queued
-        interval=60*60,                                                 # Time before the function is called again, in seconds
-        repeat=None,                                                    # Repeat this number of times (None means repeat forever)
+        scheduled_time=datetime.now(),                                          # Time for first execution, in UTC timezone
+        func='django.core.management.call_command("update_index --age=1")',     # Function to be queued
+        interval=60*60,                                                         # Time before the function is called again, in seconds
+        repeat=None,                                                            # Repeat this number of times (None means repeat forever)
     )
 
     for job in scheduler.get_jobs():

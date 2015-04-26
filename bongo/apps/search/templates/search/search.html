@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load class_name %}
+{% load pagecounts %}
+{% load dump %}
 
 {% block title %}
     <title>Search | The Bowdoin Orient</title>
@@ -36,35 +38,37 @@
         </div>
 
         {% if query %}
-            {% for result in page.object_list %}
-                <p>
+            <div class="results">
+                {% if page.object_list|first %}
+                    <p class="count">Results {{page|firstindex}} – {{page|lastindex}} of {{page|count}}</p>
+                {% endif %}
+                {% for result in page.object_list %}
                     {% if result.object|class_name == 'Creator' %}
-                        <a href="{% url 'author' result.object.id %}">{{ result.object.name }}</a>
+                        {% include "search/creator.html" with creator=result.object %}
                     {% elif result.object|class_name == 'Series' %}
-                        <a href="{% url 'series' result.object.id %}">{{ result.object.name }}</a>
+                        {% include "search/series.html" with series=result.object %}
                     {% elif result.object|class_name == 'Post' %}
-                        <a href="{% url 'article' result.object.id %}">{{ result.object.title }}</a>
+                        {% include "search/post.html" with post=result.object %}
                     {% endif %}
-                </p>
-            {% empty %}
-                <p class="noresults">No results found.</p>
-            {% endfor %}
+                {% empty %}
+                    <p class="none">No results found.</p>
+                {% endfor %}
 
-            {% if page.has_previous or page.has_next %}
-                <div>
-                    {% if page.has_previous %}
-                        <a href="/search?q={{ query }}&amp;page={{ page.previous_page_number }}">
-                            Previous
-                        </a>
-                    {% endif %}
-                    {% if page.has_next %}
-                        <a href="/search?q={{ query }}&amp;page={{ page.next_page_number }}">
-                            Next
-                        </a>
-                    {% endif %}
-                </div>
-            {% endif %}
-        {% else %}
+                {% if page.has_previous or page|has_next %}
+                    <div>
+                        {% if page.has_previous %}
+                            <a href="/search?q={{ query }}&amp;page={{ page.previous_page_number }}">
+                                Previous
+                            </a>
+                        {% endif %}
+                        {% if page|has_next %}
+                            <a href="/search?q={{ query }}&amp;page={{ page.next_page_number }}">
+                                Next
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
         {% endif %}
     </form>
 {% endblock %}

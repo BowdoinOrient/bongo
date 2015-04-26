@@ -61,14 +61,3 @@ with open(os.path.normpath(os.path.join(SITE_ROOT, "ansible/env_vars/secure.yml"
 
 STATIC_URL ='/static/'
 MEDIA_URL='/media/'
-
-### Haystack ###
-
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
-    },
-}
-
-### End Haystack ###
