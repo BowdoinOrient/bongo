@@ -54,14 +54,14 @@
                     <p class="none">No results found.</p>
                 {% endfor %}
 
-                {% if page.has_previous or page|has_next %}
+                {% if page.has_previous or page.has_next %}
                     <div>
                         {% if page.has_previous %}
                             <a href="/search?q={{ query }}&amp;page={{ page.previous_page_number }}">
                                 Previous
                             </a>
                         {% endif %}
-                        {% if page|has_next %}
+                        {% if page.has_next %}
                             <a href="/search?q={{ query }}&amp;page={{ page.next_page_number }}">
                                 Next
                             </a>
