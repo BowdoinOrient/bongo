@@ -1,0 +1,48 @@
+.search-result {
+    margin-bottom: 20px;
+    @include vendor-prefix("border-radius", 2px);
+    @include vendor-prefix("box-shadow", "0 3px 10px rgba(183,183,183, 0.6)");
+    padding: 10px 15px 15px 15px;
+
+    &.news {border-bottom: 2px solid $news}
+    &.features {border-bottom: 2px solid $features}
+    &.artsent {border-bottom: 2px solid $artsent}
+    &.sports {border-bottom: 2px solid $sports}
+    &.opinion {border-bottom: 2px solid $opinion}
+
+    &:before {
+        text-transform: uppercase;
+        color: $lightgray;
+        font-family: $myriad-stack;
+        font-size:1em;
+        display: block;
+    }
+
+    .primary {
+        font-family: $minion-stack;
+        font-size: 1.4em;
+        display: block;
+    }
+
+    &.post {
+        &:before {
+            content:"Article";
+        }
+        .excerpt {
+            font-family: $minion-stack;
+            font-size: 1.2em;
+        }
+    }
+
+    &.creator {
+        &:before {
+            content:"Author";
+        }
+    }
+
+    &.series {
+        &:before {
+            content:"Series";
+        }
+    }
+}

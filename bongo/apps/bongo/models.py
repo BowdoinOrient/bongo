@@ -36,6 +36,13 @@ class Series (models.Model):  # series is the singular, which may confuse django
     def __unicode__(self):
         return self.name
 
+    def primary_section(self):
+        try:
+            section_mapping = [post.section.classname() for post in self.post_set.all()]
+            return section_mapping[0]
+        except:
+            return ""
+
 
 class Volume (models.Model):
     volume_number = models.IntegerField()
@@ -173,6 +180,21 @@ class Creator(models.Model):
             self.html_set.all(),
             self.pullquote_set.all()
         )
+
+    def posts(self):
+        posts = []
+        for work in self.works():
+            for post in work.post_set.all():
+                posts.append(post)
+
+        return list(set(posts))
+
+    def primary_section(self):
+        try:
+            section_mapping = [post.section.classname() for post in self.posts()]
+            return section_mapping[0]
+        except:
+            return ""
 
 
 """ The following models describe things a post can contain.
@@ -339,6 +361,10 @@ class Post (models.Model):
         except:
             logger.error("Could not get an excerpt for article {}".format(self.pk))
             return ""
+
+    def primary_section(self):
+        # exists for consistency with other searchable models
+        return self.section.classname()
 
     def content_as_chain(self):
         return chain(
