@@ -22,3 +22,6 @@ class PostIndex(indexes.SearchIndex, indexes.Indexable):
 
     def get_updated_field(self):
         return "updated"
+
+    def index_queryset(self, using=None):
+        return self.get_model().objects.filter(is_published__exact=True)
