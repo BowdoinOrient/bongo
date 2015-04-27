@@ -106,9 +106,37 @@
     }
 
     .results {
-        .count, .none {
+        .more-results {
+            margin-top: 20px;
+        }
+
+        .count, .none, .prev, .next {
             font-family: $myriad-stack;
             font-size: 1.3em;
+        }
+
+
+        .prev {
+            margin-right: 10px;
+
+            .chevron {
+                margin-right: 10px;
+                display: inline-block;
+                @include arrow("left", 5px, black);
+            }
+        }
+
+        .next {
+            .chevron {
+                margin-left: 10px;
+                display: inline-block;
+                @include arrow("right", 5px, black);
+            }
+
+            &:nth-child(2){
+                padding-left: 13px;
+                border-left: 2px solid black;
+            }
         }
     }
 

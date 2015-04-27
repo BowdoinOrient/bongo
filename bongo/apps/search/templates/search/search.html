@@ -55,15 +55,15 @@
                 {% endfor %}
 
                 {% if page.has_previous or page.has_next %}
-                    <div>
+                    <div class="more-results">
                         {% if page.has_previous %}
-                            <a href="/search?q={{ query }}&amp;page={{ page.previous_page_number }}">
-                                Previous
+                            <a class="prev" href="/search?q={{ query }}&amp;page={{ page.previous_page_number }}">
+                                <i class="chevron"></i> Previous
                             </a>
                         {% endif %}
                         {% if page.has_next %}
-                            <a href="/search?q={{ query }}&amp;page={{ page.next_page_number }}">
-                                Next
+                            <a class="next" href="/search?q={{ query }}&amp;page={{ page.next_page_number }}">
+                                Next <i class="chevron"></i>
                             </a>
                         {% endif %}
                     </div>
