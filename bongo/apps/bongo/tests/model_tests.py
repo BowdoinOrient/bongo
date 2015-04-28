@@ -40,6 +40,7 @@ class TextTestCase(TestCase):
         self.assertEquals(text.excerpt, "Quinoa hashtag Kickstarter bespoke. Schlitz PBR&B 3 wolf moon, photo booth swag occupy banh mi PBR artisan lo-fi nor.bongo. Lomo selvage leggings quinoa, ugh cliche cornhole asymmetrical gluten-free Echo Park.")
         text.delete()
 
+
 class VideoTestCase(TestCase):
     def test_creator(self):
         video = factories.VideoFactory.create()
@@ -221,6 +222,7 @@ class UserTestCase(TestCase):
         self.assertNotEqual(user.password, u'')
         self.assertEqual(user.check_password("defaultpassword"), True)
 
+
 class CreatorTestCase(TestCase):
     def test_foreign_key(self):
         """ Test that Creators are properly hooked up to Jobs and Users """
@@ -259,6 +261,7 @@ class CreatorTestCase(TestCase):
         me.delete()
         photo.delete()
         video.delete()
+
 
 class JobTestCase(TestCase):
     def test_foreign_key(self):
@@ -309,11 +312,11 @@ class SeriesTestCase(TestCase):
         self.assertEqual(series.primary_section(), section2.classname())
 
 
-
 class VolumeTestCase(TestCase):
     def test_foreign_key(self):
         # @TODO
         pass
+
 
 class IssueTestCase(TestCase):
     def test_foreign_key(self):
@@ -343,6 +346,7 @@ class SectionTestCase(TestCase):
         section = factories.SectionFactory.create()
         self.assertLess(len(section.classname()), 9)
         self.assertEqual(section.classname(), section.classname().lower())
+
 
 class TagTestCase(TestCase):
     def test_foreign_key(self):
