@@ -283,6 +283,33 @@ class SeriesTestCase(TestCase):
         # @TODO
         pass
 
+    def test_primary_section(self):
+        """Test that Series' primary_section method works"""
+
+        series = factories.SeriesFactory.create()
+
+        section1 = factories.SectionFactory.create()
+        section2 = factories.SectionFactory.create()
+
+        post1 = factories.PostFactory.create()
+        post1.section = section1
+        post1.series.add(series)
+        post1.save()
+
+        post2 = factories.PostFactory.create()
+        post2.section = section2
+        post2.series.add(series)
+        post2.save()
+
+        post3 = factories.PostFactory.create()
+        post3.section = section2
+        post3.series.add(series)
+        post3.save()
+
+        self.assertEqual(series.primary_section(), section2.classname())
+
+
+
 class VolumeTestCase(TestCase):
     def test_foreign_key(self):
         # @TODO
