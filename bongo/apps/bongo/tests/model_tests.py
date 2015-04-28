@@ -208,6 +208,11 @@ class PostTestCase(TestCase):
         self.assertGreater(post2.popularity(), post1.popularity())
         self.assertGreater(post3.popularity(), post2.popularity())
 
+    def test_primary_section(self):
+        """Test that this convenience method works, which, duh"""
+        post = factories.PostFactory.create()
+        self.assertEqual(post.primary_section(), post.section.classname())
+
 
 """
 Test user-related models:
@@ -261,6 +266,37 @@ class CreatorTestCase(TestCase):
         me.delete()
         photo.delete()
         video.delete()
+
+    def test_primary_section(self):
+        """Test that Creators' primary_section method works"""
+
+        creator = factories.CreatorFactory.create()
+
+        section1 = factories.SectionFactory.create()
+        section2 = factories.SectionFactory.create()
+
+        post1 = factories.PostFactory.create()
+        post1text = factories.TextFactory.create()
+        post1text.creators.add(creator)
+        post1.text.add(post1text)
+        post1.section = section1
+        post1.save()
+
+        post2 = factories.PostFactory.create()
+        post2text = factories.TextFactory.create()
+        post2text.creators.add(creator)
+        post2.text.add(post2text)
+        post2.section = section2
+        post2.save()
+
+        post3 = factories.PostFactory.create()
+        post3text = factories.TextFactory.create()
+        post3text.creators.add(creator)
+        post3.text.add(post3text)
+        post3.section = section2
+        post3.save()
+
+        self.assertEqual(creator.primary_section(), section2.classname())
 
 
 class JobTestCase(TestCase):
