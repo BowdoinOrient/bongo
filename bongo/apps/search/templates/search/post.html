@@ -1,6 +1,6 @@
 <a href="/article/{{post.pk}}">
     <div class="search-result post {{post.primary_section}}">
-        <span class="primary">{{post.title}}</span>
-        <span class="excerpt">{{post.excerpt}}</span>
+        <span class="primary">{{ post.title }}</span>
+        <span class="excerpt">{{ post.excerpt|truncatewords:50 }}</span>
     </div>
 </a>

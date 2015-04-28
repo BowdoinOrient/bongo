@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from datetime import datetime
 from django.utils.timezone import make_aware
 from django.utils.text import slugify
+from django.utils.html import strip_tags
 from django.core.cache import cache
 from django.conf import settings
 from itertools import chain
@@ -348,16 +349,18 @@ class Post (models.Model):
 
     def excerpt(self):
         try:
+            ex = ""
             if self.primary_type == "photo":
-                return self.photo.all()[0].caption
+                ex = self.photo.all()[0].caption
             elif self.primary_type == "video":
-                return self.video.all()[0].caption
+                ex = self.video.all()[0].caption
             elif self.primary_type == "html":
-                return self.HTML.all()[0].caption
+                ex = self.HTML.all()[0].caption
             elif self.primary_type == "photo":
-                return self.photo.all()[0].caption
+                ex = self.photo.all()[0].caption
             elif self.primary_type == "text":
-                return self.text.all()[0].excerpt
+                ex = self.text.all()[0].excerpt
+            return strip_tags(ex)
         except:
             logger.error("Could not get an excerpt for article {}".format(self.pk))
             return ""

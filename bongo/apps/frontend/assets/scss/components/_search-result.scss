@@ -1,8 +1,9 @@
 .search-result {
     margin-bottom: 20px;
+    padding: 10px 15px 15px 15px;
     @include vendor-prefix("border-radius", 2px);
     @include vendor-prefix("box-shadow", "0 3px 10px rgba(183,183,183, 0.6)");
-    padding: 10px 15px 15px 15px;
+    @include vendor-prefix("transition", "transform .1s ease");
 
     &.news {border-bottom: 2px solid $news}
     &.features {border-bottom: 2px solid $features}
@@ -44,5 +45,9 @@
         &:before {
             content:"Series";
         }
+    }
+
+    &:hover {
+        @include vendor-prefix("transform", "scale(1.01)");
     }
 }
