@@ -174,8 +174,8 @@ def import_volumes():
             imported = True,
             pk = old_volume.id,
             volume_number = old_volume.arabic,
-            volume_year_start = old_volume.annodomini,  # toph.... why
-            volume_year_end = old_volume.annodomini+1
+            volume_year_start = int(old_volume.annodomini),  # toph.... why
+            volume_year_end = int(old_volume.annodomini)+1
         )
 
 
@@ -435,6 +435,9 @@ def import_content():
 
             post.text.add(text)
 
+            for old_author in old_authors:
+                text.creators.add(bongo_models.Creator.objects.get(pk__exact = old_author.id))
+
             post.primary_type = "text"
 
         if old_article.series != 0:
@@ -446,9 +449,6 @@ def import_content():
 
             if post.series.all()[0].name == "Snapshot":
                 post.primary_type = "photo"
-
-        for old_author in old_authors:
-            post.creators.add(bongo_models.Creator.objects.get(pk__exact = old_author.id))
 
         post.save(auto_dates = False)  # prevent auto-save of created and updated fields
 

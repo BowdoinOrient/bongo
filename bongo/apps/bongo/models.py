@@ -34,7 +34,7 @@ class Series (models.Model):  # series is the singular, which may confuse django
     name = models.CharField(max_length=100)
     imported = models.BooleanField(default=False, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def primary_section(self):
@@ -51,7 +51,7 @@ class Volume (models.Model):
     volume_year_end = models.IntegerField()
     imported = models.BooleanField(default=False, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.volume_number)
 
 
@@ -65,7 +65,7 @@ class Issue (models.Model):
     # link to a 111x142 thumbnail of the cover
     scribd_image = models.URLField(null=True,blank=True,editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.issue_number)
 
     def __init__(self, *args, **kwargs):
@@ -107,7 +107,7 @@ class Section (models.Model):
     priority = models.IntegerField()
     imported = models.BooleanField(default=False, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.section
 
     def classname(self):
@@ -125,7 +125,7 @@ class Tag (models.Model):
     tag = models.CharField(max_length=25)
     imported = models.BooleanField(default=False, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.tag
 
 
@@ -137,7 +137,7 @@ class Job(models.Model):
     def workers(self):
         return self.creator_set.all()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 
@@ -169,7 +169,7 @@ class Creator(models.Model):
     # for photos that previously ran with a photographer_id of 1 and a "courtesy of" caption
     courtesyof = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def works(self):
@@ -212,7 +212,7 @@ class Text (models.Model):
     caption = models.TextField(null=True, blank=True)
     imported = models.BooleanField(default=False, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.excerpt
 
     def save(self, *args, **kwargs):
@@ -238,7 +238,7 @@ class Video(models.Model):
     def url(self):
         return "http://{host}.com/{uid}".format(host=self.host.lower(), uid=self.uid)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url()
 
 
@@ -248,7 +248,7 @@ class PDF (models.Model):
     caption = models.TextField(null=True, blank=True)
     imported = models.BooleanField(default=False, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.caption[:60]
 
 
@@ -262,7 +262,7 @@ class Photo (models.Model):
     def thumbnail(self, width, height):
         pass
 
-    def __unicode__(self):
+    def __str__(self):
         return self.caption[:60]
 
 
@@ -276,7 +276,7 @@ class HTML (models.Model):
     caption = models.TextField(null=True, blank=True)
     imported = models.BooleanField(default=False, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.caption[:60]
 
 
@@ -287,7 +287,7 @@ class Pullquote (models.Model):
     caption = models.TextField(null=True, blank=True)
     imported = models.BooleanField(default=False, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.quote
 
 
@@ -470,7 +470,7 @@ class Post (models.Model):
         super(Post, self).save(*args, **kwargs)
 
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 
@@ -490,7 +490,7 @@ class Alert (models.Model):
     urgent = models.BooleanField(default=False)
     imported = models.BooleanField(default=False, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.message
 
 
@@ -498,7 +498,7 @@ class Advertiser (models.Model):
     name = models.CharField(max_length=100)
     imported = models.BooleanField(default=False, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -511,7 +511,7 @@ class Ad (models.Model):
     adfile = models.ImageField(upload_to="ads")
     imported = models.BooleanField(default=False, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.owner + ": {} through {}".format(self.run_from.strftime("%x"), self.run_through.strftime("%x"))
 
 class Tip (models.Model):
@@ -522,7 +522,7 @@ class Tip (models.Model):
     useragent = models.TextField(null=True, blank=False)
     imported = models.BooleanField(default=False, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.content[:60]
 
 

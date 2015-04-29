@@ -1,1 +1,6 @@
 <p>{{author}}</p>
+<ul>
+{% for work in author.works %}
+    <li>{{work}}</li>
+{% endfor %}
+</ul>
