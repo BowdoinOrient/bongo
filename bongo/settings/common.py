@@ -219,7 +219,7 @@ REST_FRAMEWORK = {
 ### django-cors-headers ###
 
 CORS_ORIGIN_WHITELIST = (
-    'bjacobel.com',
+    'bowdoinorient.co',
     'bowdoinorient.com',
 )
 
