@@ -53,12 +53,11 @@ CACHES = {
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-AWS_STORAGE_BUCKET_NAME = "bowdoinorient-bongo"
 AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
 AWS_PRELOAD_METADATA = True
 AWS_QUERYSTRING_EXPIRE = 63115200
-S3_URL = 'https://{}.s3.amazonaws.com/'.format(AWS_STORAGE_BUCKET_NAME)
+S3_URL = 'http://static.bowdoinorient.co/' # @TODO make this https and .com
 
 STATIC_URL = S3_URL
 MEDIA_URL = S3_URL
