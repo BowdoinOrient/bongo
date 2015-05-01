@@ -213,6 +213,19 @@ class PostTestCase(TestCase):
         post = factories.PostFactory.create()
         self.assertEqual(post.primary_section(), post.section.classname())
 
+    def test_creators(self):
+        """Test the creators() method for finding the authors of post's content"""
+        post = factories.PostFactory.create()
+        text = factories.TextFactory.create()
+        author = factories.CreatorFactory.create()
+        text.creators.add(author)
+        post.text.add(text)
+
+        creators = list(post.creators())
+
+        self.assertIn(author, creators)
+        self.assertEqual(len(creators), 1)
+
 
 """
 Test user-related models:

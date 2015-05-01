@@ -397,7 +397,7 @@ class Post (models.Model):
     def creators(self):
         crtrs = ()
         for cont in self.content_as_chain():
-            chain(crtrs, cont.creators.all())
+            crtrs = chain(crtrs, cont.creators.all())
         return crtrs
 
     def similar_tags(self):
