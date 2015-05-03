@@ -221,6 +221,10 @@ class PostTestCase(TestCase):
         text.creators.add(author)
         post.text.add(text)
 
+        text2 = factories.TextFactory.create()
+        text2.creators.add(author)
+        post.text.add(text2)
+
         creators = list(post.creators())
 
         self.assertIn(author, creators)

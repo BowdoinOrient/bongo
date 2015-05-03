@@ -1,5 +1,13 @@
 <a href="/author/{{creator.pk}}">
     <div class="search-result creator {{creator.primary_section}}">
         <span class="primary">{{creator.name}}</span>
+        <ul class="posts">
+            {% for post in creator.published_works|slice:"3" %}
+                <li><span class="title">{{post}}</span></li>
+            {% endfor %}
+            {% if creator.works|length > 4 %}
+                <li class="andmore">... and {{ creator.published_works|length|add:"-3" }} more articles</li>
+            {% endif %}
+        </ul>
     </div>
 </a>

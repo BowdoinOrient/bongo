@@ -3,6 +3,8 @@ import yaml
 
 DEBUG = True
 
+TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
+
 SECRET_KEY = 'afakesecretkeyfordevelopment'
 
 SECURE_SSL_REDIRECT = False

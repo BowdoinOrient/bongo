@@ -21,13 +21,50 @@
 
     .primary {
         font-family: $minion-stack;
-        font-size: 1.4em;
+        font-size: 1.6em;
         display: block;
+    }
+
+    ul.posts {
+        font-family: $minion-stack;
+        font-size:1.2em;
+
+        li {
+            .title {
+                &:before {
+                    content:"•";
+                    margin-right: 5px;
+                }
+            }
+            &.andmore {
+                color: $lightgray;
+            }
+        }
     }
 
     &.post {
         &:before {
             content:"Article";
+        }
+        .metadata {
+            font-size: 1em;
+            font-family: $minion-stack;
+            margin: 6px 0;
+
+            .date {
+                &:not(:last-child){
+                    &:after {
+                        content: " • ";
+                    }
+                }
+            }
+            .author {
+                &:last-child:not(:nth-child(2)){
+                    &:before {
+                        content: " and ";
+                    }
+                }
+            }
         }
         .excerpt {
             font-family: $minion-stack;
@@ -49,5 +86,6 @@
 
     &:hover {
         @include vendor-prefix("transform", "scale(1.01)");
+        cursor: pointer;
     }
 }

@@ -1,5 +1,13 @@
 <a href="/series/{{series.pk}}">
     <div class="search-result series {{series.primary_section}}">
         <span class="primary">{{series.name}}</span>
+        <ul class="posts">
+            {% for post in series.preview %}
+                <li><span class="title">{{post.title}}</span></li>
+            {% endfor %}
+            {% if series.post_set.count > 4 %}
+                <li class="andmore">... and {{ series.post_set.count|add:"-3" }} more articles</li>
+            {% endif %}
+        </ul>
     </div>
 </a>

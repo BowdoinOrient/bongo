@@ -187,7 +187,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            "debug": DEBUG,
         },
         "DIRS": [
             os.path.normpath(os.path.join(BASE_DIR, 'templates')),

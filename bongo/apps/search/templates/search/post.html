@@ -1,6 +1,14 @@
 <a href="/article/{{post.pk}}">
     <div class="search-result post {{post.primary_section}}">
         <span class="primary">{{ post.title }}</span>
+        <div class="metadata">
+            <span class="date">{{post.published | date:"F j, Y"}}</span>
+            {% for author in post.creators %}
+                {% if author.name %}
+                    <span class="author">{{ author.name }}</span>
+                {% endif %}
+            {% endfor %}
+        </div>
         <span class="excerpt">{{ post.excerpt|truncatewords:50 }}</span>
     </div>
 </a>

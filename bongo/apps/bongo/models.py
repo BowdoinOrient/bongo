@@ -44,6 +44,10 @@ class Series (models.Model):  # series is the singular, which may confuse django
         except:
             return ""
 
+    def preview(self):
+        """Return up to three most recent entries in the series"""
+        return self.post_set.all().order_by("-published")[:3]
+
 
 class Volume (models.Model):
     volume_number = models.IntegerField()
@@ -173,14 +177,18 @@ class Creator(models.Model):
         return self.name
 
     def works(self):
-        return chain(
+        return list(chain(
             self.text_set.all(),
             self.video_set.all(),
             self.pdf_set.all(),
             self.photo_set.all(),
             self.html_set.all(),
             self.pullquote_set.all()
-        )
+        ))
+
+    def published_works(self):
+        # Only return works that are published in at least one place
+        return [work for work in self.works() if True in [post.is_published for post in work.post_set.all()]]
 
     def posts(self):
         posts = []
@@ -390,7 +398,7 @@ class Post (models.Model):
         content.append([item.caption for item in self.pullquote.all()])
         content.append([item.quote for item in self.pullquote.all()])
 
-        content = [val for sublist in content for val in sublist]
+        content = [val for sublist in content for val in sublist if val != None]
 
         return ' '.join(content)
 
@@ -398,7 +406,7 @@ class Post (models.Model):
         crtrs = ()
         for cont in self.content_as_chain():
             crtrs = chain(crtrs, cont.creators.all())
-        return crtrs
+        return set(crtrs)
 
     def similar_tags(self):
         similarity = {}
