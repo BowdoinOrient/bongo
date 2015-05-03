@@ -8,9 +8,7 @@
         <meta charset="utf-8">
         <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}"/>
         <base href="/">
-        {% block title %}
-            <title>The Bowdoin Orient</title>
-        {% endblock %}
+        <title>{% block title %}The Bowdoin Orient{% endblock %}</title>
         <meta name="description" content="News and commentary from the Bowdoin Orient, the nation's oldest continuously-run college weekly.">
         <meta name="viewport" content="width=device-width">
         {% compress css %}

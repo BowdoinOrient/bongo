@@ -7,6 +7,9 @@ class CreatorIndex(indexes.SearchIndex, indexes.Indexable):
     def get_model(self):
         return Creator
 
+    def index_queryset(self, using=None):
+        return self.get_model().objects.filter(dupe_of__exact=None)
+
 class SeriesIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(model_attr='name', document=True, use_template=True)
 

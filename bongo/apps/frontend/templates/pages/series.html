@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{series.title}}{% endblock %}
+
+{% block content %}
+<p>{{series.title}}<p>
+
+<ul>
+{% for post in series.post_set.all %}
+    <li>{{post}}</li>
+{% endfor %}
+</ul>
+{% endblock %}

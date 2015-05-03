@@ -168,6 +168,7 @@ class Creator(models.Model):
     job = models.ForeignKey(Job, null=True)
     twitter = models.CharField(max_length=15, null=True, blank=True)
     profpic = models.ImageField(null=True, blank=True, upload_to="headshots")
+    dupe_of = models.ForeignKey('Creator', null=True, editable=False)
     imported = models.BooleanField(default=False, editable=False)
 
     # for photos that previously ran with a photographer_id of 1 and a "courtesy of" caption
