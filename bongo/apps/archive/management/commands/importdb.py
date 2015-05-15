@@ -13,6 +13,7 @@ from datetime import datetime
 from optparse import make_option
 import pytz
 import requests
+import re
 
 options = None
 session = None
@@ -91,6 +92,24 @@ def datetimeify(d):
         return datetime.combine(d, datetime.min.time())
     else:
         raise Exception("Things are really fucked: datetimeify called with a " + d.__class__.__name__)
+
+quoted = re.compile("\?(\b\w+\b)\?")
+possessive = re.compile("\w\?s")
+
+def body_cleanup(body):
+    """The old database has some character encoding issues; see here:
+    https://github.com/BowdoinOrient/bonus/issues/118
+
+    This method does a light pass for two common cases (Word?s, ?Word?)
+    More cases may be added later (@TODO)
+    """
+
+    quoted_instances = re.search(quoted, body)
+
+    if quoted_instances:
+        for inst in quoted_instances.groups():
+            re.sub()
+
 
 
 """ Import the old ads table into the new Advertiser, Ad models """
@@ -430,7 +449,7 @@ def import_content():
             (text, created) = bongo_models.Text.objects.get_or_create(
                 imported = True,
                 pk = old_articlebody.id,
-                body = old_articlebody.body
+                body = body_cleanup(old_articlebody.body)
             )
 
             post.text.add(text)
