@@ -225,7 +225,10 @@ class Text (models.Model):
 
     def save(self, *args, **kwargs):
         # Using NLTK here is a sledgehammer for a thumbtack, but it may be useful for tagging, too
-        tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+        try:
+            tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+        except:
+            print("Error initializing NLTK. Try running 'python manage.py nltk-init'")
         self.excerpt = ' '.join(tokenizer.tokenize(self.body)[:3])
         super(Text, self).save(*args, **kwargs)
 
