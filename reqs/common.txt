@@ -15,7 +15,7 @@ django-libsass==0.2
 pyyaml==3.11
 LogentriesLogger==0.2.1
 django-secure==1.0.1
-git+git://github.com/bjacobel/django-haystack.git@feature/django1.8#egg=django-haystack
+django-haystack==2.4.0
 rq==0.5.1
 rq-scheduler==0.5.1
 markdown==2.6.2
