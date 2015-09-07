@@ -9,6 +9,7 @@ from django.core.files.base import ContentFile
 from django.utils.text import slugify
 from django.test import override_settings
 from django.db import connection
+from django.conf import settings
 from datetime import datetime
 from optparse import make_option
 import pytz
@@ -580,6 +581,17 @@ class Command(BaseCommand):
 
         global session
         session = requests.Session()
+
+        # Dynamically append mysql db to settings
+
+        settings.DATABASES['archive'] = {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'DB02Orient',
+            'USER': 'root',
+            'PASSWORD': '',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+        }
 
         import_ads()
         import_tips()
