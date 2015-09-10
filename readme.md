@@ -25,9 +25,9 @@ Note that while all current development is being done with Python 3.4, the code 
 
         brew install python3 node
 
-Include `postgres` in the above if you choose not to use [Postgres.app](http://postgresapp.com).
+	Include `postgres` in the above if you choose not to use [Postgres.app](http://postgresapp.com).
 
-3. Install optional system-level dependencies (based on "If you plan to... above")
+3. Install optional system-level dependencies (based on "If you plan to..." above)
 
         brew install redis vagrant mariadb
 
@@ -41,7 +41,7 @@ Include `postgres` in the above if you choose not to use [Postgres.app](http://p
 
         pip install -r reqs/dev.txt
 
-It's recommended to do this step inside of a Python [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/) if you do any other Python development on this machine.
+	It's recommended to do this step inside of a Python [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/) if you do any other Python development on this machine.
 
 6. Obtain a copy of the `ansible/env_vars/secure.yml` file. It contains application secrets and third-party API credentials. An example file with secrets ommitted is at `ansible/env_vars/secure_safe.yml`. You may commit changes to this file to the repository, but please ensure you do not commit the actual secrets file.
 
