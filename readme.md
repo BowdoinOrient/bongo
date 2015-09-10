@@ -10,14 +10,14 @@ Bongo is using [waffle.io](http://waffle.io/BowdoinOrient/bongo) for project man
 ####Setup
 You'll need:
 
-- Python >=3.4
+- Python >=3.5
 - NodeJS >= 0.10
 - Postgres ([Postgres.app](http://postgresapp.com) is a good option if you're on OS X, `brew`'s postgres package always gives me issues).
 - Redis >= 2.8 (if you plan to contribute to scheduled task-related functionality)
 - Vagrant (if you plan to contribute to the project's Ansible playbook)
 - MySQL/MariaDB (if you plan to contribute changes to the project's adapter to the 2002-2015 database)
 
-Note that while all current development is being done with Python 3.4, the code base should support Python 2.7 if you are for some reason unable to upgrade.
+Note that while all current development is being done with Python 3.5, the code base should support Python 2.7 if you are for some reason unable to upgrade.
 
 1. Install [Homebrew](https://brew.sh).
 
@@ -56,7 +56,7 @@ Note that while all current development is being done with Python 3.4, the code 
 ####Tests
 You can run Bongo's test suite with `python manage.py test` (and should, often!). The current build status and test coverage stats are shown at the top of this readme. Pull requests should include tests to maintain or increase the current code coverage percentage.
 
-The test suite currently runs against both Python 2.7 and 3.4. so please ensure all pull requests are backwards-compatible (or forwards-, if developed with 2.7).
+The test suite currently runs against both Python 2.7 and 3.5, so please ensure all pull requests are backwards-compatible (or forwards-, if developed with 2.7).
 
 The test suite also runs a [PEP8](https://www.python.org/dev/peps/pep-0008/) linter (currently only in the CI environment, not in your dev env). Any PEP8 violations will cause the whole test suite to fail, so consider using a linter before you push to GitHub.
 
@@ -80,7 +80,6 @@ If you are contributing changes to the Ansible playbook, you may use the include
 and visit [http://bowdoinorient.local](http://bowdoinorient.local) in your browser if the deploy is successful.
 
 Bongo is currently deployed at [bowdoinorient.co](http://bowdoinorient.co).
-
 
 ####Using the API
 Bongo includes a JSON API acessible at [<base_url>/api/v1](https://bowdoinorient.bjacobel.com/api/v1). Its structure is fairly standard REST.
