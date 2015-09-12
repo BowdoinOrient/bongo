@@ -1,6 +1,7 @@
 [pep8]
 ignore = E266,E251
 max-line-length = 117
+exclude = */migrations/*
 
 # Ignored:
 # E226: using "###" to start comments

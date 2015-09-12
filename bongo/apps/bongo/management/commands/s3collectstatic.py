@@ -4,6 +4,7 @@ import os
 from django.contrib.staticfiles.management.commands import collectstatic
 import hashlib
 
+
 class Command(collectstatic.Command):
 
     def delete_file(self, path, prefixed_path, source_storage):
@@ -13,7 +14,9 @@ class Command(collectstatic.Command):
         if self.storage.exists(prefixed_path):
             try:
                 # attempt the S3 hash first
-                if self.storage._wrapped.entries.get(prefixed_path).etag == '"%s"' % hashlib.md5(source_storage.open(path).read()).hexdigest():
+                if self.storage._wrapped.entries.get(prefixed_path).etag == '"%s"' % hashlib.md5(
+                    source_storage.open(path).read()
+                ).hexdigest():
                     self.log(u"Skipping '%s' (not modified based on MD5 SUM)" % path)
                     return False
             except:
@@ -39,10 +42,10 @@ class Command(collectstatic.Command):
                         full_path = None
                     # Skip the file if the source file is younger
                     if target_last_modified >= source_last_modified:
-                        if not ((self.symlink and full_path
-                                 and not os.path.islink(full_path)) or
-                                (not self.symlink and full_path
-                                 and os.path.islink(full_path))):
+                        if not ((self.symlink and full_path and
+                                 not os.path.islink(full_path)) or
+                                (not self.symlink and full_path and
+                                 os.path.islink(full_path))):
                             if prefixed_path not in self.unmodified_files:
                                 self.unmodified_files.append(prefixed_path)
                             self.log(u"Skipping '%s' (not modified)" % path)
