@@ -8,8 +8,8 @@
 # Also note: You'll have to insert the output of 'django-admin.py sqlcustom [app_label]'
 # into your database.
 from __future__ import unicode_literals
-
 from django.db import models
+
 
 class Article(models.Model):
     id = models.AutoField(primary_key=True)
@@ -126,7 +126,6 @@ class Photo(models.Model):
         db_table = 'photo'
 
 
-
 """ Have been imported """
 
 
@@ -150,6 +149,7 @@ class Section(models.Model):
         managed = False
         db_table = 'section'
 
+
 class Issue(models.Model):
     id = models.AutoField(primary_key=True)
     issue_date = models.DateField()
@@ -161,6 +161,7 @@ class Issue(models.Model):
     class Meta:
         managed = False
         db_table = 'issue'
+
 
 class Ads(models.Model):
     id = models.AutoField(primary_key=True)
@@ -188,6 +189,7 @@ class Alerts(models.Model):
         managed = False
         db_table = 'alerts'
 
+
 class Series(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -198,6 +200,7 @@ class Series(models.Model):
     class Meta:
         managed = False
         db_table = 'series'
+
 
 class Tips(models.Model):
     id = models.AutoField(primary_key=True)
@@ -214,6 +217,7 @@ class Tips(models.Model):
         managed = False
         db_table = 'tips'
 
+
 class Volume(models.Model):
     id = models.AutoField(primary_key=True)
     arabic = models.IntegerField()
@@ -223,8 +227,6 @@ class Volume(models.Model):
     class Meta:
         managed = False
         db_table = 'volume'
-
-
 
 
 """ Don't import these """
