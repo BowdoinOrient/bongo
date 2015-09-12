@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.cache import cache
 
+
 class CacheTestCase(TestCase):
     def test_cache_task(self):
         """ Test memcached or LocMemCache, just so we know it's working """

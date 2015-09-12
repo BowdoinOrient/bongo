@@ -14,6 +14,7 @@ tz = pytz.timezone(settings.TIME_ZONE)
 
 fake = Faker()
 
+
 class UserFactory(Factory):
     class Meta:
         model = User
@@ -25,11 +26,13 @@ class UserFactory(Factory):
     password = factory.PostGenerationMethodCall('set_password',
                                                 'defaultpassword')
 
+
 class JobFactory(Factory):
     class Meta:
         model = models.Job
 
     title = choice(["Editor in Chief", "Opinion Editor", "Contributor", "Staff Writer", "Columnist"])
+
 
 class CreatorFactory(Factory):
     class Meta:
@@ -38,8 +41,9 @@ class CreatorFactory(Factory):
     user = factory.SubFactory(UserFactory)
     name = factory.LazyAttribute(lambda x: fake.name())
     job = factory.SubFactory(JobFactory)
-    twitter = "@"+''.join(choice(lowercase) for i in range(8))
+    twitter = "@" + ''.join(choice(lowercase) for i in range(8))
     profpic = factory.django.ImageField()
+
 
 class TextFactory(Factory):
     class Meta:
@@ -49,6 +53,7 @@ class TextFactory(Factory):
     body = fake.text(max_nb_chars=3000)
     excerpt = "The excerpt isn't correct until it's saved"
 
+
 class VideoFactory(Factory):
     class Meta:
         model = models.Video
@@ -57,11 +62,13 @@ class VideoFactory(Factory):
     host = choice(["Vimeo", "YouTube", "Vine"])
     uid = ''.join(choice(lowercase + digits) for i in range(15))
 
+
 class PDFFactory(Factory):
     class Meta:
         model = models.PDF
 
     caption = factory.Sequence(lambda n: 'This is pdf #{0}'.format(n))
+
 
 class PhotoFactory(Factory):
     class Meta:
@@ -70,12 +77,14 @@ class PhotoFactory(Factory):
     caption = factory.Sequence(lambda n: 'This is photo #{0}'.format(n))
     staticfile = factory.django.ImageField()
 
+
 class HTMLFactory(Factory):
     class Meta:
         model = models.HTML
 
     caption = factory.Sequence(lambda n: 'This is html #{0}'.format(n))
     content = "<script type='text/javascript'>alert('lol xss');</script>"
+
 
 class PullquoteFactory(Factory):
     class Meta:
@@ -85,19 +94,22 @@ class PullquoteFactory(Factory):
     quote = "Success is my only motherfuckin' option, failure's not"
     attribution = "Marshall Mathers, TDD evangelist"
 
+
 class SeriesFactory(Factory):
     class Meta:
         model = models.Series
 
     name = factory.Sequence(lambda n: 'super punny series name #{0}'.format(n))
 
+
 class VolumeFactory(Factory):
     class Meta:
         model = models.Volume
 
-    volume_number = choice(range(143))+1
-    volume_year_start = factory.LazyAttribute(lambda obj: obj.volume_number+1870)
-    volume_year_end = factory.LazyAttribute(lambda obj: obj.volume_number+1871)
+    volume_number = choice(range(143)) + 1
+    volume_year_start = factory.LazyAttribute(lambda obj: obj.volume_number + 1870)
+    volume_year_end = factory.LazyAttribute(lambda obj: obj.volume_number + 1871)
+
 
 class IssueFactory(Factory):
     class Meta:
@@ -107,12 +119,14 @@ class IssueFactory(Factory):
     issue_number = choice(range(24))
     volume = factory.SubFactory(VolumeFactory)
 
+
 class SectionFactory(Factory):
     class Meta:
         model = models.Section
 
-    section = choice(["News","Features","A&E","Opinion","Sports"])
+    section = choice(["News", "Features", "A&E", "Opinion", "Sports"])
     priority = choice(range(5))
+
 
 class TagFactory(Factory):
     class Meta:
@@ -120,17 +134,18 @@ class TagFactory(Factory):
 
     tag = ''.join(choice(lowercase) for i in range(10))
 
+
 class PostFactory(Factory):
     class Meta:
         model = models.Post
 
     published = make_aware(datetime(1871, 1, 1) + timedelta(52560), tz)
     is_published = choice([False, True])
-    title = factory.LazyAttribute(lambda x: u''.join(choice(lowercase+" ") for i in range(20)))
+    title = factory.LazyAttribute(lambda x: u''.join(choice(lowercase + " ") for i in range(20)))
     opinion = choice([False, True])
-    views_local = choice(range(0,10000))
-    views_global = choice(range(0,10000))
-    primary_type = choice(["text","photo","video","liveblog","html","generic"])
+    views_local = choice(range(0, 10000))
+    views_global = choice(range(0, 10000))
+    primary_type = choice(["text", "photo", "video", "liveblog", "html", "generic"])
 
     volume = factory.SubFactory(VolumeFactory)
     issue = factory.SubFactory(IssueFactory)
