@@ -4,6 +4,7 @@ from bongo.apps.bongo.tests.factories import CreatorFactory, SeriesFactory, Post
 from haystack.query import SearchQuerySet
 from django.core import management, urlresolvers
 
+
 class SearchTestCase(TestCase):
     def test_creator_search(self):
         """Assert that you can find Creators via search"""
@@ -37,7 +38,7 @@ class SearchTestCase(TestCase):
         """Assert that you can find Articles via search"""
 
         obj = PostFactory.create()
-        obj.is_published=True
+        obj.is_published = True
         obj.save()
 
         management.call_command('update_index', age=1, verbosity=0, interactive=False)
