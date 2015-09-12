@@ -1,5 +1,6 @@
 from django.test.runner import DiscoverRunner
 
+
 class ReusableRunner(DiscoverRunner):
     '''Custom test runner that reuses databases, if possible.'''
 

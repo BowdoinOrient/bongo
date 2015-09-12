@@ -1,8 +1,8 @@
 [pep8]
-ignore = E266,E251
+ignore = E251
 max-line-length = 117
 exclude = */migrations/*
 
 # Ignored:
-# E226: using "###" to start comments
 # E251: Assigning parameters like = this (rather than like=this)
+# because I think this is a stupid rule
