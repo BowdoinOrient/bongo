@@ -21,22 +21,29 @@ session = None
 tz = pytz.timezone('America/New_York')
 cursor = connection.cursor()
 
-# Checks memory usage; this script used to run out of memory so this reporting was helpful.
-# Now the script runs out of CPU instead! slow clap
-# Commented out, left here so I remember how to do it if we need it again
-# def memcheck():
-#     import resource
-#     return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000000.0
+
+def memcheck():
+    """Checks memory usage; this script used to run out of memory so this reporting was helpful.
+    Now the script runs out of CPU instead! slow clap
+
+    """
+
+    import resource
+    return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000000.0
+
 
 def staticfiler(obj, filename, local_path, remote_uri):
+    """couple of cases here:
+      - file already exists on the system, has filesize of 0
+      - file already exists on system, has a filesize > 0
+      - file does not exist, nodownload is set
+      - file does not exist, nodownload is off, reading from local copy fails
+      - file does not exist, nodownload is off, download succeeds
+
+    """
+
     global options
     global session
-    # couple of cases here:
-    #   - file already exists on the system, has filesize of 0
-    #   - file already exists on system, has a filesize > 0
-    #   - file does not exist, nodownload is set
-    #   - file does not exist, nodownload is off, reading from local copy fails
-    #   - file does not exist, nodownload is off, download succeeds
 
     if options.get("verbose"):
         print("looking for file {}...".format(filename), end = " ")
@@ -44,7 +51,7 @@ def staticfiler(obj, filename, local_path, remote_uri):
     stale_copy = False
     if storage.exists(local_path):
         if options.get("verbose"):
-            print ("It already exists", end = "")
+            print("It already exists", end = "")
         if storage.size(local_path) > 0 or options.get("ign_empt"):
             stale_copy = storage.open(local_path, 'rb')
             f = ContentFile(stale_copy.read())
@@ -53,39 +60,38 @@ def staticfiler(obj, filename, local_path, remote_uri):
                 print("")
         else:
             if options.get("verbose"):
-                print (", but its filesize is 0.")
+                print(", but its filesize is 0.")
         storage.delete(local_path)
 
     if not stale_copy and not options.get('nodownload'):
         if options.get("verbose"):
-            print ("Getting it from bowdoinorient.com/{}...".format(remote_uri), end = " ")
+            print("Getting it from bowdoinorient.com/{}...".format(remote_uri), end = " ")
 
         try:
-            r = session.get("http://bowdoinorient.com/"+remote_uri, timeout = 1)
+            r = session.get("http://bowdoinorient.com/" + remote_uri, timeout = 1)
 
             if r.status_code == 200:
                 f = ContentFile(r.content)
             else:
                 if options.get("verbose"):
-                    print ('Failed because of a {} response code'.format(r.status_code))
+                    print('Failed because of a {} response code'.format(r.status_code))
                 f = ContentFile("")
         except requests.exceptions.RequestException as e:
             if options.get("verbose"):
-                print (e)
+                print(e)
             f = ContentFile("")
 
     elif not stale_copy and options.get('nodownload'):
         if options.get("verbose"):
-            print ("Faking the download.")
+            print("Faking the download.")
         f = ContentFile("")
 
     obj.save(filename, f)
     f.close()
 
 
-
-""" Convert a date to a datetime, do nothing to a datetime """
 def datetimeify(d):
+    """Convert a date to a datetime, do nothing to a datetime"""
     if d.__class__.__name__ == "datetime":
         return d
     elif d.__class__.__name__ == "date":
@@ -94,9 +100,12 @@ def datetimeify(d):
         raise Exception("Things are really fucked: datetimeify called with a " + d.__class__.__name__)
 
 
-""" Import the old ads table into the new Advertiser, Ad models """
-""" There aren't actually any, so this is pointless """
 def import_ads():
+    """ Import the old ads table into the new Advertiser, Ad models
+    There aren't actually any, so this is pointless
+
+    """
+
     global options
     for old_ad in archive_models.Ads.objects.using('archive').all().iterator():
         if options.get("verbose"):
@@ -118,14 +127,15 @@ def import_ads():
         staticfiler(
             ad.adfile,
             old_ad.filename,
-            "ads/"+old_ad.filename,
-            "ads/"+old_ad.filename
+            "ads/" + old_ad.filename,
+            "ads/" + old_ad.filename
         )
         ad.save()
 
 
-""" Import the old tips table into the new Tip model """
 def import_tips():
+    """Import the old tips table into the new Tip model"""
+
     global options
     for old_tip in archive_models.Tips.objects.using('archive').all().iterator():
         if options.get("verbose"):
@@ -141,9 +151,9 @@ def import_tips():
         )
 
 
-
-""" Import the old alerts table into the new Alert model """
 def import_alerts():
+    """Import the old alerts table into the new Alert model"""
+
     global options
     for old_alert in archive_models.Alerts.objects.using('archive').all().iterator():
         if options.get("verbose"):
@@ -164,8 +174,9 @@ def import_alerts():
         )
 
 
-""" Import the old volumes table into the new Volume model """
 def import_volumes():
+    """Import the old volumes table into the new Volume model"""
+
     global options
     for old_volume in archive_models.Volume.objects.using('archive').all().iterator():
         if options.get("verbose"):
@@ -176,12 +187,13 @@ def import_volumes():
             pk = old_volume.id,
             volume_number = old_volume.arabic,
             volume_year_start = int(old_volume.annodomini),  # toph.... why
-            volume_year_end = int(old_volume.annodomini)+1
+            volume_year_end = int(old_volume.annodomini) + 1
         )
 
 
-""" Import the old issues table into the new Issue model """
 def import_issues():
+    """Import the old issues table into the new Issue model"""
+
     global options
     for old_issue in archive_models.Issue.objects.using('archive').all().iterator():
         if options.get("verbose"):
@@ -212,8 +224,9 @@ def import_issues():
         )
 
 
-""" Import the old series table into the new Series model """
 def import_series():
+    """Import the old series table into the new Series model"""
+
     global options
     for old_series in archive_models.Series.objects.using('archive').all().iterator():
         if options.get("verbose"):
@@ -225,8 +238,10 @@ def import_series():
             name = old_series.name
         )
 
-""" Import the old sections table into the new Section model """
+
 def import_section():
+    """Import the old sections table into the new Section model"""
+
     global options
     for old_section in archive_models.Section.objects.using('archive').all().iterator():
         if options.get("verbose"):
@@ -239,8 +254,10 @@ def import_section():
             priority = old_section.priority
         )
 
-""" Import the old jobs table into the new Job model """
+
 def import_job():
+    """Import the old jobs table into the new Job model"""
+
     global options
     for old_job in archive_models.Job.objects.using('archive').all().iterator():
         if options.get("verbose"):
@@ -252,8 +269,6 @@ def import_job():
             title = old_job.name,
         )
 
-
-""" Holy shit all of these last few are interrelated so this is going to be a piece of work """
 
 def import_attachment():
     global options
@@ -311,7 +326,10 @@ def import_attachment():
                 )
             except:
                 if options.get("verbose"):
-                    print("Attachment {} wants to connect to post {}, but that post does not exist.".format(old_attachment.id, old_attachment.article_id))
+                    print("Attachment {} wants to connect to post {}, but that post does not exist.".format(
+                        old_attachment.id,
+                        old_attachment.article_id
+                    ))
             if old_attachment.type == "html":
                 post.html.add(atchmt)
             elif old_attachment.type == "vimeo":
@@ -323,9 +341,6 @@ def import_attachment():
             post.save()
 
 
-
-
-""" this is complex """
 @override_settings(DEBUG = False)
 def import_content():
     global options
@@ -355,10 +370,9 @@ def import_content():
         except:
             pass
 
-
         # If an article has no volume number, try to guess it by the year. Better than nothing.
         # This shouldn't actually ever be invoked now that I did some manual DB cleanup
-        if old_article.volume  == 0:
+        if old_article.volume == 0:
             old_article.volume = old_article.date_created.year - 1870
 
         # If any of these fields are missing, set them to the unix epoch
@@ -382,11 +396,17 @@ def import_content():
             # Some articles specify an issue that does not exist (cough, 9989)
             # Set their issue to be the existing issue with date closest to the article date
 
-            # shit. have to contert from a datetime (archive_models.Article.date_created) to a date (bongo_models.Issue.issue_date)
+            # shit. have to contert from a datetime (archive_models.Article.date_created
+            # to a date (bongo_models.Issue.issue_date)
             # @TODO
 
-            iss_before = bongo_models.Issue.objects.filter(issue_date__gt=old_article.date_created.date()).order_by('issue_date').first()
-            iss_after = bongo_models.Issue.objects.filter(issue_date__lt=old_article.date_created.date()).order_by('-issue_date').first()
+            iss_before = bongo_models.Issue.objects.filter(
+                issue_date__gt=old_article.date_created.date()
+            ).order_by('issue_date').first()
+
+            iss_after = bongo_models.Issue.objects.filter(
+                issue_date__lt=old_article.date_created.date()
+            ).order_by('-issue_date').first()
 
             if not iss_before and not iss_after:
                 raise Exception("Can't find any issues near this article's date")
@@ -394,11 +414,13 @@ def import_content():
                 return iss_after
             elif not iss_after:
                 return iss_before
-            elif old_article.date_created.date() - iss_before.issue_date > iss_after.issue_date - old_article.date_created.date():
+            elif (
+                old_article.date_created.date() - iss_before.issue_date >
+                iss_after.issue_date - old_article.date_created.date()
+            ):
                 return iss_after
             else:
                 return iss_before
-
 
         (post, created) = bongo_models.Post.objects.get_or_create(
             imported = True,
@@ -473,9 +495,9 @@ def import_creator():
         if old_author.photo:
             staticfiler(
                 creator.profpic,
-                slugify(old_author.name)+".jpg",
-                "headshots/"+slugify(old_author.name)+".jpg",
-                "images/authors/"+old_author.photo
+                slugify(old_author.name) + ".jpg",
+                "headshots/" + slugify(old_author.name) + ".jpg",
+                "images/authors/" + old_author.photo
             )
             creator.save()
 
@@ -495,14 +517,16 @@ def import_photo():
 
         try:
             image_url = "images/{date}/{fname}".format(
-                date = (old_photo.article_date if old_photo.article_date else archive_models.Article.objects.using('archive').get(id__exact = old_photo.article_id).date),
+                date = (old_photo.article_date if old_photo.article_date else archive_models.Article.objects.using(
+                    'archive'
+                ).get(id__exact = old_photo.article_id).date),
                 fname = (old_photo.filename_original if old_photo.filename_original else old_photo.filename_large)
             )
 
             staticfiler(
                 photo.staticfile,
-                str(old_photo.id)+".jpg",
-                "photos/"+str(old_photo.id)+".jpg",
+                str(old_photo.id) + ".jpg",
+                "photos/" + str(old_photo.id) + ".jpg",
                 image_url
             )
         except Exception as e:
@@ -544,7 +568,6 @@ def import_photo():
         except:
             if options.get("verbose"):
                 print("The article owning this photo has been deleted.")
-
 
 
 class Command(BaseCommand):
