@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from haystack.query import SearchQuerySet
 from bongo.apps.bongo.helpers import arbitrary_serialize
 
+
 @api_view(('POST',))
 def search(request, format=None):
     if 'query' not in request.data:

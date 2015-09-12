@@ -5,11 +5,13 @@ from rest_framework import viewsets, permissions, filters
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
+
 class SectionCrud(viewsets.ModelViewSet):
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_backends = (filters.OrderingFilter,)
+
 
 class SectionCrudRestricted(viewsets.ReadOnlyModelViewSet):
     queryset = Section.objects.all()
