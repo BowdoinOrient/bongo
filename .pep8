@@ -1,0 +1,7 @@
+[pep8]
+ignore = E266,E251
+max-line-length = 117
+
+# Ignored:
+# E226: using "###" to start comments
+# E251: Assigning parameters like = this (rather than like=this)
