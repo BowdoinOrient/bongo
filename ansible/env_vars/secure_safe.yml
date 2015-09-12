@@ -4,6 +4,9 @@ django_secret_key:
 # Password for the 'bongo' postgres role
 db_password:
 
+# Password for the legacy MySQL db (with user root)
+mysql_pass:
+
 # Amazon AWS credentials for the S3 bucket static files are stored on
 aws_access_key_id:
 aws_secret_access_key:
