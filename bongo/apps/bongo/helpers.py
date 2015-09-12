@@ -10,21 +10,26 @@ try:
 except ImportError:
     from html.parser import HTMLParser as htmlparse
 
+
 class MLStripper(htmlparse):
     def __init__(self):
-        self.convert_charrefs=False
+        self.convert_charrefs = False
         self.reset()
         self.fed = []
         self.strict = True
+
     def handle_data(self, d):
         self.fed.append(d)
+
     def get_data(self):
         return ''.join(self.fed)
+
 
 def strip_tags(html):
     s = MLStripper()
     s.feed(html)
     return s.get_data()
+
 
 def tagify(text):
     # cache weights so we don't do this IO repeatedly

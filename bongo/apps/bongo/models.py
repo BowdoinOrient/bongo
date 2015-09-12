@@ -27,6 +27,7 @@ Posts. Every post must belong to one Issue, but can be in many series.
 Also sections are obviously a thing we do.
 """
 
+
 class Series (models.Model):  # series is the singular, which may confuse django
     class Meta:
         verbose_name_plural = "Series"
@@ -63,11 +64,11 @@ class Issue (models.Model):
     issue_date = models.DateField()  # friday, friday, this better validate to a friday
     issue_number = models.IntegerField()
     volume = models.ForeignKey(Volume)
-    scribd = models.IntegerField(null=True,blank=True)
+    scribd = models.IntegerField(null=True, blank=True)
     imported = models.BooleanField(default=False, editable=False)
 
     # link to a 111x142 thumbnail of the cover
-    scribd_image = models.URLField(null=True,blank=True,editable=False)
+    scribd_image = models.URLField(null=True, blank=True, editable=False)
 
     def __str__(self):
         return str(self.issue_number)
@@ -85,7 +86,20 @@ class Issue (models.Model):
                 "api_key": settings.SCRIBD_API_KEY
             }
 
-            api_sig = md5((settings.SCRIBD_API_SECRET + re.sub('"|{|}', '', json.dumps(payload, separators=('',''), sort_keys=True))).encode('utf-8')).hexdigest()
+            api_sig = md5(
+                (
+                    settings.SCRIBD_API_SECRET +
+                    re.sub(
+                        '"|{|}',
+                        '',
+                        json.dumps(
+                            payload,
+                            separators=('', ''),
+                            sort_keys=True
+                        )
+                    )
+                ).encode('utf-8')
+            ).hexdigest()
             payload['api_sig'] = api_sig
 
             res = requests.get("http://api.scribd.com/api", params = payload)
@@ -93,7 +107,11 @@ class Issue (models.Model):
                 try:
                     self.scribd_image = res.json()['rsp']['thumbnail_url']
                 except:
-                    logger.debug("bad scribd ID ({}) supplied when saving vol. {} issue {}, no thumbnail found".format(self.scribd, self.volume.volume_number, self.issue_number))
+                    logger.debug(
+                        "bad scribd ID ({}) supplied when saving vol. {} issue {}, no thumbnail found".format(
+                            self.scribd, self.volume.volume_number, self.issue_number
+                        )
+                    )
 
         super(Issue, self).save(*args, **kwargs)
         self.old_scribd = self.scribd
@@ -121,11 +139,12 @@ class Section (models.Model):
             return self.section.lower()
 
 
-""" potential system for reccommending content. For now only a Post can have tags, but
-there's potential for them to be assigned to individual content instead and then have
-the Post's tags be the collection of all the content within's tags
-"""
 class Tag (models.Model):
+    """ potential system for reccommending content. For now only a Post can have tags, but
+    there's potential for them to be assigned to individual content instead and then have
+    the Post's tags be the collection of all the content within's tags
+    """
+
     tag = models.CharField(max_length=25)
     imported = models.BooleanField(default=False, editable=False)
 
@@ -145,10 +164,6 @@ class Job(models.Model):
         return self.title
 
 
-
-
-
-
 """ Creators own Posts. Creators might be:
     - an organization (e.g., The Editorial Board)
     - a user of Bongo (e.g., an Orient staffer)
@@ -160,6 +175,7 @@ class Job(models.Model):
     - an infographicmaker
     - some combination of the above, or more
 """
+
 
 class Creator(models.Model):
     # possibility this author is also a bongo user
@@ -210,6 +226,7 @@ class Creator(models.Model):
 This is a limited subset for the time being and will expand.
 """
 
+
 class Text (models.Model):
     class Meta:
         verbose_name_plural = "Text"
@@ -241,7 +258,10 @@ class Video(models.Model):
     )  # the syntax of how you have to do this is really annoying
 
     host = models.CharField(max_length=7, choices=hosts, default="Vimeo")
-    uid = models.CharField(max_length=20, verbose_name="Video identifier - typically a string of letters or numbers after the last slash in the URL")
+    uid = models.CharField(
+        max_length=20,
+        verbose_name="Video identifier - typically a string of letters or numbers after the last slash in the URL"
+    )
     creators = models.ManyToManyField(Creator)
     caption = models.TextField(null=True, blank=True)
     imported = models.BooleanField(default=False, editable=False)
@@ -302,11 +322,6 @@ class Pullquote (models.Model):
         return self.quote
 
 
-
-
-
-
-
 """ The following model describes things a post on the website is.
 Posts are most commonly articles, but that terminology is limiting;
 a post might be a stand-alone photo or an entry in a video series.
@@ -316,6 +331,7 @@ Bongo supports storing for maximum content reusability.
 They also have a primary_type, which will help the frontend decide the
 layout for that post (a standard article, liveblog, a photo gallery, etc.)
 """
+
 
 class Post (models.Model):
     created = models.DateTimeField(editable=False)
@@ -330,7 +346,10 @@ class Post (models.Model):
     section = models.ForeignKey(Section)
 
     title = models.CharField(max_length=180)
-    slug = models.CharField(max_length=180, verbose_name="Slug. WARNING: Changing this will change the post URL, breaking existing links.")  # http://en.wikipedia.org/wiki/Clean_URL#Slug
+    slug = models.CharField(
+        max_length=180,
+        verbose_name="Slug. WARNING: Changing this will change the post URL, breaking existing links."
+    )  # http://en.wikipedia.org/wiki/Clean_URL#Slug
     tags = models.ManyToManyField(Tag, blank=True)
 
     opinion = models.BooleanField(default=False)
@@ -401,7 +420,7 @@ class Post (models.Model):
         content.append([item.caption for item in self.pullquote.all()])
         content.append([item.quote for item in self.pullquote.all()])
 
-        content = [val for sublist in content for val in sublist if val != None]
+        content = [val for sublist in content for val in sublist if val is not None]
 
         return ' '.join(content)
 
@@ -423,14 +442,12 @@ class Post (models.Model):
 
         return [post for (post, count) in sorted(similarity.items(), key=operator.itemgetter(1))]
 
-
     def taggit(self):
         if self.text.all():
             for t in tagify(self.text.all()[0].body):
                 (tag, created) = Tag.objects.get_or_create(tag=t)
                 self.tags.add(tag)
                 self.save()
-
 
     def popularity(self):
         cache_key = "popularity_{}".format(self.pk)
@@ -443,7 +460,7 @@ class Post (models.Model):
             published_withtz = self.published
             popularity = self.views_global - ((current_withtz - published_withtz).total_seconds() / 10**4.5)
 
-            # url = "http://bowdoinorient.com/article/{}".format(self.pk)
+            url = "http://bowdoinorient.com/article/{}".format(self.pk)
 
             # # get twitter shares
             # try:
@@ -455,7 +472,15 @@ class Post (models.Model):
 
             # # get facebook interactions
             # try:
-            #     res = requests.post("https://api.facebook.com/restserver.php", data=json.dumps({"method":"links.getStats", "format":"json", "urls":url}), headers={"content-type":"application/json"})
+            #     res = requests.post(
+            #         "https://api.facebook.com/restserver.php",
+            #         data=json.dumps({
+            #             "method": "links.getStats",
+            #             "format": "json",
+            #             "urls": url
+            #         }), headers={
+            #             "content-type": "application/json"
+            #         })
             #     if res.status_code == 200:
             #         popularity = popularity + res.json()[0]['total_count'] * 5
             # except Exception as e:
@@ -480,15 +505,8 @@ class Post (models.Model):
 
         super(Post, self).save(*args, **kwargs)
 
-
     def __str__(self):
         return self.title
-
-
-
-
-
-
 
 
 """ Other miscellaneous tools """
@@ -525,6 +543,7 @@ class Ad (models.Model):
     def __str__(self):
         return self.owner + ": {} through {}".format(self.run_from.strftime("%x"), self.run_through.strftime("%x"))
 
+
 class Tip (models.Model):
     content = models.TextField()
     respond_to = models.EmailField(null=True, blank=True)
@@ -537,21 +556,13 @@ class Tip (models.Model):
         return self.content[:60]
 
 
-
-
-
-""" For our Plancast replacement """
 class Event (models.Model):
+    """For our Plancast replacement"""
+
     imported = models.BooleanField(default=False, editable=False)
 
 
-
-
-
-""" For our Buffer replacement """
 class ScheduledPost(models.Model):
+    """For our Buffer replacement"""
+
     imported = models.BooleanField(default=False, editable=False)
-
-
-
-
