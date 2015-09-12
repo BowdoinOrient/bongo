@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from bongo.apps.bongo import models
 
+
 def HomeView(request):
 
     recent = models.Post.objects.order_by("-published")[:50]
@@ -25,16 +26,19 @@ def HomeView(request):
         "artsent": models.Post.objects.filter(section__exact=4).order_by("-published")[:10],
         "sports": models.Post.objects.filter(section__exact=5).order_by("-published")[:10],
         "toplist": sorted(recent, key=lambda x: -1 * x.popularity())[:10],
-        # this can theoretically raise DoesNotExist but I'm not going to catch: it because if that happens it's a bfd and indicative of some other problem
+        # this can theoretically raise DoesNotExist but I'm not going to catch: it
+        # because if that happens it's a bfd and indicative of some other problem
         "current_issue": models.Issue.objects.order_by("-issue_date").first(),
         "sections": sections
     }
 
     return render(request, 'pages/home.html', ctx)
 
+
 def ArticleView(request, id=None, slug=None):
     ctx = {}
     return render(request, 'pages/article.html', ctx)
+
 
 def AuthorView(request, id=None):
     ctx = {
@@ -42,23 +46,29 @@ def AuthorView(request, id=None):
     }
     return render(request, 'pages/author.html', ctx)
 
+
 def SeriesView(request, id=None):
     ctx = {
         "series": models.Series.objects.filter(id__exact=id).first()
     }
     return render(request, 'pages/series.html', ctx)
 
+
 def AboutView(request):
     return render(request, 'pages/static/about.html')
+
 
 def EthicsView(request):
     return render(request, 'pages/static/ethics.html')
 
+
 def SubscribeView(request):
     return render(request, 'pages/static/subscribe.html')
 
+
 def AdvertiseView(request):
     return render(request, 'pages/static/advertise.html')
+
 
 def ContactView(request):
     return render(request, 'pages/static/contact.html')
