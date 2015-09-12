@@ -4,6 +4,7 @@ from redis import Redis
 
 scheduler = Scheduler(connection=Redis())
 
+
 def update_es_index():
     """ Update the ElasticSearch index every hour."""
 
@@ -12,10 +13,10 @@ def update_es_index():
             scheduler.cancel(job)
 
     scheduler.schedule(
-        scheduled_time=datetime.now(),                                          # Time for first execution, in UTC timezone
-        func='django.core.management.call_command("update_index --age=1")',     # Function to be queued
-        interval=60*60,                                                         # Time before the function is called again, in seconds
-        repeat=None,                                                            # Repeat this number of times (None means repeat forever)
+        scheduled_time=datetime.now(),
+        func='django.core.management.call_command("update_index --age=1")',
+        interval=60 * 60,
+        repeat=None,
     )
 
     for job in scheduler.get_jobs():
@@ -26,4 +27,4 @@ def update_es_index():
     index_job.meta['task_type'] = "update_index"
     index_job.save()
 
-task_list = [update_es_index,]
+task_list = [update_es_index]

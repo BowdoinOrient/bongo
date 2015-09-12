@@ -34,5 +34,6 @@ before_script:
   - celery -A bongo.apps.bongo worker &
 script:
   - coverage run --source=bongo manage.py test
+  - pep8
 after_success:
   - coveralls

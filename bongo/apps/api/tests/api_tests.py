@@ -9,6 +9,7 @@ from bongo.apps.bongo.helpers import arbitrary_serialize
 
 # @TODO: These tests don't do a very good job of cleaning up after themselves
 
+
 class APITestCase(TestCase):
     def test_Job_endpoint(self):
         obj = factories.JobFactory.create()
@@ -77,7 +78,10 @@ class APITestCase(TestCase):
 
         js_res_keys = js_res.keys()
 
-        for model in ["series", "volume", "issue", "section", "tag", "job", "creator", "text", "video", "pdf", "photo", "html", "pullquote", "post", "alert", "advertiser", "ad", "tip", "event", "scheduledpost", "search"]:
+        for model in [
+            "series", "volume", "issue", "section", "tag", "job", "creator", "text", "video", "pdf", "photo", "html",
+            "pullquote", "post", "alert", "advertiser", "ad", "tip", "event", "scheduledpost", "search"
+        ]:
             self.assertIn(model, js_res_keys)
 
         for model in js_res_keys:
@@ -85,7 +89,6 @@ class APITestCase(TestCase):
 
             # Some endpoints do not accept GET, so allow a 405 status code
             self.assertIn(res.status_code, [200, 405])
-
 
     def test_search_endpoint(self):
         client = APIClient()

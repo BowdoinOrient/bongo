@@ -53,6 +53,13 @@ Note that while all current development is being done with Python 3.4, the code 
 
         python manage.py check
 
+####Tests
+You can run Bongo's test suite with `python manage.py test` (and should, often!). The current build status and test coverage stats are shown at the top of this readme. Pull requests should include tests to maintain or increase the current code coverage percentage.
+
+The test suite currently runs against both Python 2.7 and 3.4. so please ensure all pull requests are backwards-compatible (or forwards-, if developed with 2.7).
+
+The test suite also runs a [PEP8](https://www.python.org/dev/peps/pep-0008/) linter (currently only in the CI environment, not in your dev env). Any PEP8 violations will cause the whole test suite to fail, so consider using a linter before you push to GitHub.
+
 ####Deployment
 The code base includes Ansible roles for configuring a Linux server and deploying Bongo onto it.
 
@@ -73,12 +80,6 @@ If you are contributing changes to the Ansible playbook, you may use the include
 and visit [http://bowdoinorient.local](http://bowdoinorient.local) in your browser if the deploy is successful.
 
 Bongo is currently deployed at [bowdoinorient.co](http://bowdoinorient.co).
-
-####Tests
-You can run Bongo's test suite with `python manage.py test` (and should, often!). The current build status and test coverage stats are shown at the top of this readme. Pull requests should include tests to maintain or increase the current code coverage percentage.
-
-
-The test suite currently runs against both Python 2.7 and 3.4. so please ensure all pull requests are backwards-compatible (or forwards-, if developed with 2.7).
 
 
 ####Using the API

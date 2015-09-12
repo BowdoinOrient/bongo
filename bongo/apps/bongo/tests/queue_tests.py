@@ -5,8 +5,10 @@ from redis import Redis
 from subprocess import Popen
 from datetime import timedelta
 
+
 def add(x, y):
     return x + y
+
 
 class QueueTestCase(TestCase):
     def test_queued_code(self):

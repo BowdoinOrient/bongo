@@ -4,6 +4,7 @@ import os
 from django.conf import settings
 from tagger.extras import build_dict_from_nltk
 
+
 class Command(BaseCommand):
 
     def handle(self, *args, **options):

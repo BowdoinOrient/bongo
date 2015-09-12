@@ -37,7 +37,7 @@ ALLOWED_HOSTS = [
     '.bowdoinorient.com'
 ]
 
-########## CACHE CONFIGURATION
+"""CACHE CONFIGURATION"""
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#caches
 CACHES = {
     'default': {
@@ -45,10 +45,10 @@ CACHES = {
         'LOCATION': '127.0.0.1:11211',
     }
 }
-########## END CACHE CONFIGURATION
+"""END CACHE CONFIGURATION"""
 
 
-########## AMAZON CONFIGURATION
+"""AMAZON CONFIGURATION"""
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
@@ -58,22 +58,22 @@ AWS_ACCESS_KEY_ID = environ.get("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_ACCESS_KEY = environ.get("AWS_SECRET_ACCESS_KEY", "")
 AWS_PRELOAD_METADATA = True
 AWS_QUERYSTRING_EXPIRE = 63115200
-S3_URL = 'http://static.bowdoinorient.co/' # @TODO make this https and .com
+S3_URL = 'http://static.bowdoinorient.co/'  # @TODO make this https and .com
 
 STATIC_URL = S3_URL
 MEDIA_URL = S3_URL
 
-########## END AMAZON
+"""END AMAZON"""
 
-#### RAVEN ###
+"""RAVEN"""
 
 RAVEN_CONFIG = {
     'dsn': environ.get('RAVEN_DSN'),
 }
 
-### END RAVEN #####
+"""END RAVEN"""
 
-### DJANGO-COMPRESSOR SETTINGS ###
+"""DJANGO-COMPRESSOR SETTINGS"""
 
 COMPRESS_CSS_FILTERS = (
     "compressor.filters.cssmin.CSSMinFilter",
@@ -85,7 +85,7 @@ COMPRESS_JS_FILTERS = (
 
 COMPRESS_STORAGE = STATICFILES_STORAGE
 
-### END DJANGO-COMPRESSOR ###
+"""END DJANGO-COMPRESSOR"""
 
 DISQUS_API_KEY = environ.get('DISQUS_API_KEY', '')
 SCRIBD_API_KEY = environ.get('SCRIBD_API_KEY', '')
@@ -95,7 +95,7 @@ MYSQL_PASS = environ.get('MYSQL_PASS', '')
 for logger in LOGGING['loggers']:
     LOGGING['loggers'][logger]['handlers'].append('logentries')
 
-### Haystack ###
+"""Haystack"""
 
 HAYSTACK_CONNECTIONS = {
     'default': {
@@ -106,4 +106,4 @@ HAYSTACK_CONNECTIONS = {
     }
 }
 
-### End Haystack ###
+"""End Haystack"""

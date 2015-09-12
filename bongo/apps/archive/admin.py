@@ -21,12 +21,16 @@ class MultiDBModelAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
         # Tell Django to populate ForeignKey widgets using a query
         # on the 'other' database.
-        return super(MultiDBModelAdmin, self).formfield_for_foreignkey(db_field, request=request, using=self.using, **kwargs)
+        return super(MultiDBModelAdmin, self).formfield_for_foreignkey(
+            db_field, request=request, using=self.using, **kwargs
+        )
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
         # Tell Django to populate ManyToMany widgets using a query
         # on the 'other' database.
-        return super(MultiDBModelAdmin, self).formfield_for_manytomany(db_field, request=request, using=self.using, **kwargs)
+        return super(MultiDBModelAdmin, self).formfield_for_manytomany(
+            db_field, request=request, using=self.using, **kwargs
+        )
 
 
 admin.site.register(Ads, MultiDBModelAdmin)

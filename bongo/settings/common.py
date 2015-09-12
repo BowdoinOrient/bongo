@@ -138,8 +138,8 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'filters': {
-    'require_debug_false': {
-        '()': 'django.utils.log.RequireDebugFalse'
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
         }
     },
     'handlers': {
@@ -196,7 +196,7 @@ TEMPLATES = [
     }
 ]
 
-### django-rest-framework ###
+"""django-rest-framework"""
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_SERIALIZER_CLASS': 'bongo.apps.api.pagination.CustomPaginationSerializer',
@@ -214,18 +214,18 @@ REST_FRAMEWORK = {
 
 API_VERSION = 1
 
-### end drf ###
+"""end drf"""
 
-### django-cors-headers ###
+"""django-cors-headers"""
 
 CORS_ORIGIN_WHITELIST = (
     'bowdoinorient.co',
     'bowdoinorient.com',
 )
 
-### end django-cors-headers ###
+"""end django-cors-headers"""
 
-### django-bower ###
+"""django-bower"""
 
 BOWER_INSTALLED_APPS = (
     "moment#2.8.1",
@@ -236,9 +236,9 @@ BOWER_PATH = os.path.join(SITE_ROOT, 'node_modules/bower/bin/bower')
 
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'static/bower_components')
 
-### end django-bower ###
+"""end django-bower"""
 
-### django-compressor ###
+"""django-compressor"""
 
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
@@ -246,4 +246,4 @@ COMPRESS_PRECOMPILERS = (
 
 COMPRESS_OFFLINE = True
 
-### end django-compressor ###
+"""end django-compressor"""
