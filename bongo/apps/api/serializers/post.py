@@ -7,6 +7,7 @@ from ..serializers.photo import PhotoSerializer
 from ..serializers.html import HTMLSerializer
 from ..serializers.pullquote import PullquoteSerializer
 
+
 class PostSerializer(serializers.ModelSerializer):
     content = serializers.ReadOnlyField()
     creators = serializers.ReadOnlyField()
