@@ -369,11 +369,8 @@ def import_content():
         # get the Creator(s)
 
         old_authors = []
-        try:
-            for old_articleauthor in archive_articleauthors.get(article_id__exact = old_article.id):
-                old_authors.append(archive_authors.get(id__exact = old_articleauthor.author_id))
-        except:
-            pass
+        for old_articleauthor in archive_articleauthors.filter(article_id__exact = old_article.id):
+            old_authors.append(archive_authors.get(id__exact = old_articleauthor.author_id))
 
         # If an article has no volume number, try to guess it by the year. Better than nothing.
         # This shouldn't actually ever be invoked now that I did some manual DB cleanup
@@ -457,8 +454,10 @@ def import_content():
 
             post.text.add(text)
 
-            for old_author in old_authors:
-                text.creators.add(bongo_models.Creator.objects.get(pk__exact = old_author.id))
+            if old_authors:
+                for old_author in old_authors:
+                    text.creators.add(bongo_models.Creator.objects.get(pk__exact = old_author.id))
+                text.save()
 
             post.primary_type = "text"
 
@@ -642,5 +641,5 @@ class dummy_context_mgr():
     def __enter__(self):
         return None
 
-    def __exit__(self):
+    def __exit__(self, *args):
         return False
