@@ -153,7 +153,7 @@ class Tag (models.Model):
 
 
 class Job(models.Model):
-    title = models.CharField(max_length=40)
+    title = models.CharField(max_length=60)
     imported = models.BooleanField(default=False, editable=False)
 
     # returns a list of everyone with this job
