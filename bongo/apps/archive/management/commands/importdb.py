@@ -2,6 +2,7 @@ from __future__ import print_function
 
 from bongo.apps.archive import models as archive_models
 from bongo.apps.bongo import models as bongo_models
+from bongo.apps.bongo.helpers import strip_tags
 from django.core.management.base import BaseCommand
 from django.core.files.storage import default_storage as storage
 from django.utils.timezone import make_aware
@@ -12,6 +13,7 @@ from django.db import connection
 from django.conf import settings
 from datetime import datetime
 from optparse import make_option
+from ipdb import launch_ipdb_on_exception
 import pytz
 import requests
 
@@ -202,12 +204,15 @@ def import_issues():
         try:
             vol = bongo_models.Volume.objects.get(volume_number__exact = old_issue.volume)
         except bongo_models.Volume.DoesNotExist as e:
-            if old_issue.volume == 144:
+            # Cover the cases where nobody created Volume 144 or 145 in the DB
+            # @TODO: lots of magic numbers in here
+
+            if old_issue.volume in [144, 145]:
                 (vol, created) = bongo_models.Volume.objects.get_or_create(
-                    id = archive_models.Volume.objects.using('archive').all().count() + 1,
-                    volume_number = 144,
-                    volume_year_start = 2014,
-                    volume_year_end = 2015,
+                    id = archive_models.Volume.objects.using('archive').all().count() + old_issue.volume - 143,
+                    volume_number = old_issue.volume,
+                    volume_year_start = 1870 + old_issue.volume,
+                    volume_year_end = 1870 + old_issue.volume + 1,
                     imported = True
                 )
             else:
@@ -266,7 +271,7 @@ def import_job():
         (job, created) = bongo_models.Job.objects.get_or_create(
             imported = True,
             pk = old_job.id,
-            title = old_job.name,
+            title = strip_tags(old_job.name).title(),
         )
 
 
@@ -364,11 +369,8 @@ def import_content():
         # get the Creator(s)
 
         old_authors = []
-        try:
-            for old_articleauthor in archive_articleauthors.get(article_id__exact = old_article.id):
-                old_authors.append(archive_authors.get(id__exact = old_articleauthor.author_id))
-        except:
-            pass
+        for old_articleauthor in archive_articleauthors.filter(article_id__exact = old_article.id):
+            old_authors.append(archive_authors.get(id__exact = old_articleauthor.author_id))
 
         # If an article has no volume number, try to guess it by the year. Better than nothing.
         # This shouldn't actually ever be invoked now that I did some manual DB cleanup
@@ -383,8 +385,6 @@ def import_content():
         if old_article.date_published is None:
             old_article.date_published = make_aware(datetime(1970, 1, 1), tz)
 
-        # @TODO: Fix a crash where the issue does not exist (article 9989 vol 144 issue 16)
-
         try:
             iss = bongo_models.Issue.objects.get(
                 issue_number__exact = old_article.issue_number,
@@ -395,10 +395,6 @@ def import_content():
         except bongo_models.Issue.DoesNotExist:
             # Some articles specify an issue that does not exist (cough, 9989)
             # Set their issue to be the existing issue with date closest to the article date
-
-            # shit. have to contert from a datetime (archive_models.Article.date_created
-            # to a date (bongo_models.Issue.issue_date)
-            # @TODO
 
             iss_before = bongo_models.Issue.objects.filter(
                 issue_date__gt=old_article.date_created.date()
@@ -411,16 +407,16 @@ def import_content():
             if not iss_before and not iss_after:
                 raise Exception("Can't find any issues near this article's date")
             elif not iss_before:
-                return iss_after
+                iss = iss_after
             elif not iss_after:
-                return iss_before
+                iss = iss_before
             elif (
                 old_article.date_created.date() - iss_before.issue_date >
                 iss_after.issue_date - old_article.date_created.date()
             ):
-                return iss_after
+                iss = iss_after
             else:
-                return iss_before
+                iss = iss_before
 
         (post, created) = bongo_models.Post.objects.get_or_create(
             imported = True,
@@ -458,8 +454,10 @@ def import_content():
 
             post.text.add(text)
 
-            for old_author in old_authors:
-                text.creators.add(bongo_models.Creator.objects.get(pk__exact = old_author.id))
+            if old_authors:
+                for old_author in old_authors:
+                    text.creators.add(bongo_models.Creator.objects.get(pk__exact = old_author.id))
+                text.save()
 
             post.primary_type = "text"
 
@@ -595,7 +593,15 @@ class Command(BaseCommand):
             action = 'store_true',
             default = False,
             help = "Do not attempt to replace empty files."
+        ),
+        make_option(
+            '--ipdb',
+            dest = 'ipdb',
+            action = 'store_true',
+            default = False,
+            help = "Launch ipdb if an unhandled exception occurs."
         )
+
     )
 
     def handle(self, *args, **opts):
@@ -611,20 +617,29 @@ class Command(BaseCommand):
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'DB02Orient',
             'USER': 'root',
-            'PASSWORD': '',
+            'PASSWORD': settings.MYSQL_PASS,
             'HOST': '127.0.0.1',
             'PORT': '3306',
         }
 
-        import_ads()
-        import_tips()
-        import_alerts()
-        import_volumes()
-        import_issues()
-        import_series()
-        import_section()
-        import_job()
-        import_creator()
-        import_content()
-        import_attachment()
-        import_photo()
+        with launch_ipdb_on_exception() if options.get("ipdb") else dummy_context_mgr():
+            import_ads()
+            import_tips()
+            import_alerts()
+            import_volumes()
+            import_issues()
+            import_series()
+            import_section()
+            import_job()
+            import_creator()
+            import_content()
+            import_attachment()
+            import_photo()
+
+
+class dummy_context_mgr():
+    def __enter__(self):
+        return None
+
+    def __exit__(self, *args):
+        return False
