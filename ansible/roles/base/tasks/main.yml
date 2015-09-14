@@ -27,7 +27,7 @@
     - iftop
     - git
     - python-dev
-    - python3.4-dev
+    - python3.5-dev
     - python-pip
     - python3-pip
     - python-pycurl
