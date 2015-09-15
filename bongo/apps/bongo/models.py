@@ -492,8 +492,22 @@ class Post (models.Model):
 
     def save(self, *args, **kwargs):
         auto_dates = kwargs.pop('auto_dates', True)
+
         if not self.slug:
-            self.slug = slugify(self.title)[:180]
+            newslug = slugify(self.title)[:175]
+
+            # make sure this slug has not been used before
+            variant = 2
+            while len(Post.objects.filter(slug__exact=newslug)) > 0:
+                slug_salt = "-" + str(variant)
+
+                if variant > 2:
+                    newslug = newslug[:-len(slug_salt)]
+
+                newslug += slug_salt
+                variant += 1
+
+            self.slug = newslug
 
         # generally we want created to update to the time whenever we create the obj
         # and updated to update every time

@@ -141,7 +141,7 @@ class PostFactory(Factory):
 
     published = make_aware(datetime(1871, 1, 1) + timedelta(52560), tz)
     is_published = choice([False, True])
-    title = factory.LazyAttribute(lambda x: u''.join(choice(lowercase + " ") for i in range(20)))
+    title = factory.LazyAttribute(lambda x: u' '.join(fake.word() for i in range(5)).title())
     opinion = choice([False, True])
     views_local = choice(range(0, 10000))
     views_global = choice(range(0, 10000))
