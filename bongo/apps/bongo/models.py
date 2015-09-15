@@ -348,7 +348,8 @@ class Post (models.Model):
     title = models.CharField(max_length=180)
     slug = models.CharField(
         max_length=180,
-        verbose_name="Slug. WARNING: Changing this will change the post URL, breaking existing links."
+        verbose_name="Slug. WARNING: Changing this will change the post URL, breaking existing links.",
+        db_index=True
     )  # http://en.wikipedia.org/wiki/Clean_URL#Slug
     tags = models.ManyToManyField(Tag, blank=True)
 
