@@ -3,8 +3,8 @@ from bongo.apps.frontend import views
 
 urlpatterns = [
     url(r'^$', views.HomeView, name="home"),
-    url(r'^article/(?P<slug>.+)/', views.ArticleView, name="article"),
     url(r'^article/(?P<id>\d+)/', views.ArticleView, name="article"),
+    url(r'^article/(?P<slug>[\w-]+)/', views.ArticleView, name="article"),
     url(r'^author/(?P<id>\d+)/', views.AuthorView, name="author"),
     url(r'^series/(?P<id>\d+)/', views.SeriesView, name="series"),
 
