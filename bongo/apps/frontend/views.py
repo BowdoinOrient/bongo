@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from bongo.apps.bongo import models
+from django.http import HttpResponsePermanentRedirect
+from django.core.urlresolvers import reverse
 
 
 def HomeView(request):
@@ -36,7 +38,13 @@ def HomeView(request):
 
 
 def ArticleView(request, id=None, slug=None):
-    ctx = {}
+    if id:
+        article = models.Post.objects.get(pk__exact=id)
+        return HttpResponsePermanentRedirect(reverse(ArticleView, args=[article.slug]))
+
+    ctx = {
+        "article": models.Post.objects.get(slug__exact=slug)
+    }
     return render(request, 'pages/article.html', ctx)
 
 
