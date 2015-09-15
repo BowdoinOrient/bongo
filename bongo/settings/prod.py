@@ -2,6 +2,7 @@ from os import environ
 from bongo.settings.common import *
 
 SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
