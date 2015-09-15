@@ -308,7 +308,10 @@ class HTML (models.Model):
     imported = models.BooleanField(default=False, editable=False)
 
     def __str__(self):
-        return self.caption[:60]
+        if self.caption:
+            return self.caption[:60]
+        else:
+            return self.content[:60]
 
 
 class Pullquote (models.Model):
