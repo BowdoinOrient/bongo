@@ -57,7 +57,7 @@
     dest: /etc/rsyslog.d/22-nginx.conf
   notify: restart rsyslog
 
-- name: Add celery logs to rsyslog collection
+- name: Add rq logs to rsyslog collection
   template:
     src: 24-rq.conf.j2
     dest: /etc/rsyslog.d/24-rq.conf

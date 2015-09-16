@@ -1,6 +1,6 @@
 ---
 
-- name: Create the folder for the celery scripts
+- name: Create the folder for the rq scripts
   file:
     path: "{{ rq_scripts_dir }}"
     owner: "{{ rq_user }}"

@@ -31,7 +31,6 @@ before_script:
   - python manage.py syncdb --noinput
   - python manage.py nltk-init
   - python manage.py rebuild_index --noinput
-  - celery -A bongo.apps.bongo worker &
 script:
   - coverage run --source=bongo manage.py test
   - pep8
