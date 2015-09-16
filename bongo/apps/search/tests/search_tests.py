@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from bongo.apps.bongo.models import Creator, Series, Post
 from bongo.apps.bongo.tests.factories import CreatorFactory, SeriesFactory, PostFactory
 from haystack.query import SearchQuerySet
@@ -13,7 +13,7 @@ class SearchTestCase(TestCase):
 
         management.call_command('update_index', age=1, verbosity=0, interactive=False)
 
-        sqs = SearchQuerySet().using("test").all()
+        sqs = SearchQuerySet().all()
 
         res = sqs.auto_query(obj.name)
 
@@ -27,7 +27,7 @@ class SearchTestCase(TestCase):
 
         management.call_command('update_index', age=1, verbosity=0, interactive=False)
 
-        sqs = SearchQuerySet().using("test").all()
+        sqs = SearchQuerySet().all()
 
         res = sqs.auto_query(obj.name)
 
@@ -43,23 +43,23 @@ class SearchTestCase(TestCase):
 
         management.call_command('update_index', age=1, verbosity=0, interactive=False)
 
-        sqs = SearchQuerySet().using("test").all()
+        sqs = SearchQuerySet().all()
 
         # Haystack seems to only be returning searches for complete words
         # So some finangling here is needed until I figure that out
         res = sqs.auto_query(obj.text.all()[0].body.split(' ')[0])
 
         self.assertGreater(len(res), 0)
-        self.assertIn(Post.objects.filter(pk__exact=obj.pk).first(), [res_item.object for res_item in res])
+        self.assertIn(Post.objects.get(pk__exact=obj.pk), [res_item.object for res_item in res])
 
+    # @TODO: This test intermittently fails
     def test_search_view(self):
         """Test that you can search by querying the search page"""
-        c = Client()
 
         obj = CreatorFactory.create()
-        management.call_command('update_index', age=1, remove=True, verbosity=0, interactive=False)
+        management.call_command('update_index', age=1, verbosity=0, interactive=False)
 
-        res = c.get(urlresolvers.reverse("haystack_search"), {"q": obj.name})
+        res = self.client.get(urlresolvers.reverse("haystack_search"), {"q": obj.name})
 
         self.assertGreater(len(res.context['page'].object_list), 0)
         self.assertEqual(res.context['page'].object_list[0].object, obj)

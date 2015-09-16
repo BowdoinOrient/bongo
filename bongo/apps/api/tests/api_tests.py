@@ -90,12 +90,13 @@ class APITestCase(TestCase):
             # Some endpoints do not accept GET, so allow a 405 status code
             self.assertIn(res.status_code, [200, 405])
 
+    # @TODO: This test intermittently fails
     def test_search_endpoint(self):
         client = APIClient()
 
         creator = factories.CreatorFactory.create()
 
-        management.call_command('update_index', verbosity=0, interactive=False)
+        management.call_command('update_index', age=1, verbosity=0, interactive=False)
 
         res = client.post("http://testserver/api/v1/search/", {
             "query": creator.name
