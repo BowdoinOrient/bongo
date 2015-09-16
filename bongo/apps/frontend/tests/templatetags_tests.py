@@ -23,7 +23,7 @@ class TemplateTagsTestCase(TestCase):
 
         self.assertEqual(rendered, article.__dict__)
 
-    def test_dump_templatetag(self):
+    def test_class_name_templatetag(self):
         """Test the class_name() template tag (print object's class name)"""
         article = factories.PostFactory.create()
 
