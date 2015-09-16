@@ -5,6 +5,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from .test_helpers import crud
 from haystack.management.commands import update_index
+from datetime import datetime, timedelta
 import json
 
 # @TODO: These tests don't do a very good job of cleaning up after themselves
@@ -55,10 +56,6 @@ class APITestCase(TestCase):
         obj = factories.IssueFactory.create()
         crud(self, obj, models.Issue)
 
-    def test_Section_endpoint(self):
-        obj = factories.SectionFactory.create()
-        crud(self, obj, models.Section)
-
     def test_Tag_endpoint(self):
         obj = factories.TagFactory.create()
         crud(self, obj, models.Tag)
@@ -66,6 +63,51 @@ class APITestCase(TestCase):
     def test_Post_endpoint(self):
         obj = factories.PostFactory.create()
         crud(self, obj, models.Post)
+
+    def test_Section_endpoint(self):
+        obj = factories.SectionFactory.create()
+        crud(self, obj, models.Section)
+
+    def test_Section_Post_endpoint(self):
+        """Test Section's additional @list_route, /section/<id>/posts/"""
+        client = APIClient()
+
+        section = factories.SectionFactory.create()
+
+        posts = [factories.PostFactory.create() for x in range(3)]
+
+        for post in posts:
+            post.section = section
+            post.published = datetime.now() + timedelta(hours=post.pk)
+            post.save(auto_dates=False)
+
+        res = client.get("http://testserver/api/v1/section/{}/posts/".format(section.pk))
+
+        self.assertEqual(res.status_code, 200)
+
+        js_res = json.loads(res.content.decode("utf-8"))
+
+        self.assertEqual([p['id'] for p in js_res["posts"]], [p.id for p in reversed(posts)])
+
+        # Test with pagination
+
+        res = client.get("http://testserver/api/v1/section/{}/posts/?limit=2".format(section.pk))
+
+        self.assertEqual(res.status_code, 200)
+
+        js_res = json.loads(res.content.decode("utf-8"))
+
+        self.assertEqual(len(js_res['posts']), 2)
+
+        # Test ordering
+
+        res = client.get("http://testserver/api/v1/section/{}/posts/?ordering=published".format(section.pk))
+
+        self.assertEqual(res.status_code, 200)
+
+        js_res = json.loads(res.content.decode("utf-8"))
+
+        self.assertEqual([p['id'] for p in js_res["posts"]], [p.id for p in posts])
 
     def test_root_endpoint(self):
         client = APIClient()

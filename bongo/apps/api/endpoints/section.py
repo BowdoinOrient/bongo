@@ -2,7 +2,7 @@ from bongo.apps.bongo.models import Section, Post
 from bongo.apps.api.serializers.section import SectionSerializer
 from bongo.apps.api.serializers.post import PostSerializer
 from rest_framework import viewsets, permissions, filters
-from rest_framework.decorators import list_route
+from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
 
@@ -18,10 +18,10 @@ class SectionCrudRestricted(viewsets.ReadOnlyModelViewSet):
     serializer_class = SectionSerializer
     filter_backends = (filters.OrderingFilter,)
 
-    @list_route()
+    @detail_route()
     def posts(self, request, pk=None):
         if 'limit' in request.GET:
-            l = request.GET['limit']
+            l = int(request.GET['limit'])
         else:
             l = 10
 
@@ -30,10 +30,12 @@ class SectionCrudRestricted(viewsets.ReadOnlyModelViewSet):
         else:
             s = "-published"
 
-        posts = Post.objects.filter(section_id__exact=pk).order_by(s)[:l]
+        posts = Section.objects.get(pk__exact=pk).post_set.all().order_by(s)[:l]
 
         serializedPosts = []
         for post in posts:
             serializedPosts.append(PostSerializer(post).data)
+
+        serializedPosts = {"posts": serializedPosts}
 
         return Response(serializedPosts)

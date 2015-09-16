@@ -6,11 +6,12 @@ from ..serializers.pdf import PDFSerializer
 from ..serializers.photo import PhotoSerializer
 from ..serializers.html import HTMLSerializer
 from ..serializers.pullquote import PullquoteSerializer
+from ..serializers.creator import CreatorSerializer
 
 
 class PostSerializer(serializers.ModelSerializer):
-    content = serializers.ReadOnlyField()
-    creators = serializers.ReadOnlyField()
+    content = serializers.ReadOnlyField(source="get_content", read_only=True)
+    creators = CreatorSerializer(source="get_creators", read_only=True)
 
     class Meta:
         model = models.Post
@@ -44,3 +45,6 @@ class PostSerializer(serializers.ModelSerializer):
             "html": HTMLSerializer(self.html.all(), many=True),
             "pullquote": PullquoteSerializer(self.pullquote.all(), many=True)
         }
+
+    def get_creators(self, obj):
+        return [CreatorSerializer(creator) for creator in obj.creators()]
