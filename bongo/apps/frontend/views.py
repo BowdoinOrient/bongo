@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from bongo.apps.bongo import models
-from django.http import HttpResponsePermanentRedirect
+from django.http import HttpResponsePermanentRedirect, Http404
 from django.core.urlresolvers import reverse
 
 
@@ -50,15 +50,22 @@ def ArticleView(request, id=None, slug=None):
 
 def AuthorView(request, id=None):
     ctx = {
-        "author": models.Creator.objects.filter(id__exact=id).first()
+        "author": models.Creator.objects(id__exact=id)
     }
     return render(request, 'pages/author.html', ctx)
 
 
 def SeriesView(request, id=None):
+    try:
+        series = models.Series.objects.get(id__exact=id)
+    except models.Series.DoesNotExist:
+        raise Http404("No series with this ID exists")
+
     ctx = {
-        "series": models.Series.objects.filter(id__exact=id).first()
+        "series": series,
+        "posts": series.post_set.all().order_by('-published')
     }
+
     return render(request, 'pages/series.html', ctx)
 
 
