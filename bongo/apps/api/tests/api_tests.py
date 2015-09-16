@@ -1,11 +1,11 @@
-import json
-from bongo.apps.bongo.tests import factories
-from django.test import TestCase
-from django.core import management
-from rest_framework.test import APIClient
 from bongo.apps.bongo import models
-from .test_helpers import crud
+from bongo.apps.bongo.tests import factories
 from bongo.apps.bongo.helpers import arbitrary_serialize
+from django.test import TestCase
+from rest_framework.test import APIClient
+from .test_helpers import crud
+from haystack.management.commands import update_index
+import json
 
 # @TODO: These tests don't do a very good job of cleaning up after themselves
 
@@ -95,7 +95,7 @@ class APITestCase(TestCase):
 
         creator = factories.CreatorFactory.create()
 
-        management.call_command('update_index', age=1, verbosity=0, interactive=False)
+        update_index.Command().handle(using=['default'], age=1, verbosity=0, interactive=False)
 
         res = client.post("http://testserver/api/v1/search/", {
             "query": creator.name

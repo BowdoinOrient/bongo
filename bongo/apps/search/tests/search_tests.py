@@ -2,7 +2,8 @@ from django.test import TestCase
 from bongo.apps.bongo.models import Creator, Series, Post
 from bongo.apps.bongo.tests.factories import CreatorFactory, SeriesFactory, PostFactory
 from haystack.query import SearchQuerySet
-from django.core import management, urlresolvers
+from haystack.management.commands import update_index
+from django.core import urlresolvers
 
 
 class SearchTestCase(TestCase):
@@ -11,7 +12,7 @@ class SearchTestCase(TestCase):
 
         obj = CreatorFactory.create()
 
-        management.call_command('update_index', age=1, verbosity=0, interactive=False)
+        update_index.Command().handle(using=['default'], age=1, verbosity=0, interactive=False)
 
         sqs = SearchQuerySet().all()
 
@@ -25,7 +26,7 @@ class SearchTestCase(TestCase):
 
         obj = SeriesFactory.create()
 
-        management.call_command('update_index', age=1, verbosity=0, interactive=False)
+        update_index.Command().handle(using=['default'], age=1, verbosity=0, interactive=False)
 
         sqs = SearchQuerySet().all()
 
@@ -41,7 +42,7 @@ class SearchTestCase(TestCase):
         obj.is_published = True
         obj.save()
 
-        management.call_command('update_index', age=1, verbosity=0, interactive=False)
+        update_index.Command().handle(using=['default'], age=1, verbosity=0, interactive=False)
 
         sqs = SearchQuerySet().all()
 
@@ -56,7 +57,7 @@ class SearchTestCase(TestCase):
         """Test that you can search by querying the search page"""
 
         obj = CreatorFactory.create()
-        management.call_command('update_index', age=1, verbosity=0, interactive=False)
+        update_index.Command().handle(using=['default'], age=1, verbosity=0, interactive=False)
 
         res = self.client.get(urlresolvers.reverse("haystack_search"), {"q": obj.name})
 

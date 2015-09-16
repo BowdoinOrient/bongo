@@ -14,14 +14,14 @@ def update_es_index():
 
     scheduler.schedule(
         scheduled_time=datetime.now(),
-        func='django.core.management.call_command("update_index --age=1")',
+        func='haystack.management.commands.update_index.Command().handle()',
         interval=60 * 60,
         repeat=None,
     )
 
     for job in scheduler.get_jobs():
         index_job = job
-        if index_job.func_name == 'django.core.management.call_command("update_index")':
+        if index_job.func_name == 'haystack.management.commands.update_index.Command().handle()':
             break
 
     index_job.meta['task_type'] = "update_index"
