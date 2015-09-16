@@ -52,7 +52,6 @@ class SearchTestCase(TestCase):
         self.assertGreater(len(res), 0)
         self.assertIn(Post.objects.get(pk__exact=obj.pk), [res_item.object for res_item in res])
 
-    # @TODO: This test intermittently fails
     def test_search_view(self):
         """Test that you can search by querying the search page"""
 
