@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.conf import settings
+from django.utils.html import escape
 from django.template import Context, Template
 from bongo.apps.bongo.tests import factories
 
@@ -21,7 +22,7 @@ class TemplateTagsTestCase(TestCase):
             }
         )
 
-        self.assertEqual(rendered, article.__dict__)
+        self.assertEqual(rendered, escape(article.__dict__))
 
     def test_class_name_templatetag(self):
         """Test the class_name() template tag (print object's class name)"""
