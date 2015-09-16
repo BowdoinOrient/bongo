@@ -1,8 +1,6 @@
 from django.contrib import admin
 from bongo.apps.bongo.models import *
 
-# Some of these we will definitely want to customize later
-# But for now the default admin view is fine
 admin.site.register(Series)
 admin.site.register(Volume)
 admin.site.register(Issue)

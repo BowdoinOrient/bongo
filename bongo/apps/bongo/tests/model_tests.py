@@ -2,6 +2,7 @@ from bongo.apps.bongo.tests import factories
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils.text import slugify
 import os
 
 """
@@ -259,6 +260,25 @@ class PostTestCase(TestCase):
 
         self.assertIn(author, creators)
         self.assertEqual(len(creators), 1)
+
+    def test_slug(self):
+        """Test that an article gets assigned a slug when saved"""
+        post = factories.PostFactory.create()
+        post.save()
+
+        self.assertEqual(post.slug, slugify(post.title))
+
+    def test_slug_collision(self):
+        posts = [factories.PostFactory.create() for x in range(3)]
+
+        for post in posts:
+            post.slug = None
+            post.title = "Campus Concern Raises Concern"
+            post.save()
+
+        self.assertEqual(posts[0].slug, "campus-concern-raises-concern")
+        self.assertEqual(posts[1].slug, "campus-concern-raises-concern-2")
+        self.assertEqual(posts[2].slug, "campus-concern-raises-concern-3")
 
 
 """

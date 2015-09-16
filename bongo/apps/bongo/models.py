@@ -308,7 +308,10 @@ class HTML (models.Model):
     imported = models.BooleanField(default=False, editable=False)
 
     def __str__(self):
-        return self.caption[:60]
+        if self.caption:
+            return self.caption[:60]
+        else:
+            return self.content[:60]
 
 
 class Pullquote (models.Model):
@@ -348,7 +351,7 @@ class Post (models.Model):
     title = models.CharField(max_length=180)
     slug = models.CharField(
         max_length=180,
-        verbose_name="Slug. WARNING: Changing this will change the post URL, breaking existing links."
+        db_index=True
     )  # http://en.wikipedia.org/wiki/Clean_URL#Slug
     tags = models.ManyToManyField(Tag, blank=True)
 
@@ -492,8 +495,22 @@ class Post (models.Model):
 
     def save(self, *args, **kwargs):
         auto_dates = kwargs.pop('auto_dates', True)
+
         if not self.slug:
-            self.slug = slugify(self.title)[:180]
+            newslug = slugify(self.title)[:175]
+
+            # make sure this slug has not been used before
+            variant = 2
+            while len(Post.objects.filter(slug__exact=newslug)) > 0:
+                slug_salt = "-" + str(variant)
+
+                if variant > 2:
+                    newslug = newslug[:-len(slug_salt)]
+
+                newslug += slug_salt
+                variant += 1
+
+            self.slug = newslug
 
         # generally we want created to update to the time whenever we create the obj
         # and updated to update every time
