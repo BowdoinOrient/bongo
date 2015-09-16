@@ -49,8 +49,14 @@ def ArticleView(request, id=None, slug=None):
 
 
 def AuthorView(request, id=None):
+    try:
+        creator = models.Creator.objects.get(id__exact=id)
+    except models.Creator.DoesNotExist:
+        raise Http404("No author with this ID exists")
+
     ctx = {
-        "author": models.Creator.objects(id__exact=id)
+        "creator": creator,
+        "posts": creator.posts()
     }
     return render(request, 'pages/author.html', ctx)
 

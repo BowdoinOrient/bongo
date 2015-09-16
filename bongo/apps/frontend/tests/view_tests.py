@@ -1,6 +1,5 @@
 from django.test import TestCase
 from bongo.apps.bongo.tests import factories
-from datetime import datetime, timedelta
 
 
 class ArticleViewTestCase(TestCase):
@@ -28,7 +27,29 @@ class HomeViewTestCase(TestCase):
 
 
 class AuthorViewTestCase(TestCase):
-    pass
+    def test_creator_view_context(self):
+        creator = factories.CreatorFactory.create()
+        posts = [factories.PostFactory.create() for x in range(5)]
+
+        for post in posts:
+            article = post.text.first()
+            article.creators.add(creator)
+            article.save()
+            post.save(auto_dates=False)
+
+        res = self.client.get('/author/{}/'.format(creator.pk))
+
+        self.assertEqual(creator, res.context['creator'])
+        self.assertEqual(set(posts), set(res.context['posts']))
+
+    def test_series_view_route(self):
+        creator = factories.CreatorFactory.create()
+
+        self.assertEqual(self.client.get('/author/{}/'.format(creator.pk)).status_code, 200)
+
+        self.assertEqual(self.client.get('/author/'.format(creator.pk)).status_code, 404)
+
+        self.assertEqual(self.client.get('/author/0/').status_code, 404)
 
 
 class SeriesViewTestCase(TestCase):
@@ -37,7 +58,6 @@ class SeriesViewTestCase(TestCase):
         posts = [factories.PostFactory.create() for x in range(5)]
 
         for post in posts:
-            post.published = datetime.now() + timedelta(hours=post.pk)
             post.series.add(series)
             post.save(auto_dates=False)
 
