@@ -118,3 +118,8 @@
 # Register Elasticsearch service to start on boot
 - name: Ensure Elasticsearch is started on boot
   service: name=elasticsearch enabled={{ elasticsearch_service_startonboot }} state={{ elasticsearch_service_state }}
+
+- name: Ensure Elasticsearch is started
+  service:
+    name: elasticsearch
+    state: running
