@@ -17,3 +17,6 @@
 
 - name: restart rsyslog
   service: name=rsyslog state=restarted
+
+- name: restart logstash-forwarder
+  supervisorctl: name=logstash-forwarder state=restarted

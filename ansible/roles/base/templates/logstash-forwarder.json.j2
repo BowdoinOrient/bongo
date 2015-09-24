@@ -1,0 +1,17 @@
+{
+  "network": {
+    "servers": [ "listener.logz.io:5005" ],
+    "timeout": 15,
+    "ssl ca": "/etc/pki/tls/certs/COMODORSADomainValidationSecureServerCA.crt"
+  },
+  "files": [
+    {
+      "paths": [
+        "/path/to/file"
+      ],
+      "fields": {
+        "token": "{{ logzio_token }}"
+      }
+    }
+  ]
+}

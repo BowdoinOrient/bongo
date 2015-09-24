@@ -1,0 +1,10 @@
+[program:logstash-forwarder]
+command={{ virtualenv_path }}/bin/lfw_start
+
+autostart=true
+autorestart=true
+
+user={{ ssh_user }}
+
+stdout_logfile={{ application_log_dir }}/lfw.log
+redirect_stderr = true
