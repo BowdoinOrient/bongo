@@ -9,76 +9,20 @@
       "paths": [
         "{{ virtualenv_path }}/logs/nginx_access.log",
         "{{ virtualenv_path }}/logs/nginx_error.log",
-        "/var/log/nginx/access.log",
-        "/var/log/nginx/error.log"
-      ],
-      "fields": {
-        "token": "{{ logzio_token }}",
-        "tags": "nginx"
-      }
-    },
-    {
-      "paths": [
         "{{ virtualenv_path }}/logs/rq.log",
-        "{{ virtualenv_path }}/logs/rq_dashboard.log"
+        "{{ virtualenv_path }}/logs/rq_dashboard.log",
+        "{{ virtualenv_path }}/logs/gunicorn_supervisor.log",
+        "{{ virtualenv_path }}/logs/newrelic.log",
+        "/var/log/nginx/access.log",
+        "/var/log/nginx/error.log",
+        "/var/log/elasticsearch/elasticsearch.log",
+        "/var/log/fail2ban.log",
+        "/var/log/postgresql/postgresql-9.3-main.log",
+        "/var/log/supervisor/supervisord.log",
+        "/var/log/syslog"
       ],
       "fields": {
         "token": "{{ logzio_token }}",
-        "tags": "rq"
-      }
-    },
-    {
-      "paths": [
-        "{{ virtualenv_path }}/logs/gunicorn_supervisor.log"
-      ],
-      "fields": {
-        "token": "{{ logzio_token }}",
-        "tags": "gunicorn"
-      }
-    },
-    {
-      "paths": [
-        "{{ virtualenv_path }}/logs/newrelic.log"
-      ],
-      "fields": {
-        "token": "{{ logzio_token }}",
-        "tags": "newrelic"
-      }
-    },
-    {
-      "paths": [
-        "/var/log/elasticsearch/elasticsearch.log"
-      ],
-      "fields": {
-        "token": "{{ logzio_token }}",
-        "tags": "elasticsearch"
-      }
-    },
-    {
-      "paths": [
-        "/var/log/fail2ban.log"
-      ],
-      "fields": {
-        "token": "{{ logzio_token }}",
-        "tags": "fail2ban"
-      }
-    },
-    {
-      "paths": [
-        "/var/log/postgresql/postgresql-9.3-main.log"
-      ],
-      "fields": {
-        "token": "{{ logzio_token }}",
-        "tags": "postgres"
-      }
-    },
-    {
-      "paths": [
-        "/var/log/supervisor/supervisord.log"
-      ],
-      "fields": {
-        "token": "{{ logzio_token }}",
-        "tags": "supervisor"
       }
     }
   ]
