@@ -1,4 +1,4 @@
 #!/bin/sh
 
-exec logstash-forwarder \
-  -config /etc/logstash-forwarder.json
+exec /opt/logstash-forwarder/bin/logstash-forwarder \
+  -config /etc/logstash-forwarder.conf

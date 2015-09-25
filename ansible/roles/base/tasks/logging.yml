@@ -15,10 +15,16 @@
     repo: deb http://packages.elasticsearch.org/logstashforwarder/debian stable main
     state: present
 
-- name: Move logstash-forwarder.json to location
+- name: Install logstash-forwarder
+  apt:
+    name: logstash-forwarder
+    state: latest
+    update_cache: yes
+
+- name: Move logstash-forwarder.conf to location
   template:
-    src: logstash-forwarder.json.j2
-    dest: /etc/logstash-forwarder.json
+    src: logstash-forwarder.conf.j2
+    dest: /etc/logstash-forwarder.conf
 
 - name: Create start file for logstash-forwarder
   template:
