@@ -59,6 +59,7 @@ INSTALLED_APPS = (
     'bongo.apps.tasks',
 
     # for the frontend
+    'storages',
     'compressor',
 
     # for the API
