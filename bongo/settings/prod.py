@@ -29,7 +29,7 @@ DATABASES = {
 
 # See: http://django-storages.readthedocs.org/en/latest/index.html
 INSTALLED_APPS += (
-    'raven.contrib.django.raven_compat'
+    'raven.contrib.django.raven_compat',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
