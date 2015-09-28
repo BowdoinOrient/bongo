@@ -5,6 +5,7 @@
     virtualenv: "{{ virtualenv_path }}"
     name: pip
     extra_args: --upgrade
+    executable: pip3
   tags:
     - django
 
