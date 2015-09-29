@@ -4,6 +4,7 @@ from bongo.apps.api.serializers.post import PostSerializer
 from rest_framework import viewsets, permissions, filters
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
+from django.conf import settings
 
 
 class SectionCrud(viewsets.ModelViewSet):
@@ -19,7 +20,7 @@ class SectionCrudRestricted(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.OrderingFilter,)
 
     @detail_route()
-    def posts(self, request, pk=None):
+    def posts(self, request, version=settings.REST_FRAMEWORK['DEFAULT_VERSION'], pk=None):
         if 'limit' in request.GET:
             l = int(request.GET['limit'])
         else:

@@ -4,6 +4,9 @@ from rest_framework.test import APIClient
 from bongo.apps.bongo import models
 from bongo.apps.bongo.helpers import arbitrary_serialize
 
+from django.conf import settings
+APIVER = settings.REST_FRAMEWORK['DEFAULT_VERSION']
+
 
 def authorize(client):
     user = factories.UserFactory.create()
@@ -14,7 +17,10 @@ def authorize(client):
 def crud(self, object, model, endpoint=None):
     if not endpoint:
         # not sure if this is a hack or clever
-        endpoint = "http://testserver/api/v1/" + str(type(object)).split('.')[-1][:-2] + "/"
+        endpoint = "http://testserver/api/{version}/{resource}/".format(
+            version=APIVER,
+            resource=str(type(object)).split('.')[-1][:-2]
+        )
 
     # use DRF's APICLient rather than django.test.Client because the latter is
     # totally broken with regards to content_type
@@ -36,7 +42,7 @@ def crud(self, object, model, endpoint=None):
     self.assertEqual(res.status_code, 200)
     self.assertIn(
         object.pk,
-        [v for k, v in json.loads(res.content.decode("utf-8"))['objects'][0].items() if k == 'id']
+        [v for k, v in json.loads(res.content.decode("utf-8"))['results'][0].items() if k == 'id']
     )
 
     # test that a POST to /endpoint with {object} 401s when not authenticated
@@ -63,9 +69,9 @@ def crud(self, object, model, endpoint=None):
     except AssertionError:
         if (
             res.status_code == 400 and
-            'objects' in json.loads(res.content.decode("utf-8")) and
+            'results' in json.loads(res.content.decode("utf-8")) and
             json.loads(res.content.decode("utf-8"))
-                .get('objects')
+                .get('results')
                 .get('staticfile') == [u'This field is required.']
         ):
             # We don't really want to test file upload, so let this slide
@@ -82,9 +88,9 @@ def crud(self, object, model, endpoint=None):
     except AssertionError:
         if (
             res.status_code == 400 and
-            'objects' in json.loads(res.content.decode("utf-8")) and
+            'results' in json.loads(res.content.decode("utf-8")) and
             json.loads(res.content.decode("utf-8"))
-                .get('objects')
+                .get('results')
                 .get('staticfile') == [u'This field is required.']
         ):
             pass
@@ -102,9 +108,9 @@ def crud(self, object, model, endpoint=None):
     except AssertionError:
         if (
             res.status_code == 400 and
-            'objects' in json.loads(res.content.decode("utf-8")) and
+            'results' in json.loads(res.content.decode("utf-8")) and
             json.loads(res.content.decode("utf-8"))
-                .get('objects')
+                .get('results')
                 .get('staticfile') == [u'This field is required.']
         ):
             pass

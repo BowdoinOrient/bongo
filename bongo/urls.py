@@ -8,7 +8,8 @@ from bongo.apps.search import urls as search_urls
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^api/v{}/'.format(settings.API_VERSION), include(api_urls)),
+    url(r'^api/(?P<version>[v\d\.]+)/', include(api_urls)),
+    url(r'^api/', include(api_urls)),
     url(r'^', include(frontend_urls)),
     url(r'^', include(search_urls))
 ]

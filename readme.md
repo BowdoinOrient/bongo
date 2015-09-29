@@ -82,33 +82,43 @@ and visit [http://bowdoinorient.local](http://bowdoinorient.local) in your brows
 Bongo is currently deployed at [bowdoinorient.co](http://bowdoinorient.co).
 
 ####Using the API
-Bongo includes a JSON API acessible at [<base_url>/api/v1](https://bowdoinorient.bjacobel.com/api/v1). Its structure is fairly standard REST.
+Bongo includes a JSON API acessible at [<base_url>/api/](https://bowdoinorient.bjacobel.com/api/). Its structure is fairly standard REST.
 
 To obtain a list of all resources of a type:
 
-        GET /api/v1/<resource>
+        GET /api/<resource>
 
 To obtain details about a specific instance of a resource type:
 
-        GET /api/v1/<resource>/<#>
+        GET /api/<resource>/<#>
 
 The object detail endpoint offers more method options to authenticated users:
 
-        POST/PUT/DELETE/UPDATE /api/v1/<resource>/<#>
+        POST/PUT/DELETE/UPDATE /api/<resource>/<#>
 
-Authentication methods are still being developed.
+#####Authentication
+TODO. Probably some kind of OAuth tokens.
+
+#####Versioning
+Versioning is suggessted but not required. To pass a version, use the following URL form:
+
+        /api/<version>/<resource>/<id>
+
+Current API version is `v0.1` -- the API will default to this version if no version is specified in the URL. API version numbers will follow [SemVer](http://semver.org).
+
+#####Pagination
 
 Every endpoint accepts two query parameters.
 
-1. `limit=<n>` limits the response to a maximum of `n` objects. Subsequent object are accessible through pagination. The default limit is 25, and the maximum is 100.
+1. `limit=<n>` limits the response to a maximum of `n` objects. Subsequent object are accessible through pagination. The default limit is 20, and the maximum is 100.
 
 2. `ordering=<criteria>` orders the response objects by `criteria`, where `criteria` is a field on the contained objects Django knows how to order. This argument accepts a `-` prefix for reverse ordering. For example, to return a list of posts in reverse chronological order:
 
-        GET /api/v1/post/?ordering=-published
+        GET /api/post/?ordering=-published
 
 Some endpoints allow you to cross-reference resources. For example, to return a  list of all of the posts in a particular section:
 
-        GET /api/v1/section/3/posts
+        GET /api/section/3/posts
 
 
 #### License

@@ -4,13 +4,7 @@ from rest_framework import pagination
 from rest_framework import serializers
 
 
-class LinksSerializer(serializers.Serializer):
-    next = pagination.NextPageField(source='*')
-    prev = pagination.PreviousPageField(source='*')
-
-
-class CustomPaginationSerializer(pagination.BasePaginationSerializer):
-    links = LinksSerializer(source='*')  # Takes the page object as the source
-    total_results = serializers.ReadOnlyField(source='paginator.count')
-
-    results_field = 'objects'
+class BongoPagination(pagination.PageNumberPagination):
+    page_size = 20
+    page_size_query_param = 'limit'
+    max_page_size = 100

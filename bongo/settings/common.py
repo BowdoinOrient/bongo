@@ -180,11 +180,11 @@ TEMPLATES = [
 """django-rest-framework"""
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_SERIALIZER_CLASS': 'bongo.apps.api.pagination.CustomPaginationSerializer',
-    'PAGINATE_BY': 20,                  # Default to 20
-    'PAGINATE_BY_PARAM': 'limit',       # Allow client to override, using `?limit=xxx`.
-    'MAX_PAGINATE_BY': 100,             # Maximum limit allowed when using `?limit=xxx`.
+    'DEFAULT_PAGINATION_CLASS': 'bongo.apps.api.pagination.BongoPagination',
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_VERSION': 'v0.1',
+    'ALLOWED_VERSIONS': ['v0.1'],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
@@ -192,8 +192,6 @@ REST_FRAMEWORK = {
     ),
     'COMPACT_JSON': False
 }
-
-API_VERSION = 1
 
 """end drf"""
 

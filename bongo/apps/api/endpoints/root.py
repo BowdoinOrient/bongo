@@ -4,10 +4,11 @@ from collections import OrderedDict
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from django.conf import settings
 
 
 @api_view(('GET',))
-def api_root(request, format=None):
+def api_root(request, version=settings.REST_FRAMEWORK['DEFAULT_VERSION'], format=None):
     """# Bongo API
     The Bongo API is a RESTful interface to the following data models. Navigate to
     the route for each to browse individual documentation on each resource.

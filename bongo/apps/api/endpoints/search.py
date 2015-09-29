@@ -2,10 +2,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from haystack.query import SearchQuerySet
 from bongo.apps.bongo.helpers import arbitrary_serialize
+from django.conf import settings
 
 
 @api_view(('POST',))
-def search(request, format=None):
+def search(request, version=settings.REST_FRAMEWORK['DEFAULT_VERSION'], format=None):
     if 'query' not in request.data:
         return Response({"error": "'query' missing from request body."}, status=422)
     else:
