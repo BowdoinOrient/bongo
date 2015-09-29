@@ -93,9 +93,6 @@ SCRIBD_API_KEY = environ.get('SCRIBD_API_KEY', '')
 SCRIBD_API_SECRET = environ.get('SCRIBD_API_SECRET', '')
 MYSQL_PASS = environ.get('MYSQL_PASS', '')
 
-for logger in LOGGING['loggers']:
-    LOGGING['loggers'][logger]['handlers'].append('logentries')
-
 """Haystack"""
 
 HAYSTACK_CONNECTIONS = {
