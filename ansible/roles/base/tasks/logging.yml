@@ -5,21 +5,24 @@
     src=bongo_logrotate.j2
     dest=/etc/logrotate.d/bongo
 
-- name: Get the Elastic apt key
-  apt_key:
-    url: http://packages.elasticsearch.org/GPG-KEY-elasticsearch
-    state: present
-
-- name: Add logstash-forwarder to sources.list
-  apt_repository:
-    repo: deb http://packages.elasticsearch.org/logstashforwarder/debian stable main
-    state: present
-
-- name: Install logstash-forwarder
+- name: Install Go
   apt:
-    name: logstash-forwarder
+    name: golang
     state: latest
-    update_cache: yes
+
+- name: Download logstash-forwarder source
+  get_url:
+    url: https://github.com/elastic/logstash-forwarder/archive/master.zip
+    dest: /tmp/logstash-forwarder.zip
+
+- name: Unzip logstash-forwarder source
+  unarchive:
+    copy: no
+    src: /tmp/logstash-forwarder.zip
+    dest: /tmp/
+
+- name: Build/install logstash-forwarder
+  command: go build -o /opt/logstash-forwarder/bin/logstash-forwarder chdir=/tmp/logstash-forwarder-master
 
 - name: Move logstash-forwarder.conf to location
   template:
