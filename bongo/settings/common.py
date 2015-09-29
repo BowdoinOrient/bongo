@@ -181,9 +181,10 @@ TEMPLATES = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'bongo.apps.api.pagination.BongoPagination',
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
-    'DEFAULT_VERSION': 'v1',
-    'ALLOWED_VERSIONS': ['v1'],
+    'DEFAULT_VERSION': 'v0.1',
+    'ALLOWED_VERSIONS': ['v0.1'],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
@@ -191,8 +192,6 @@ REST_FRAMEWORK = {
     ),
     'COMPACT_JSON': False
 }
-
-API_VERSION = 1
 
 """end drf"""
 

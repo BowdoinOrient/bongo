@@ -2,6 +2,7 @@ from bongo.apps.bongo import models
 from bongo.apps.bongo.tests import factories
 from bongo.apps.bongo.helpers import arbitrary_serialize
 from django.test import TestCase
+from django.conf import settings
 from rest_framework.test import APIClient
 from .test_helpers import crud
 from haystack.management.commands import update_index
@@ -9,6 +10,8 @@ from datetime import datetime, timedelta
 import json
 
 # @TODO: These tests don't do a very good job of cleaning up after themselves
+
+APIVER = settings.REST_FRAMEWORK['DEFAULT_VERSION']
 
 
 class APITestCase(TestCase):
@@ -81,7 +84,7 @@ class APITestCase(TestCase):
             post.published = datetime.now() + timedelta(hours=post.pk)
             post.save(auto_dates=False)
 
-        res = client.get("http://testserver/api/v1/section/{}/posts/".format(section.pk))
+        res = client.get("http://testserver/api/{v}/section/{pk}/posts/".format(v=APIVER, pk=section.pk))
 
         self.assertEqual(res.status_code, 200)
 
@@ -91,7 +94,7 @@ class APITestCase(TestCase):
 
         # Test with pagination
 
-        res = client.get("http://testserver/api/v1/section/{}/posts/?limit=2".format(section.pk))
+        res = client.get("http://testserver/api/{v}/section/{pk}/posts/?limit=2".format(v=APIVER, pk=section.pk))
 
         self.assertEqual(res.status_code, 200)
 
@@ -101,7 +104,10 @@ class APITestCase(TestCase):
 
         # Test ordering
 
-        res = client.get("http://testserver/api/v1/section/{}/posts/?ordering=published".format(section.pk))
+        res = client.get("http://testserver/api/{v}/section/{pk}/posts/?ordering=published".format(
+            v=APIVER,
+            pk=section.pk
+        ))
 
         self.assertEqual(res.status_code, 200)
 
@@ -112,7 +118,7 @@ class APITestCase(TestCase):
     def test_root_endpoint(self):
         client = APIClient()
 
-        res = client.get("http://testserver/api/v1/")
+        res = client.get("http://testserver/api/{v}/".format(v=APIVER))
 
         self.assertEqual(res.status_code, 200)
 
@@ -139,7 +145,7 @@ class APITestCase(TestCase):
 
         update_index.Command().handle(using=['default'], age=1, verbosity=0, interactive=False)
 
-        res = client.post("http://testserver/api/v1/search/", {
+        res = client.post("http://testserver/api/{v}/search/".format(v=APIVER), {
             "query": creator.name
         })
 
@@ -155,7 +161,7 @@ class APITestCase(TestCase):
 
         client = APIClient()
 
-        res = client.get("http://testserver/api/v1/issue/?limit=1")
+        res = client.get("http://testserver/api/{v}/issue/?limit=1".format(v=APIVER))
         js = json.loads(res.content.decode("utf-8"))
 
         self.assertEqual(len(js['results']), 1)

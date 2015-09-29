@@ -4,6 +4,9 @@ from rest_framework.test import APIClient
 from bongo.apps.bongo import models
 from bongo.apps.bongo.helpers import arbitrary_serialize
 
+from django.conf import settings
+APIVER = settings.REST_FRAMEWORK['DEFAULT_VERSION']
+
 
 def authorize(client):
     user = factories.UserFactory.create()
@@ -14,7 +17,10 @@ def authorize(client):
 def crud(self, object, model, endpoint=None):
     if not endpoint:
         # not sure if this is a hack or clever
-        endpoint = "http://testserver/api/v1/" + str(type(object)).split('.')[-1][:-2] + "/"
+        endpoint = "http://testserver/api/{version}/{resource}/".format(
+            version=APIVER,
+            resource=str(type(object)).split('.')[-1][:-2]
+        )
 
     # use DRF's APICLient rather than django.test.Client because the latter is
     # totally broken with regards to content_type
