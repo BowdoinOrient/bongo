@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 import os
-import sys
 import yaml
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -128,29 +127,28 @@ MANAGERS = ADMINS
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
+    'disable_existing_loggers': False,
     'handlers': {
         'console': {
             'level': 'DEBUG',
-            '()': 'logutils.colorize.ColorizingStreamHandler',
-            'stream': sys.stdout
+            'class': 'logging.StreamHandler'
         }
     },
     'loggers': {
         'bongo': {
             'handlers': ['console'],
             'propagate': True,
+            'level': 'DEBUG'
+        },
+        'django': {
+            'handlers': ['console'],
             'level': 'INFO',
+            'propagate': True
         },
         'django.request': {
             'handlers': ['console'],
-            'level': 'ERROR',
-            'propagate': True,
+            'level': 'INFO',
+            'propagate': True
         }
     }
 }
