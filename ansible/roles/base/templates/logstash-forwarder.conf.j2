@@ -9,13 +9,21 @@
       "paths": [
         "{{ application_log_dir }}/nginx_access.log",
         "{{ application_log_dir }}/nginx_error.log",
+        "/var/log/nginx/access.log",
+        "/var/log/nginx/error.log"
+      ],
+      "fields": {
+        "token": "{{ logzio_token }}",
+        "tags": ["nginx"]
+      }
+    },
+    {
+      "paths": [
         "{{ application_log_dir }}/rq.log",
         "{{ application_log_dir }}/rq_dashboard.log",
         "{{ application_log_dir }}/gunicorn_supervisor.log",
         "{{ application_log_dir }}/newrelic.log",
         "{{ application_log_dir }}/lfw.log",
-        "/var/log/nginx/access.log",
-        "/var/log/nginx/error.log",
         "/var/log/elasticsearch/elasticsearch.log",
         "/var/log/fail2ban.log",
         "/var/log/postgresql/postgresql-9.3-main.log",
