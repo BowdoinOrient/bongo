@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
 import os
-import sys
 import yaml
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -126,43 +125,30 @@ ADMINS = (
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
-LOGENTRIES_TOKEN = ''
-try:
-    with open(os.path.normpath(os.path.join(SITE_ROOT, "ansible/env_vars/secure.yml")), "rb") as f:
-        secrets = yaml.load(f)
-        LOGENTRIES_TOKEN = secrets['logentries_token']
-except:
-    LOGENTRIES_TOKEN = os.environ.get('LOGENTRIES_TOKEN')
-
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
+    'disable_existing_loggers': False,
     'handlers': {
         'console': {
             'level': 'DEBUG',
-            '()': 'logutils.colorize.ColorizingStreamHandler',
-            'stream': sys.stdout
-        },
-        'logentries': {
-            'token': LOGENTRIES_TOKEN,
-            'class': 'logentries.LogentriesHandler'
+            'class': 'logging.StreamHandler'
         }
     },
     'loggers': {
         'bongo': {
             'handlers': ['console'],
             'propagate': True,
+            'level': 'DEBUG'
+        },
+        'django': {
+            'handlers': ['console'],
             'level': 'INFO',
+            'propagate': True
         },
         'django.request': {
             'handlers': ['console'],
-            'level': 'ERROR',
-            'propagate': True,
+            'level': 'INFO',
+            'propagate': True
         }
     }
 }

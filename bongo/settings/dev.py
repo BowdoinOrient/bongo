@@ -51,7 +51,6 @@ with open(os.path.normpath(os.path.join(SITE_ROOT, "ansible/env_vars/secure.yml"
     DISQUS_API_KEY = secrets['disqus_api_key']
     SCRIBD_API_KEY = secrets['scribd_api_key']
     SCRIBD_API_SECRET = secrets['scribd_api_secret']
-    LOGENTRIES_TOKEN = secrets['logentries_token']
     MYSQL_PASS = secrets['mysql_pass']
 
 STATIC_URL = '/static/'

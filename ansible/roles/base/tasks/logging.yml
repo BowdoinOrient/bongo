@@ -1,0 +1,65 @@
+---
+
+- name: Set up log rotation
+  template:
+    src=bongo_logrotate.j2
+    dest=/etc/logrotate.d/bongo
+
+- name: Install Go
+  apt:
+    name: golang
+    state: latest
+
+- name: Download logstash-forwarder source
+  get_url:
+    url: https://github.com/elastic/logstash-forwarder/archive/master.zip
+    dest: /tmp/logstash-forwarder.zip
+
+- name: Unzip logstash-forwarder source
+  unarchive:
+    copy: no
+    src: /tmp/logstash-forwarder.zip
+    dest: /tmp/
+
+- name: Build/install logstash-forwarder
+  command: go build -o /opt/logstash-forwarder/bin/logstash-forwarder chdir=/tmp/logstash-forwarder-master
+
+- name: Move logstash-forwarder.conf to location
+  template:
+    src: logstash-forwarder.conf.j2
+    dest: /etc/logstash-forwarder.conf
+
+- name: Create start file for logstash-forwarder
+  template:
+    src: lfw_start.j2
+    dest: "{{ virtualenv_path }}/bin/lfw_start"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create supervisor config file for logstash-forwarder
+  template: src=supervisor_lfw.conf.j2
+            dest=/etc/supervisor/conf.d/lfw.conf
+
+- name: Re-read the Supervisor config files
+  command: supervisorctl reread
+
+- name: Update Supervisor to add the app in the process group
+  command: supervisorctl update
+
+- name: Create /etc/pki/tls/certs
+  file:
+    path: /etc/pki/tls/certs
+    state: directory
+    owner: root
+    group: root
+
+- name: Get the Logz.io CA crt
+  get_url:
+    url: https://raw.githubusercontent.com/cloudflare/cfssl_trust/master/intermediate_ca/COMODORSADomainValidationSecureServerCA.crt
+    dest: /etc/pki/tls/certs/COMODORSADomainValidationSecureServerCA.crt
+
+- name: Restart logstash-forwarder
+  command: "true"
+  notify:
+    - restart logstash-forwarder

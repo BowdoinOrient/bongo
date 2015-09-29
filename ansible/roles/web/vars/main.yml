@@ -33,7 +33,6 @@ django_environment:
   DISQUS_API_KEY: "{{ disqus_api_key }}"
   SCRIBD_API_KEY: "{{ scribd_api_key }}"
   SCRIBD_API_SECRET: "{{ scribd_api_secret }}"
-  LOGENTRIES_TOKEN: "{{ logentries_token }}"
   LEGACY_DB_USER: "{{ legacy_db_user }}"
   LEGACY_DB_NAME: "{{ legacy_db_name }}"
   LEGACY_DB_PASSWORD: "{{ legacy_db_password }}"

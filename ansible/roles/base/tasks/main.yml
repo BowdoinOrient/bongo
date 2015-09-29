@@ -64,7 +64,8 @@
 - include: security.yml tags=security
 
 - include: monitoring.yml tags=monitoring
-  when: install_newrelic_server
+
+- include: logging.yml tags=logging
 
 - include: performance.yml tags=performance
 
