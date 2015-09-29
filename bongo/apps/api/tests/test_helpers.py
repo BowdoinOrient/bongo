@@ -36,7 +36,7 @@ def crud(self, object, model, endpoint=None):
     self.assertEqual(res.status_code, 200)
     self.assertIn(
         object.pk,
-        [v for k, v in json.loads(res.content.decode("utf-8"))['objects'][0].items() if k == 'id']
+        [v for k, v in json.loads(res.content.decode("utf-8"))['results'][0].items() if k == 'id']
     )
 
     # test that a POST to /endpoint with {object} 401s when not authenticated
@@ -63,9 +63,9 @@ def crud(self, object, model, endpoint=None):
     except AssertionError:
         if (
             res.status_code == 400 and
-            'objects' in json.loads(res.content.decode("utf-8")) and
+            'results' in json.loads(res.content.decode("utf-8")) and
             json.loads(res.content.decode("utf-8"))
-                .get('objects')
+                .get('results')
                 .get('staticfile') == [u'This field is required.']
         ):
             # We don't really want to test file upload, so let this slide
@@ -82,9 +82,9 @@ def crud(self, object, model, endpoint=None):
     except AssertionError:
         if (
             res.status_code == 400 and
-            'objects' in json.loads(res.content.decode("utf-8")) and
+            'results' in json.loads(res.content.decode("utf-8")) and
             json.loads(res.content.decode("utf-8"))
-                .get('objects')
+                .get('results')
                 .get('staticfile') == [u'This field is required.']
         ):
             pass
@@ -102,9 +102,9 @@ def crud(self, object, model, endpoint=None):
     except AssertionError:
         if (
             res.status_code == 400 and
-            'objects' in json.loads(res.content.decode("utf-8")) and
+            'results' in json.loads(res.content.decode("utf-8")) and
             json.loads(res.content.decode("utf-8"))
-                .get('objects')
+                .get('results')
                 .get('staticfile') == [u'This field is required.']
         ):
             pass

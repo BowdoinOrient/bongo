@@ -158,11 +158,10 @@ class APITestCase(TestCase):
         res = client.get("http://testserver/api/v1/issue/?limit=1")
         js = json.loads(res.content.decode("utf-8"))
 
-        self.assertEqual(len(js), 3)
-        self.assertEqual(len(js['objects']), 1)
-        self.assertEqual(js['objects'][0]['id'], issue1.pk)
+        self.assertEqual(len(js['results']), 1)
+        self.assertEqual(js['results'][0]['id'], issue1.pk)
 
-        res = client.get(js['links']['next'])
+        res = client.get(js['next'])
         js = json.loads(res.content.decode("utf-8"))
-        self.assertEqual(js['objects'][0]['id'], issue2.pk)
-        self.assertEqual(js['links']['next'], None)
+        self.assertEqual(js['results'][0]['id'], issue2.pk)
+        self.assertEqual(js['next'], None)
