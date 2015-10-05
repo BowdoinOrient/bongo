@@ -34,6 +34,7 @@
     - python-mysqldb
     - supervisor
     - libyaml-dev
+    - zip
   tags: packages
 
 - name: Uninstall undesired packages
