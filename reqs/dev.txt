@@ -1,5 +1,4 @@
 -r common.txt
 factory_boy==2.4.1
 fake-factory==0.4.2
-ipdb==0.8
 pep8==1.6.2
