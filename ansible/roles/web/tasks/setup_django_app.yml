@@ -17,17 +17,6 @@
   tags:
     - django
 
-- name: Run the Django syncdb command
-  django_manage:
-    command: syncdb
-    app_path: "{{ project_path }}"
-    virtualenv: "{{ virtualenv_path }}"
-    settings: "{{ django_settings_file }}"
-  environment: django_environment
-  tags:
-    - django
-    - django_syncdb
-
 - name: Run Django migrations
   django_manage:
     command: migrate
