@@ -92,16 +92,3 @@ DISQUS_API_KEY = environ.get('DISQUS_API_KEY', '')
 SCRIBD_API_KEY = environ.get('SCRIBD_API_KEY', '')
 SCRIBD_API_SECRET = environ.get('SCRIBD_API_SECRET', '')
 MYSQL_PASS = environ.get('MYSQL_PASS', '')
-
-"""Haystack"""
-
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': 'http://127.0.0.1:9200/',
-        'INDEX_NAME': 'haystack',
-        'INCLUDE_SPELLING': True
-    }
-}
-
-"""End Haystack"""

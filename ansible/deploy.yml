@@ -13,7 +13,6 @@
     - { role: base, tags: ['base'] }
     - { role: db, tags: ['db'] }
     - { role: memcached, tags: ['memcached'] }
-    - { role: elasticsearch, tags: ['elasticsearch'] }
     - { role: web, tags: ['web'] }
     - { role: redis, tags: ['redis'] }
     - { role: rq, tags: ['rq'] }
