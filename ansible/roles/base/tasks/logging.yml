@@ -32,7 +32,7 @@
 - name: Create start file for logstash-forwarder
   template:
     src: lfw_start.j2
-    dest: "{{ virtualenv_path }}/bin/lfw_start"
+    dest: "/usr/local/bin/lfw_start"
     owner: root
     group: root
     mode: 0755
