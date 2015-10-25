@@ -226,3 +226,17 @@ COMPRESS_PRECOMPILERS = (
 COMPRESS_OFFLINE = True
 
 """end django-compressor"""
+
+"""django-haystack"""
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(SITE_ROOT, '.tmp/whoosh'),
+        'STORAGE': 'file',
+        'POST_LIMIT': 128 * 1024 * 1024,
+        'BATCH_SIZE': 100,
+    }
+}
+
+"""end django-haystack"""

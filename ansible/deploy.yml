@@ -3,8 +3,7 @@
 - name: Provision a {{ application_name }} server
   hosts: all
   sudo: yes
-  sudo_user: root
-  remote_user: "{{ssh_user}}"
+  remote_user: "{{ ssh_user }}"
   vars_files:
     - env_vars/base.yml
     - env_vars/secure.yml
@@ -13,7 +12,6 @@
     - { role: base, tags: ['base'] }
     - { role: db, tags: ['db'] }
     - { role: memcached, tags: ['memcached'] }
-    - { role: elasticsearch, tags: ['elasticsearch'] }
-    - { role: web, tags: ['web'] }
     - { role: redis, tags: ['redis'] }
+    - { role: web, tags: ['web'] }
     - { role: rq, tags: ['rq'] }

@@ -1,13 +1,13 @@
 ---
-- name: Write swapfile
-  command: |
-    {% if swapfile_use_dd %}
-    dd if=/dev/zero of=/swapfile bs=1M count={{ swapfile_size }} creates=/swapfile
-    {% else %}
-    fallocate -l {{ swapfile_size }} /swapfile creates=/swapfile
-    {% endif %}
+- name: Write swapfile (if swapfile_use_dd)
+  command: dd if=/dev/zero of=/swapfile bs=1M count={{ swapfile_size }} creates=/swapfile
   register: write_swapfile
-  when: swapfile_size != false
+  when: swapfile_use_dd == true and swapfile_size != false
+
+- name: Write swapfile (if !swapfile_use_dd)
+  command: fallocate -l {{ swapfile_size }} /swapfile creates=/swapfile
+  register: write_swapfile
+  when: swapfile_use_dd != true and swapfile_size != false
 
 - name: Set swapfile permissions
   file: path=/swapfile mode=600

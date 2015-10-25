@@ -2,7 +2,7 @@
 
 site_url: bowdoinorient.co
 code_source: git
-ssh_user: orient
+ssh_user: ubuntu
 
 
 # Gunicorn settings. For the number of workers, a good rule to follow is

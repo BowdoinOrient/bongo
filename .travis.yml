@@ -7,7 +7,6 @@ services:
   - postgresql
   - redis
   - memcached
-  - elasticsearch
 install:
   - pip install -r reqs/travis.txt
 cache:

@@ -34,8 +34,6 @@ legacy_db_password:
 # Disable easy root access to the MySQL DB
 mysql_root_password:
 
-citadel_pem_pub:
-
 # SSL certificate - currently valid only for bowdoinorient.bjacobel.com @TODO
 ssl_crt: |
 
