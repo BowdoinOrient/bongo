@@ -1,0 +1,10 @@
+{% for article in toplist %}
+    <a href="/article/{{article.pk}}">
+        <div class="top-article">
+            <div class="top-badge {{article.section.classname}}">
+                <span class="index">{{forloop.counter}}</span>
+            </div>
+            <p class="top-title">{{article.title}}</p>
+        </div>
+    </a>
+{% endfor %}

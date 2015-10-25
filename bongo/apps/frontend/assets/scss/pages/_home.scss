@@ -1,77 +1,3 @@
-.top-reads {
-    @include vendor-prefix("column-count", "2");
-    overflow:hidden;
-    width:100%;
-    height:300px;
-    margin:25px 0;
-    padding:10px 0 10px 20px;
-    background-color:$lightergray;
-
-    .top-article {
-        cursor:pointer;
-        position:relative;
-
-        .top-badge {
-            width:25px;
-            height:25px;
-            background-color: white;
-            border-radius: 50%;
-            display:block;
-            position:absolute;
-            top:50%;
-            transform: translate3d(0, -50%, 0);
-
-            &.news      {border: 2px solid $news; color:$news}
-            &.features  {border: 2px solid $features; color:$features}
-            &.artsent   {border: 2px solid $artsent; color:$artsent}
-            &.sports    {border: 2px solid $sports; color:$sports}
-            &.opinion   {border: 2px solid $opinion; color:$opinion}
-
-            @include vendor-prefix("transition", "border-width 0.15s, color 0.15s");
-
-            .index {
-                position:absolute;
-                top:-1.5px;
-                left:-1.5px;
-                width:100%;
-                font-size:1.1em;
-                line-height:1.5em;
-                text-align:center;
-                width:25px;
-                height:25px;
-                font-family: $myriad-stack;
-                font-style:bold;
-                font-weight:500;
-
-                @include vendor-prefix("transition", "top 0.15s, left 0.15s");
-            }
-        }
-
-        &:hover {
-            .top-badge {
-                border-width:12.5px;
-                color:white;
-                .index {
-                    top:-12.5px;
-                    left:-12px;
-                }
-            }
-            .top-title {
-                text-decoration:underline;
-            }
-        }
-
-        .top-title {
-            font-family: $minion-stack;
-            display:inline-block;
-            max-width:80%;
-            margin:10px 0 10px 40px;
-            font-size:1.3em;
-            font-weight:normal;
-        }
-    }
-}
-
 .homepage-content {
     position:relative;
 
@@ -80,18 +6,6 @@
         padding:0 10px;
         left:0;
         top:0;
-
-        section {
-            h2 {
-                border-bottom:2px solid $lightergray;
-                @extend %header-style;
-            }
-
-            .section-post {
-                display:block;
-                position:relative;
-            }
-        }
     }
 
     .right-col {
@@ -137,4 +51,3 @@
         }
     }
 }
-

@@ -1,0 +1,21 @@
+{% load static %}
+
+{% if debug %}
+    <div class="debug-twitter">
+        <p>Twitter widget is disabled when <pre>DEBUG==True</pre></p>
+    </div>
+{% else %}
+    <div>
+        <a
+            class="twitter-timeline"
+            href="https://twitter.com/bowdoinorient"
+            data-widget-id="265860324312354816"
+        >
+            Tweets by @bowdoinorient
+        </a>
+    </div>
+
+    {% block nocompress %}
+        <script type="text/javascript" src="{% static 'js/twitter.js' %}" async></script>
+    {% endblock %}
+{% endif %}

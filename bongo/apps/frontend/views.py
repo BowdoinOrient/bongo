@@ -2,11 +2,20 @@ from django.shortcuts import render
 from bongo.apps.bongo import models
 from django.http import HttpResponsePermanentRedirect, Http404
 from django.core.urlresolvers import reverse
+from random import sample, randint
 
 
 def HomeView(request):
 
     recent = models.Post.objects.order_by("-published")[:50]
+
+    # @TODO: Pull these from a real model, not this hacked together object
+    # also obviously don't do this at random - that's just to catch layout edge cases
+    deck = [{
+        'post': post,
+        'cols': 2,  # randint(1, 4),
+        'rows': randint(1, 3),
+    } for post in sample(list(recent), randint(4, 7))]
 
     sections = models.Section.objects.all()
 
@@ -31,7 +40,9 @@ def HomeView(request):
         # this can theoretically raise DoesNotExist but I'm not going to catch: it
         # because if that happens it's a bfd and indicative of some other problem
         "current_issue": models.Issue.objects.order_by("-issue_date").first(),
-        "sections": sections
+        "sections": sections,
+        # @TODO: pull this from its own model, don't append these attributes here
+        "deck": deck
     }
 
     return render(request, 'pages/home.html', ctx)

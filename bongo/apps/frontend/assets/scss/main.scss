@@ -4,15 +4,5 @@
 @import 'overrides';
 @import 'responsive';
 
-@import 'pages/home';
-@import 'pages/article';
-@import 'pages/search';
-
-@import 'components/header';
-@import 'components/basement-menu';
-@import 'components/deck';
-@import 'components/errors';
-@import 'components/disqus';
-@import 'components/scribd';
-@import 'components/search';
-@import 'components/search-result';
+@import 'pages/all';
+@import 'components/all';

@@ -1,149 +1,25 @@
-/*  The Deck has:
-    - 4 columns
-    - 3 rows
-    - 600 vertical pixels
-    - 6 containers (1x2x2, 5x2x1)
-*/
-
-
 .deck {
     position: relative;
     width: 100%;
-    height: 600px;
     display: block;
 
-    .story {
-        position: absolute;
+    .card {
+        $col-width: 125px;
+        $row-height: 100px;
+        $card-padding: 3px;
 
-        &.lead {
-            background-color:$news;
-            
-            left:0;
-            top:0;
+        display: inline-block;
+        border: 1px solid $lightgray;
+        padding: $card-padding;
 
-            width:50%;
-            height:66.6%;
-        }
-
-        &.second {
-            width:50%;
-            height:33.3%;
-
-            &#n1 {
-                background-color:$features;
-                right:0;
-                top:0;
-            }
-            &#n2 {
-                background-color:$artsent;
-                right:0;
-                top:33.3%;
-            }
-        }
-
-        &.thumb {
-            width:25%;
-            height:33.3%;
-            min-width:200px;
-
-            &#n1 {
-                background-color:$opinion;
-                left:0;
-                top:66.6%;
-            }
-            &#n2 {
-                background-color:$opinion;
-                right:0;
-                top:66.6%;
-            }
-        }
-
-        &.anchor {
-            background-color:$sports;
-
-            top:66.6%;
-            left:25%;
-
-            width:50%;
-            height:33.3%;
-        }
-    }
-}
-
-@media (max-width:800px){
-    .deck {
-        .story {
-            &.thumb {
-                width:25%;
-                height:33.3%;
-                min-width:200px;
-
-                &#n1 {
-                    left:0;
-                    top:66.6%;
-                }
-                &#n2 {
-                    right:0;
-                    top:66.6%;
-                }
+        // this is pretty dope, I <3 sass
+        @for $i from 1 through 4 {
+            &.card-w-#{$i} {
+                width: ($col-width * $i) - (2 * $card-padding);
             }
 
-            &.anchor {
-                left:200px;
-                top:66.6%;
-
-                width:50%;
-                height:33.3%;
-            }
-        }
-    }
-}
-
-@media (max-width:640px){
-    .deck {
-        .story {
-            &.lead {
-                left:0;
-                top:0;
-
-                width:100%;
-                height:33.3%;
-            }
-
-            &.second {
-                width:50%;
-                height:33.3%;
-
-                &#n1 {
-                    left:0;
-                    top:33.3%;
-                }
-                &#n2 {
-                    right:0;
-                    top:33.3%;
-                }
-            }
-
-            &.thumb {
-                width:50%;
-                height:16.65%;
-
-                &#n1 {
-                    left:0;
-                    top:83.25%;
-                }
-                &#n2 {
-                    right:0;
-                    top:83.25%;
-                }
-            }
-
-            &.anchor {
-                left:0;
-                top:66.6%;
-
-                width:100%;
-                height:16.68%;
+            &.card-h-#{$i} {
+                height: ($row-height * $i) - (2 * $card-padding);
             }
         }
     }

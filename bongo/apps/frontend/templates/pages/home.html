@@ -1,95 +1,29 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block content %}
 
     <div class="deck">
-        <div class="story lead"></div>
-        <div class="story second" id="n1"></div>
-        <div class="story second" id="n2"></div>
-        <div class="story thumb" id="n1"></div>
-        <div class="story anchor"></div>
-        <div class="story thumb" id="n2"></div>
+        {% for card in deck %}
+            {% include 'components/card.html' with card=card %}
+        {% endfor %}
     </div>
 
     <div class="top-reads">
-        {% for article in toplist %}
-            <a href="/article/{{article.pk}}">
-                <div class="top-article">
-                    <div class="top-badge {{article.section.classname}}">
-                        <span class="index">{{forloop.counter}}</span>
-                    </div>
-                    <p class="top-title">{{article.title}}</p>
-                </div>
-            </a>
-        {% endfor %}
+        {% include 'components/toplist.html' with toplist=toplist %}
     </div>
 
     <div class="homepage-content">
         <div class="left-col">
             {% for section in sections %}
-                <section>
-                    <h2>{{section.get_section_display}}</h2>
-                    {% for post in section.posts %}
-                        <div class="section-post">
-                            <a href="/article/{{post.slug}}">
-                                <h3 class="post-title">{{post.title}}</h3>
-                                <span class="post-excerpt">{{post.excerpt}}</span>
-                                {% comment %}
-
-                                "Using python's datetime.strftime date format symbols would be too easy, let's use PHP's instead"
-                                    -- some fucking django developer
-
-                                https://docs.djangoproject.com/en/1.7/ref/templates/builtins/#date
-
-                                {% endcomment %}
-                                <span class="post-date">{{post.published | date:"l, F j"}}</p>
-                            </a>
-                        </div>
-                    {% endfor %}
-                </section>
+                {% include 'components/section-summary.html' with section=section %}
             {% endfor %}
         </div>
         <div class="right-col">
-            {# twitter #}
-            <div>
-                <a class="twitter-timeline" href="https://twitter.com/bowdoinorient" data-widget-id="265860324312354816">Tweets by @bowdoinorient</a>
-            </div>
-
-            {# search #}
-            <div class="homepage-search">
-                <h2 class="search-title">Search</h2>
-                <form method="get" action="/search" id="homepage-search-form">
-                    <input class="search-box" type="search" name="q">
-                    <input class="search-submit" type="submit" value="Search">
-                </form>
-            </div>
-
-            {# scribd #}
-            {% if current_issue.scribd_image %}
-                <div class="current-issue">
-                    <h2 class="current-issue-title">In Print</h2>
-                    <a href="https://scribd.com/doc/{{current_issue.scribd}}">
-                        <div class="issue-thumb" style="background-image:url('{{current_issue.scribd_image}}')"></div>
-                        <ul class="issue-details">
-                            <li>Volume {{current_issue.volume.volume_number}}</li>
-                            <li>Number {{current_issue.issue_number}}</li>
-                            <li>{{current_issue.issue_date}}</li>
-                        </ul>
-                    </a>
-                </div>
-            {% endif %}
-
-            {# disqus #}
-            <div class="dsq-widget">
-                <h2 class="dsq-widget-title">Recent Comments</h2>
-                <script type="text/javascript" src="https://disqus.com/forums/bowdoinorient/recent_comments_widget.js?num_items=8&hide_avatars=1&avatar_size=24&excerpt_length=140"></script>
-            </div>
+            {% include 'components/twitter.html' %}
+            {% include 'components/search.html' %}
+            {% include 'components/scribd.html' with current_issue=current_issue %}
+            {% include 'components/disqus-recent.html' %}
         </div>
     </div>
 
-{% endblock %}
-
-{% block nocompress %}
-    <script type="text/javascript" src="{% static 'js/twitter.js' %}" async></script>
 {% endblock %}

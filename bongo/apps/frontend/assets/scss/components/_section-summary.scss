@@ -1,0 +1,11 @@
+section.summary {
+    h2 {
+        border-bottom:2px solid $lightergray;
+        @extend %header-style;
+    }
+
+    .section-post {
+        display:block;
+        position:relative;
+    }
+}
