@@ -13,7 +13,7 @@ def HomeView(request):
     # also obviously don't do this at random - that's just to catch layout edge cases
     deck = [{
         'post': post,
-        'cols': 2,  # randint(1, 4),
+        'cols': randint(1, 6),
         'rows': randint(1, 3),
     } for post in sample(list(recent), randint(4, 7))]
 

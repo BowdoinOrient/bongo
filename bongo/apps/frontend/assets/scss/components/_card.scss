@@ -1,0 +1,19 @@
+.card {
+    $col-width: (100% / $deck-cols);
+    $row-height: 75px;
+
+    padding: $pad-inner;
+
+    border: 1px solid $lightgray;
+
+    // this is pretty dope, I <3 sass
+    @for $i from 1 through $deck-cols {
+        &.card-w-#{$i} {
+            width: ($col-width * $i);
+        }
+
+        &.card-h-#{$i} {
+            height: ($row-height * $i);
+        }
+    }
+}

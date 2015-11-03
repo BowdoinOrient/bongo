@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <div class="deck">
+    <div id="deck" class="deck js-packery">
         {% for card in deck %}
             {% include 'components/card.html' with card=card %}
         {% endfor %}
@@ -26,4 +26,16 @@
         </div>
     </div>
 
+{% endblock %}
+
+<!--  @TODO: Remove and replace with bower version -->
+{% block nocompress %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/packery/1.4.3/packery.pkgd.min.js"></script>
+    <script>
+        var pck = new Packery('#deck', {
+            "itemSelector": ".card",
+            "columnWidth": ".card-w-1",
+            "rowHeight": ".card-h-1"
+        });
+    </script>
 {% endblock %}

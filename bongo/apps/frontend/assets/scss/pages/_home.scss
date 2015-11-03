@@ -1,49 +1,54 @@
+.deck {
+    width: 100%;
+    margin-top: $pad-outer;
+}
+
 .homepage-content {
-    position:relative;
+    position: relative;
 
     .left-col {
-        width:70%;
-        padding:0 10px;
-        left:0;
-        top:0;
+        width: 70%;
+        padding: 0 10px;
+        left: 0;
+        top: 0;
     }
 
     .right-col {
-        width:30%;
-        padding:0 10px;
-        right:0;
-        top:0;
+        width: 30%;
+        padding: 0 10px;
+        right: 0;
+        top: 0;
 
         div {
-            width:100%;
-            display:block;
-            position:relative;
+            width: 100%;
+            display: block;
+            position: relative;
         }
     }
 
     & div {
-        display:inline-block;
-        position:absolute;
+        display: inline-block;
+        position: absolute;
     }
 }
 
-@media (max-width:767px){
+@media (max-width: 767px) {
     .homepage-content {
         .left-col {
-            width:100%;
+            width: 100%;
         }
 
         .right-col {
-            display:none;
-            width:0%;
+            display: none;
+            width: 0%;
         }
     }
 }
 
-@media (min-width:1024px){
+@media (min-width: 1024px) {
     .homepage-content {
         .left-col {
-            padding:0 10px 0 0;
+            padding: 0 10px 0 0;
         }
 
         .right-col {
