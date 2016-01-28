@@ -10,6 +10,7 @@
   roles:
     - { role: swapfile, tags: ['swapfile'], when: swapon == true}
     - { role: base, tags: ['base'] }
+    - { role: letsencrypt, tags: ['ssl'] }
     - { role: db, tags: ['db'] }
     - { role: memcached, tags: ['memcached'] }
     - { role: redis, tags: ['redis'] }

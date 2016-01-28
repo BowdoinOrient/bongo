@@ -34,12 +34,6 @@ legacy_db_password:
 # Disable easy root access to the MySQL DB
 mysql_root_password:
 
-# SSL certificate - currently valid only for bowdoinorient.bjacobel.com @TODO
-ssl_crt: |
-
-# SSL key pair for above certificate. 4096 bits RSA.
-ssl_key: |
-
 git_ssh_pub_key: |
 
 git_ssh_priv_key: |
